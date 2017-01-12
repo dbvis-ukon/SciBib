@@ -1,0 +1,2 @@
+# SciBib
+Scientific Bibliography System
