@@ -1,4 +1,14 @@
+# Local stuff #
+###################
 /tmp/*
 /logs/*
 /webroot/uploadedFiles/*
 /nbproject/*
+composer.lock
+/config/app.php
+
+# User plugin #
+###################
+!/vendor/
+/vendor/*
+!/vendor/cakedc/

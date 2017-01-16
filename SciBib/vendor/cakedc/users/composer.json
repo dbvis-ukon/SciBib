@@ -1,0 +1,59 @@
+{
+    "name": "cakedc/users",
+    "description": "Users Plugin for CakePHP 3",
+    "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "oauth2",
+        "auth",
+        "authentication",
+        "cakedc"
+    ],
+    "homepage": "https://github.com/CakeDC/users",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CakeDC",
+            "homepage": "http://www.cakedc.com",
+            "role": "Author"
+        },
+        {
+            "name": "Others",
+            "homepage": "https://github.com/CakeDC/users/graphs/contributors"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/CakeDC/users/issues",
+        "source": "https://github.com/CakeDC/users"
+    },
+    "require": {
+        "cakephp/cakephp": "~3.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "cakephp/cakephp-codesniffer": "^2.0",
+        "league/oauth2-facebook": "@stable",
+        "league/oauth2-instagram": "@stable",
+        "league/oauth2-google": "@stable",
+        "league/oauth2-linkedin": "@stable"
+    },
+    "suggest": {
+        "league/oauth1-client": "Provides Social Authentication with Twitter",
+        "league/oauth2-facebook": "Provides Social Authentication with Facebook",
+        "league/oauth2-instagram": "Provides Social Authentication with Instagram",
+        "league/oauth2-google": "Provides Social Authentication with Google+",
+        "league/oauth2-linkedin": "Provides Social Authentication with LinkedIn",
+        "google/recaptcha": "Provides reCAPTCHA validation for registration form"
+    },
+    "autoload": {
+        "psr-4": {
+            "CakeDC\\Users\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CakeDC\\Users\\Test\\": "tests",
+            "CakeDC\\Users\\Test\\Fixture\\": "tests"
+        }
+    }
+}
