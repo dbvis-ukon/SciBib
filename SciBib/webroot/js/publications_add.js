@@ -1,20 +1,3 @@
-/**
-Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-**/
-
-
 /*********************
  * ON DOCUMENT READY *
  *********************/
@@ -28,7 +11,7 @@ $(document).ready(function () {
      *
      */
 
-//bibtex array:  0 = article, 1 = book etc. 
+    // Bibtex array:  0 = article, 1 = book etc.
     var bibtex = {
         Article: [false, false, false, false, false, false, false, true, true, true, true, false, true, false, false, true, false],
         Book: [true, false, false, true, true, false, false, false, true, true, true, false, false, false, true, true, true],
@@ -45,7 +28,8 @@ $(document).ready(function () {
         Techreport: [true, false, false, false, false, false, true, false, true, true, true, false, false, false, false, false, false],
         Unpublished: [false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false]
     };
-    //on change  change the bibtex fields in the add method
+
+    // On change  change the bibtex fields in the add method
     $("#typebox").change(function () {
         for (var i = 0; i < 17; i++) {
             if (bibtex[$("#typebox option:selected").text()][i]) {
@@ -57,13 +41,15 @@ $(document).ready(function () {
             }
         }
     });
-    //trigger for the first time 
+
+    // Trigger for the first time
     $("#typebox").trigger("change");
+
     /* 
      * 
      * PUBLICATION STATUS
-     * 
-     *   */
+     *
+     */
     $("#PublicationPublicationdate").datepicker({
         showButtonPanel: true,
         minDate: +1,
@@ -73,9 +59,11 @@ $(document).ready(function () {
         dateFormat: "yy-mm-dd",
         inline: true
     });
-    //by default the datepicker is disabled
+
+    // By default the datepicker is disabled
     $("#PublicationPublicationdate").datepicker('disable');
-    //Feedback Text 
+
+    // Feedback Text
     $("#PublicationSubmitted").change(function () {
         var beginActive = '<span style="color: green;">';
         var endActive = "</span>";
@@ -124,7 +112,8 @@ $(document).ready(function () {
         }
     }
     );
-    //On change functions for the buttons
+
+    // On change functions for the buttons
     $("#PublicationPublished").change(function () {
         $("#PublicationSubmitted").trigger("change");
     });
@@ -148,25 +137,28 @@ $(document).ready(function () {
     $("#PublicationPublicationdate").change(function () {
         $("#PublicationSubmitted").trigger("change");
     });
+
     /* 
      * 
      * CATEGORY
      * 
      */
+
     // Use the Plugin Select2
     $("#categories-ids").select2({
         tags: true,
         placeholder: 'Select categories from the menu to add them to the list',
         templateSelection: categoriesText
     });
-    /**
+
+    /*
      * Remove whitespace from both sides of a string
      */
     function categoriesText(data, container) {
         return data.text.trim();
     }
 
-    /**
+    /*
      * On Change select all the children and parents in the hierarchie
      */
     $("#categories-ids").on("select2:select", function (e) {
@@ -182,7 +174,8 @@ $(document).ready(function () {
         //change the view
         $("#categories-ids").trigger("change");
     });
-    /**
+
+    /*
      * On Change unselect all the children and parents in the hierarchie
      */
     $("#categories-ids").on("select2:unselect", function (e) {
@@ -197,6 +190,7 @@ $(document).ready(function () {
         //change the view
         $("#categories-ids").trigger("change");
     });
+
     /**
      * Get all children node ids of the category selected 
      * 
@@ -240,11 +234,11 @@ $(document).ready(function () {
         return nodes;
     }
 
-    /* 
+    /*
      * 
      * Abstract Photo Preview
      * 
-     *   */
+     */
     $("#imagePreview2").hide();
     $("#abstractphoto").on("change", function () {
         $("#imagePreview2").show();
@@ -262,11 +256,12 @@ $(document).ready(function () {
             };
         }
     });
+
     /* 
      * 
      * Thumb Preview
      * 
-     *   */
+     */
     $("#imagePreview").hide();
     $("#thumb").on("change", function () {
         $("#imagePreview").show();
@@ -284,18 +279,21 @@ $(document).ready(function () {
             };
         }
     });
+
     /* 
      * 
      * AUTHORS
      * 
-     *   */
+     */
+
     // Use the Plugin Select2
     $("#authors-ids").select2({
         tags: true,
         placeholder: 'Start typing a surname to get suggestions',
         minimumInputLength: 3
     });
-    /**
+
+    /*
      * On Change add the author to the list 
      */
     $("#authors-ids").on("select2:select", function (e) {
@@ -304,20 +302,22 @@ $(document).ready(function () {
         $("#authorsSortable").append('<li id="' + selectedId + '"> <span class="drag-handle">☰</span>'
                 + selectedName + '</li>');
     });
-    /**
+
+    /*
      * On Change remove the author to the list 
      */
     $("#authors-ids").on("select2:unselect", function (e) {
         var selectedId = e.params.data.id;
         $("#authorsSortable #" + selectedId).remove();
     });
-    // authors position 
+
+    // Authors position
     var list = document.getElementById("authorsSortable");
     Sortable.create(list, {
         animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
-    }); // That's all.
+    });
 
-    // if the mode is the edit mode get the authors sorted
+    // If the mode is the edit mode get the authors sorted
     if (window.location.href.indexOf("edit") > -1) {
         for (var i = 0; i < selectedAuthors.length; i++) {
             var selectedId = selectedAuthors[i].id;
@@ -327,44 +327,49 @@ $(document).ready(function () {
         }
     }
 
-    //observer for the order of the authors
-    //we add the ordering to a string 
-    //then we put it into the hidden form so we have it on the server side also
+    // Observer for the order of the authors
+    // We add the ordering to a string
+    // Then we put it into the hidden form so we have it on the server side also
     var observer = new MutationObserver(function () {
-        //fresh string
+        // Fresh string
         var authorsPosition = "";
         $('#authorsSortable li').each(function (li) {
-            //for each author save the => id,position;
+            // For each author save the => id,position;
             authorsPosition = authorsPosition + $(this).attr('id') + ',' + li + ';';
         });
-        //add all to the hidden input
+        // Add all to the hidden input
         $('#authorsPos').val(authorsPosition);
     });
-    // configuration of the observer:
+    // Configuration of the observer:
     var config = {attributes: false, childList: true, characterData: true, subtree: true};
-    // pass in the target node, as well as the observer options
+    // Pass in the target node, as well as the observer options
     observer.observe(document.querySelector('#authorsSortable'), config);
-    /* 
+
+    /*
      * 
      * KEYWORDS
      * 
-     *   */
+     */
 
     // Use the Plugin Select2
     $("#keywords-ids").select2({
         tags: true,
         placeholder: 'Start typing to get suggestions',
     });
+
     /* 
      * 
      * Info Icon
      * 
-     *   */
+     */
     $("#info_icon").click(function () {
         $('#abstractInfoText').toggle("slow");
     });
     $('#abstractInfoText').hide();
-    /* AUTHORS add new */
+
+    /*
+     * AUTHORS add new
+     */
     $("#addAuthorButton").click(function () {
         $("#addAuthorButton").slideUp();
         $("#addAuthorTable").css('display', 'block');
@@ -378,7 +383,10 @@ $(document).ready(function () {
             $("#CreateAuthorError").empty().append('<span class="error">Unable to create a new author</span>');
         }
     });
-    /* Keyword add new */
+
+    /*
+     * Keyword add new
+     */
     $("#addKeywordButton").click(function () {
         $("#addKeywordButton").slideUp();
         $("#addKeywordTable").css('display', 'block');
@@ -394,11 +402,12 @@ $(document).ready(function () {
     });
 
 });
+
 /********************
  * HELPER FUNCTIONS *
  ********************/
 
-/* 
+/**
  * Create Author with ajax
  */
 function createAuthor(forename, surname) {
@@ -415,8 +424,9 @@ function createAuthor(forename, surname) {
         },
     });
 }
-/* 
- * add author to the select2 component 
+
+/**
+ * Add author to the select2 component
  */
 function addAuthor(author) {
     var select = $('#authors-ids');
@@ -437,7 +447,7 @@ function addAuthor(author) {
 
 /* KEYWORDS */
 
-/* 
+/**
  * Create Keyword with ajax
  */
 function createKeyword(keyword) {
@@ -453,8 +463,9 @@ function createKeyword(keyword) {
         },
     });
 }
-/* 
- * add Keyword to the select2 component 
+
+/**
+ * Add Keyword to the select2 component
  */
 function addKeyword(keyword) {
     var select = $('#keywords-ids');
@@ -470,4 +481,49 @@ function addKeyword(keyword) {
             $(".success").remove();
         }
     }, 5000)
+}
+
+/**
+ * valid - Validation function to check if inputs are set
+ */
+
+function valid(event) {
+
+    // selector for inputs
+    var check_value_ids = ['#title', 'input[name="institution[]"]:checked'];
+    // selector to show user whats missing
+    var alert_value_ids = ['#title', '#institution'];
+
+    for (var id in check_value_ids) {
+        if (!$(check_value_ids[id]).val()) {
+
+            $(alert_value_ids[id]).css("border", "solid red 2px");
+            $('html, body').animate({
+                scrollTop: $(alert_value_ids[id]).offset().top
+            }, 2000);
+
+            event.preventDefault();
+            return 0;
+        }
+    }
+
+    // selector for html
+    var check_html_ids = ['#authorsSortable'];
+    // selector to show user whats missing
+    var alert_html_ids = ['#authors'];
+
+    for (var id in check_html_ids) {
+        if ($(check_html_ids[id]).html().replace(/\s/g, "") == "") {
+
+            $(alert_html_ids[id]).css("border", "solid red 2px");
+            $('html, body').animate({
+                scrollTop: $(alert_html_ids[id]).offset().top
+            }, 2000);
+
+            event.preventDefault();
+            return 0;
+        }
+    }
+
+    return 1;
 }

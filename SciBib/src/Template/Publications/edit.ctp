@@ -1,18 +1,3 @@
-<!--
-   Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
 <script>
     var baseURL = "<?php echo $this->request->webroot ?>/";
     var imageBaseURL = baseURL+"img";
@@ -49,7 +34,7 @@ echo $this->Html->css('publications-add.css');
 </nav>
 <div class="publications form large-9 medium-8 columns content">
 
-    <?= $this->Form->create($publication, ['type' => 'file']) ?>
+    <?= $this->Form->create($publication, ['type' => 'file', 'onsubmit' => 'return valid(event);']) ?>
 
     <h4>General Information</h4>
 
@@ -61,6 +46,7 @@ echo $this->Html->css('publications-add.css');
                     <?=
                     $this->Form->input('title', ['label' => ['class' => 'labelField'],
                         'class' => 'inputFieldTitle',
+                        'id' => 'title',
                         'placeholder' => 'Good research paper title']);
                     ?>
                 </td>
@@ -78,9 +64,19 @@ echo $this->Html->css('publications-add.css');
     <table>
         <tbody style="vertical-align: top;">
             <tr>    
-                <td>
+                <td id="institution">
+                    <?php $selectedChairs = array();
+                    for ($i = 0; $i < count($publication->chair_pub); $i++) {
+                        array_push($selectedChairs, $publication->chair_pub[$i]['id']);
+                    }
+                    ?>
                     <?=
-                    $this->Form->radio('institution', $chair);
+                    $this->Form->input('institution', ['options' => $chair,
+                        'id' => 'chair',
+                        'multiple' => 'checkbox',
+                        'type' => 'select',
+                        'val' => $selectedChairs
+                    ]);
                     ?>
                 </td>
                 <!--Submitted, Published Checkbox with the Publication data option-->
@@ -223,7 +219,7 @@ echo $this->Html->css('publications-add.css');
 
     <!-- AUTHOR -->
     <h4>Authors</h4>
-    <table>
+    <table id="authors">
         <tbody style="vertical-align: top;">
             <tr>    
                 <td style="width: 70%;"> 

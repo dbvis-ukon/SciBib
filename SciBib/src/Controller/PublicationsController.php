@@ -1,20 +1,5 @@
 <?php
 
-/** Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-**/
-
 namespace App\Controller;
 
 use Cake\View\Helper;
@@ -168,7 +153,7 @@ class PublicationsController extends AppController {
             }
         }
 
-        //a new publication will be created
+        // a new publication will be created
         $copyrights = $this->Publications->Copyrights->find('list', ['limit' => 200]);
         $authors = $this->Publications->Authors->find('list', ['keyField' => 'id',
             'valueField' => 'cleanname']);
@@ -195,7 +180,7 @@ class PublicationsController extends AppController {
         // get keywords
         $keywords = $this->Publications->Keywords->find('list', ['keyField' => 'id',
             'valueField' => 'name']);
-        //setting view variables
+        // setting view variables
         $this->set(compact('publication', 'copyrights', 'authors', 'categories', 'chair', 'optionsType', 'keywords'));
         $this->set('_serialize', ['publication']);
     }
@@ -212,7 +197,7 @@ class PublicationsController extends AppController {
             'contain' => ['Authors' => [
                     //needed so that the authros are in the right ordering
                     'sort' => ['AuthorsPublications.position' => 'ASC']
-                ], 'Categories']
+                ], 'Categories', 'ChairPub']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $publication = $this->Publications->patchEntity($publication, $this->request->data);
@@ -300,6 +285,11 @@ class PublicationsController extends AppController {
                 });
             }
         }
+        //filter header
+        $hideHeader = false;
+        if ($this->request->query('hide')) {
+            $hideHeader = true;
+        }
         //filter type 
         if ($this->request->query('type')) {
             //Other option
@@ -351,6 +341,7 @@ class PublicationsController extends AppController {
             });
         }
         //setting view variables
+        $this->set('hideFilterHeader', $hideHeader);
         $this->set('publications', $result);
         $this->set('isEmbedded', $this->isEmbedded());
     }

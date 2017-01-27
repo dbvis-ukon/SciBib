@@ -1,20 +1,5 @@
 <?php
 
-/** Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-**/
-
 namespace App\Model\Table;
 
 use App\Model\Entity\Publication;
@@ -69,6 +54,11 @@ class PublicationsTable extends Table {
             'targetForeignKey' => 'chair_id',
             'joinTable' => 'chairs_publications'
         ]);
+        $this->belongsToMany('ChairPub', [
+            'foreignKey' => 'publication_id',
+            'targetForeignKey' => 'chair_id',
+            'joinTable' => 'chairs_publications'
+        ]);
         $this->belongsToMany('Categories', [
             'foreignKey' => 'publication_id',
             'targetForeignKey' => 'category_id',
@@ -99,11 +89,11 @@ class PublicationsTable extends Table {
                     'field' => [ $this->aliasField('type')]
         ]);
 
-        //added the Upload Plugin 
+        // Add the Upload Plugin
         $this->addBehavior('Josegonzalez/Upload.Upload', [
             'thumb' => [
                 'path' => 'webroot{DS}uploadedFiles{DS}thumbs{DS}',
-                //thumb resize 
+                // thumb resize
                 'transformer' => function (\Cake\Datasource\RepositoryInterface $table, \Cake\Datasource\EntityInterface $entity, $data, $field, $settings) {
                     // get the extension from the file
                     // there could be better ways to do this, and it will fail
@@ -121,7 +111,7 @@ class PublicationsTable extends Table {
                             ->save($tmp);
                     // Now return the original *and* the thumbnail
                     return [
-                        //$data['tmp_name'] => $data['name'],
+                        // $data['tmp_name'] => $data['name'],
                         $tmp => $data['name'],
                     ];
                 },
@@ -132,14 +122,14 @@ class PublicationsTable extends Table {
                     ],
                     'mainfile' => [
                         'path' => 'webroot{DS}uploadedFiles{DS}',
-                        //rename PDF
+                        // rename PDF
                         'nameCallback' => function (array $data, array $options) {
                             return date('Y-m-d') . $data['name'];
                         }
                     ],
                     'abstractphoto' => [
                         'path' => 'webroot{DS}uploadedFiles{DS}abstractphotos{DS}',
-                        //thumb resize 
+                        // thumb resize
                         'transformer' => function (\Cake\Datasource\RepositoryInterface $table, \Cake\Datasource\EntityInterface $entity, $data, $field, $settings) {
                             // get the extension from the file
                             // there could be better ways to do this, and it will fail
@@ -161,7 +151,7 @@ class PublicationsTable extends Table {
                                 $tmp => $data['name'],
                             ];
                         },
-                                //rename abstract photo
+                                // rename abstract photo
                                 'nameCallback' => function (array $data, array $options) {
                             return date('Y-m-d') . '-a-' . $data['name'];
                         }

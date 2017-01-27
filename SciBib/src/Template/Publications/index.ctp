@@ -1,18 +1,3 @@
-<!--
-   Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
 <?php
 $typeColors['inproceedings'] = '#7f7fff';
 $typeColors['article'] = '#ff7f7f';
@@ -21,15 +6,13 @@ $typeColors['inbook'] = '#c5b4a1';
 $typeColors['book'] = '#b5a1c5';
 $typeColors['other'] = '#888888';
 
-$hideFilterHeader = false;
-
 echo $this->Html->css('publications_index.css');
 
 ?>
 <div class="publications index large-9 medium-8 columns content">
 <?php
 
-if (!$user['active'] &&!$isEmbedded['isEmbedded']) {
+if (!$user['active'] && !$hideFilterHeader && !$isEmbedded['isEmbedded']) {
     ?>
         <div id="login">
             <ul class="right">
@@ -188,8 +171,8 @@ if (!$user['active'] &&!$isEmbedded['isEmbedded']) {
                                 . '<img src="' . $this->request->webroot . 'img/document_url.png" alt="DOI" style="width:50px;height:50px;"></a>';
                         }
                         if (!empty(trim($publication->mainfile)) &&
-                            file_exists(WWW_ROOT . 'uploadedFiles' . DS . $publication->mainfile &&
-                            $publication->published)
+                            file_exists(WWW_ROOT . 'uploadedFiles' . DS . $publication->mainfile) &&
+                            $publication->published
                         ) {
                             echo '<a href="' . $this->request->webroot . './uploadedFiles/' . $publication->mainfile .
                                 '"><img src="' . $this->request->webroot . 'img/document_pdf.png" alt="PDF" style="width:50px;height:50px;"></a>';
