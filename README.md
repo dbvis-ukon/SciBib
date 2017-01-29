@@ -44,18 +44,21 @@ sudo apt install php7.0 php7.0-cli php7.0-intl php7.0-xsl php7.0-mbstring
   ```
   
 ----------
- Use for this the ```scibib_db.sql``` sql file
+
  - Clone the git repository
 ```
 git clone https://github.com/UKN-DBVIS/SciBib.git
 ```
 
- - Create the scibib mysql database. 
-
+ - Create the scibib mysql database. Use for this the ```scibib_db.sql``` sql file.
+```
+mysql -u root -p < scibib_db.sql 
+```
 
  - Use composer to get the required packages and plugins.
  Move to ```~/SciBib/``` and use the update composer command
 ```
+cd SciBib
 composer update
 ```
 
