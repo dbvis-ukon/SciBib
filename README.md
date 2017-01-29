@@ -23,25 +23,49 @@ SciBib is an online **Sci**entific **Bib**liography System. The aim of SciBib is
 
 ### Installation
 
- - Install [PHP](http://php.net/manual/de/install.php)
- - Install [Composer](https://getcomposer.org/download/)
- - Install MySQL database 
- - Install Apache HTTP Server
+ - Install PHP and extensions
+ ```
+sudo apt install php7.0 php7.0-cli php7.0-intl php7.0-xsl php7.0-mbstring
+```
  
+ - Install [Composer](https://getcomposer.org/download/)
+ ```
+ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+```
+
+ - Install MySQL database and PHP extension
+ ```
+ sudo apt install mysql-server php-mysql
+ ```
+ 
+ - Install Apache HTTP Server
+  ```
+ sudo apt install apache2 apache2-doc 
+  ```
+  
 ----------
- - Create the scibib mysql database. 
  Use for this the ```scibib_db.sql``` sql file
  - Clone the git repository
 ```
 git clone https://github.com/UKN-DBVIS/SciBib.git
 ```
+
+ - Create the scibib mysql database. 
+
+
  - Use composer to get the required packages and plugins.
  Move to ```~/SciBib/``` and use the update composer command
 ```
 composer update
 ```
+
  - Edit the ````~/SciBib/config/app.php `` 
- Add a custom salt security string 
+ Create a custom salt security string
+ ```
+ echo -e "import uuid\nprint(uuid.uuid4().hex)" | python3
+ ```
+ 
+ Add your salt to the config (minimum length: 256 bits / 32 bytes)
 ```
 ...
 'Security' => [
