@@ -81,7 +81,13 @@ bin/cake users addSuperuser
 
 ## Deployment
 
-***ToDo*** how to deploy live system
+Steps as seen as in the Installation process above.
+
+## Troubleshooting
+
+- If ```composer update``` fails, be sure to have installed all required PHP extensions. 
+  Especially the php-intl and MYSQL extensions. 
+
 
 ## Built With
 
