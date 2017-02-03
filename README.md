@@ -43,9 +43,10 @@ sudo apt install php7.0 php7.0-cli php7.0-intl php7.0-xsl php7.0-mbstring php7.0
  sudo apt install mysql-server php-mysql
  ```
  
- - Install Apache HTTP Server
+ - Install Apache HTTP Server and enable the mod
   ```
  sudo apt install apache2 apache2-doc libapache2-mod-php7.0
+ sudo a2enmod rewrite
   ```
   
 ----------
@@ -119,6 +120,17 @@ ln -s /home/ubuntu/litmgmt/SciBib/SciBib /var/www/html/SciBib
 
 - Change permissions so that Apache2 can access the files
 chown -R www-data /home/ubuntu/litmgmt/SciBib/*
+
+- Patch users directory
+``` 
+sudo rm -rf /home/ubuntu/litmgmt/SciBib/SciBib/vendor/cakedc/users/
+wget https://github.com/UKN-DBVIS/SciBib/archive/master.zip
+unzip master.zip
+sudo cp -r SciBib-master/SciBib/vendor/cakedc/users litmgmt/SciBib/SciBib/vendor/cakedc/
+sudo chown -R www-data litmgmt/SciBib/SciBib/vendor/cakedc/*
+sudo chgrp -R www-data litmgmt/SciBib/SciBib/vendor/cakedc/*
+sudo services apache2 restart
+```
 
 - For productive usage, run the command `mysql_secure_installation` to secure the MYSQL db.
 
