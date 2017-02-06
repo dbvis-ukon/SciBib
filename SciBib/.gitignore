@@ -2,7 +2,6 @@
 ###################
 /tmp/*
 /logs/*
-/webroot/uploadedFiles/*
 /nbproject/*
 composer.lock
 /config/app.php

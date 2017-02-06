@@ -21,6 +21,7 @@
         <li><?= $this->Html->link($this->Html->image('/img/author.png', ['width' => '16', 'height' => '16']) . ' ' . __('Add, edit or delete an author'), ['controller' => 'Authors', 'action' => 'index'], ['escape' => false]) ?></li>
         <li><?= $this->Html->link($this->Html->image('/img/keyword.png', ['width' => '16', 'height' => '16']) . ' ' . __('Edit or delete a keyword'), ['controller' => 'Keywords', 'action' => 'index'], ['escape' => false]) ?></li>
         <li><?= $this->Html->link($this->Html->image('/img/category.png', ['width' => '16', 'height' => '16']) . ' ' . __('Add, edit or delete a category'), ['controller' => 'Categories', 'action' => 'index'], ['escape' => false]) ?></li>
+        <li><?= $this->Html->link($this->Html->image('/img/university.png', ['width' => '16', 'height' => '16']) . ' ' . __('Add, edit or delete a chair'), ['controller' => 'Chairs', 'action' => 'index'], ['escape' => false]) ?></li>
         <li><?= $this->Html->link($this->Html->image('/img/change_password.png', ['width' => '16', 'height' => '16']) . ' ' . __('Change your user password'), ['controller' => 'users', 'action' => 'users/changePassword'], ['escape' => false]) ?></li>
         <?php
         // check if user is superuser and if show the add users menu point 
