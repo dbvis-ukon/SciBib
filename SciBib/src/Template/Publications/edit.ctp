@@ -1,9 +1,26 @@
 <script>
     var baseURL = "<?php echo $this->request->webroot ?>/";
-    var imageBaseURL = baseURL+"img";
+    var imageBaseURL = baseURL + "img";
 </script>
 
 <?php
+/*
+   Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+
 //Javascirpt libs 
 echo $this->Html->script('/js/jquery-1.12.0.js');
 echo $this->Html->script('/js/jquery-ui.js');
@@ -66,17 +83,14 @@ echo $this->Html->css('publications-add.css');
             <tr>    
                 <td id="institution">
                     <?php $selectedChairs = array();
-                    for ($i = 0; $i < count($publication->chair_pub); $i++) {
-                        array_push($selectedChairs, $publication->chair_pub[$i]['id']);
+                    for ($i = 0; $i < count($publication->chairs); $i++) {
+                        array_push($selectedChairs, $publication->chairs[$i]['id']);
                     }
-                    ?>
-                    <?=
-                    $this->Form->input('institution', ['options' => $chair,
-                        'id' => 'chair',
+                    echo $this->Form->input('chairs._ids', ['options' => $chairs,
                         'multiple' => 'checkbox',
-                        'type' => 'select',
-                        'val' => $selectedChairs
+                        'type' => 'select'
                     ]);
+
                     ?>
                 </td>
                 <!--Submitted, Published Checkbox with the Publication data option-->
@@ -211,7 +225,23 @@ echo $this->Html->css('publications-add.css');
                     ?>
                 </td>
                 <td> 
-                    <div id="imagePreview"></div>
+                    <div id="imagePreview">
+
+                    </div>
+                </td>
+                <td> 
+                    <div id="currentThumb">
+                        Current Thumbnail:
+                           <?php if ($publication->thumb == null ||
+                                       !file_exists(WWW_ROOT . 'uploadedFiles' . DS . 'thumbs' . DS . $publication->thumb)) {
+                                    echo $this->Html->image('/uploadedFiles/thumbs/default.png'
+                            , ['width' => '100px', 'height' => '100px',]);
+                                } else {
+                                    echo $this->Html->image('/uploadedFiles/thumbs/'
+                            . $publication->thumb, ['width' => '100px', 'height' => '100px ;']);
+                            }
+                        ?>
+                    </div>
                 </td> 
             </tr>
         </tbody>
@@ -303,6 +333,16 @@ echo $this->Html->css('publications-add.css');
     $this->Form->input('mainfile', ['type' => 'file', 'label' => false]);
     ?>
 
+    <?php
+        if (!empty(trim($publication->mainfile)) &&
+           file_exists(WWW_ROOT . 'uploadedFiles' . DS . $publication->mainfile) &&
+            $publication->published
+            ) {
+                echo 'Current document <a href="' . $this->request->webroot . './uploadedFiles/' . $publication->mainfile .
+                '"><img src="' . $this->request->webroot . 'img/document_pdf.png" alt="PDF" style="width:50px;height:50px;"></a>';
+              }
+    ?>
+
     <h4>
         Paper Abstract
         <?php echo $this->Html->image('/img/info_icon.png', ['width' => '32', 'height' => '32', 'id' => 'info_icon']); ?>
@@ -331,6 +371,18 @@ echo $this->Html->css('publications-add.css');
         </tbody>
     </table>
     <div id="imagePreview2"></div>
+    <div id="currentThumb">
+
+        <?php
+            if ($publication->abstractphoto) {
+                 echo  'Current paper image:' ;
+                 echo $this->Html->link(
+                        $this->Html->image('/uploadedFiles/abstractphotos/'
+                        . $publication->abstractphoto), ('/uploadedFiles/abstractphotos/original-' . $publication->abstractphoto), ['escape' => false, 'class' => 'abstractPhoto']);
+            }
+        ?>
+    </div>
+
     <div id="paperPreview">
 
     </div>

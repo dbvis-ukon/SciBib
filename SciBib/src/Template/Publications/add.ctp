@@ -62,8 +62,7 @@ echo $this->Html->css('publications-add.css');
             <tr>    
                 <td id="institution">
                     <?=
-                    $this->Form->input('institution', ['options' => $chair,
-                        'id' => 'chair',
+                    $this->Form->input('chairs._ids', ['options' => $chair,
                         'multiple' => 'checkbox',
                         'type' => 'select'
                     ]);

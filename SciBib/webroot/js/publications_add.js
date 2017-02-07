@@ -489,10 +489,10 @@ function addKeyword(keyword) {
 
 function valid(event) {
 
-    // selector for inputs
-    var check_value_ids = ['#title', 'input[name="institution[]"]:checked'];
-    // selector to show user whats missing
-    var alert_value_ids = ['#title', '#institution'];
+//    // selector for inputs
+    var check_value_ids = ['#title'];
+//    // selector to show user whats missing
+    var alert_value_ids = ['#title'];
 
     for (var id in check_value_ids) {
         if (!$(check_value_ids[id]).val()) {

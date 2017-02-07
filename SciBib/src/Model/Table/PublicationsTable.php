@@ -54,11 +54,6 @@ class PublicationsTable extends Table {
             'targetForeignKey' => 'chair_id',
             'joinTable' => 'chairs_publications'
         ]);
-        $this->belongsToMany('ChairPub', [
-            'foreignKey' => 'publication_id',
-            'targetForeignKey' => 'chair_id',
-            'joinTable' => 'chairs_publications'
-        ]);
         $this->belongsToMany('Categories', [
             'foreignKey' => 'publication_id',
             'targetForeignKey' => 'category_id',

@@ -197,7 +197,7 @@ class PublicationsController extends AppController {
             'contain' => ['Authors' => [
                     //needed so that the authros are in the right ordering
                     'sort' => ['AuthorsPublications.position' => 'ASC']
-                ], 'Categories', 'ChairPub']
+                ], 'Categories', 'Chairs']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
                         // get the data
@@ -251,13 +251,13 @@ class PublicationsController extends AppController {
             'PhDThesis' => 'PhDThesis', 'Proceedings' => 'Proceedings', 'Techreport' => 'Techreport',
             'Unpublished' => 'Unpublished'];
         // get chairs
-        $chair = $this->Publications->Chairs->find('list', ['keyField' => 'id',
+        $chairs = $this->Publications->Chairs->find('list', ['keyField' => 'id',
             'valueField' => 'name']);
         // get keywords
         $keywords = $this->Publications->Keywords->find('list', ['keyField' => 'id',
             'valueField' => 'name']);
         //setting view variables
-        $this->set(compact('publication', 'copyrights', 'authors', 'categories', 'chair', 'optionsType', 'keywords'));
+        $this->set(compact('publication', 'copyrights', 'authors', 'categories', 'chairs', 'optionsType', 'keywords'));
         $this->set('_serialize', ['publication']);
     }
 
