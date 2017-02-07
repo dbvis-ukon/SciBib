@@ -200,13 +200,33 @@ class PublicationsController extends AppController {
                 ], 'Categories', 'ChairPub']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $publication = $this->Publications->patchEntity($publication, $this->request->data);
+                        // get the data
+            $data = $this->request->data;
+            // delete the authors input
+            $data['authors'] = [];
+            // get the authorsPosition hidden input
+            // split the string, this results in an array
+            // e.g. [[id,position],[id,position],....]
+            $authorsPositions = explode(";", $data['authorsPosition']);
+            // transform it to the form CakePHP needs it to be
+            foreach ($authorsPositions as $tmp) {
+                $author = [];
+                if ($tmp) {
+                    //split the string id,position
+                    $tmp = explode(",", $tmp);
+                    $author['id'] = $tmp[0];
+                    $author['_joinData'] = ['position' => $tmp[1]];
+                    //add the stuff to the authors array
+                    array_push($data['authors'], $author);
+                }
+            }
+            $publication = $this->Publications->patchEntity($publication, $data);
             if ($this->Publications->save($publication)) {
                 $this->Flash->success(__('The publication has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The publication could not be saved. Please, try again.'));
-            }
+            }            
         }
         //a new publication will be created
         $copyrights = $this->Publications->Copyrights->find('list', ['limit' => 200]);
