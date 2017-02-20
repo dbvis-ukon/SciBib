@@ -55,7 +55,7 @@ return [
             // public user for viewing the publications index and the view 
             'role' => '*',
             'controller' => ['Publications', 'Authors'],
-            'action' => ['Index', 'view'],
+            'action' => ['Index', 'view','tojson'],
             'allowed' => true,
         ],
         [

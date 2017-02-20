@@ -365,7 +365,93 @@ class PublicationsController extends AppController {
         $this->set('publications', $result);
         $this->set('isEmbedded', $this->isEmbedded());
     }
+    
+       /**
+     * Public index method
+     *
+     * @return void
+     */
+    public function tojson() {
 
+        // get all publications
+        $result = $this->paginate($this->Publications->find('all', [
+                    'contain' => ['Authors' => [
+                            'sort' => ['AuthorsPublications.position' => 'ASC']
+                        ], 'Categories']
+                        ]
+        ));
+        //filter year
+        if ($this->request->query('year')) {
+            if ($this->request->query('year') === 'lastTwoYears') {
+                $result = $result->filter(function ($publication) {
+                    return $publication->year >= (date('Y') - 1);
+                });
+            } else {
+                $result = $result->filter(function ($publication) {
+                    return $publication->year === $this->request->query('year');
+                });
+            }
+        }
+        //filter header
+        $hideHeader = true;
+        if ($this->request->query('hide')) {
+            $hideHeader = true;
+        }
+        //filter type 
+        if ($this->request->query('type')) {
+            //Other option
+            if ($this->request->query('type') === 'other') {
+                $result = $result->filter(function ($publication) {
+                    return ($publication->type === "Booklet" ||
+                            $publication->type === "Conference" ||
+                            $publication->type === "Incollection" ||
+                            $publication->type === "Manual" ||
+                            $publication->type === "Masterthesis" ||
+                            $publication->type === "Misc" ||
+                            $publication->type === "PhDThesis" ||
+                            $publication->type === "Proceedings" ||
+                            $publication->type === "Techreport" ||
+                            $publication->type === "Unpublished" );
+                });
+            } else {
+                $result = $result->filter(function ($publication) {
+                    return strcasecmp($publication->type, $this->request->query('type')) == 0;
+                });
+            }
+        }
+        //filter author
+        if ($this->request->query('author')) {
+            $result = $result->filter(function ($publication) {
+                foreach ($publication->authors as $author) {
+                    if ($author->id === (int) $this->request->query('author')) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        //filter category
+        if ($this->request->query('category')) {
+            $result = $result->filter(function ($publication) {
+                foreach ($publication->categories as $category) {
+                    if ($category->id === (int) $this->request->query('category')) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        //filter by kops
+        if ($this->request->query('filterByKops')) {
+            $result = $result->filter(function ($publication) {
+                return $publication->kops;
+            });
+        }
+        //setting view variables
+        $this->set(['publications' => $result,
+            '_serialize' => ['publications']]);
+    }
+    
     public function bibtex($id = null) {
 
         $this->viewBuilder()->layout('ajax');
@@ -376,8 +462,8 @@ class PublicationsController extends AppController {
                 ], 'Categories', 'Documents', 'Keywords']
         ]);
         //setting view variables
+        $this->set('hideFilterHeader', $hideHeader);
         $this->set('publication', $publication);
-        $this->set('_serialize', ['publication']);
     }
 
     private function isEmbedded() {
