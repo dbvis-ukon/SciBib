@@ -181,10 +181,9 @@ if (!$user['active'] && !$hideFilterHeader && !$isEmbedded['isEmbedded']) {
                              style="width:50px;height:50px;">
                     </a>
                     <?php
-                    if ($publication->public) {
                         if ($publication->doi) {
                             echo '<a href="http://dx.doi.org/' . $publication->doi . '" target="_blank">'
-                                . '<img src="' . $this->request->webroot . 'img/document_url.png" alt="DOI" style="width:50px;height:50px;"></a>';
+                                . '<img src="' . $this->request->webroot . 'img/document_doi.png" alt="DOI" style="width:50px;height:50px;"></a>';
                         }
                         if (!empty(trim($publication->mainfile)) &&
                             file_exists(WWW_ROOT . 'uploadedFiles' . DS . $publication->mainfile) &&
@@ -193,7 +192,14 @@ if (!$user['active'] && !$hideFilterHeader && !$isEmbedded['isEmbedded']) {
                             echo '<a href="' . $this->request->webroot . './uploadedFiles/' . $publication->mainfile .
                                 '"><img src="' . $this->request->webroot . 'img/document_pdf.png" alt="PDF" style="width:50px;height:50px;"></a>';
                         }
-                    }
+                        if ($publication->documents) {
+                          foreach ($publication->documents as $document) {
+                            if ($document->remote) {
+                              echo '<a href="' . $document->filename .
+                                  '"><img src="' . $this->request->webroot . 'img/document_url.png" alt="PDF" style="width:50px;height:50px;"></a>';
+                            }
+                          }
+                        }
                     ?>
                 </td>
                 <?php
