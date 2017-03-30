@@ -30,7 +30,7 @@ SciBib is an online **Sci**entific **Bib**liography System. The aim of SciBib is
 
  - Install PHP and extensions
  ```
-sudo apt install php7.0 php7.0-cli php7.0-intl php7.0-xsl php7.0-mbstring php7.0-zip php7.0-sqlite 
+sudo apt install php7.0 php7.0-cli php7.0-intl php7.0-xsl php7.0-mbstring php7.0-zip php7.0-sqlite php7.0-gd
 ```
  
  - Install [Composer](https://getcomposer.org/download/)
@@ -43,11 +43,22 @@ sudo apt install php7.0 php7.0-cli php7.0-intl php7.0-xsl php7.0-mbstring php7.0
  sudo apt install mysql-server php-mysql
  ```
  
- - Install Apache HTTP Server and enable the mod
+ - Install Apache HTTP Server and enable the rewrite mod
   ```
  sudo apt install apache2 apache2-doc libapache2-mod-php7.0
  sudo a2enmod rewrite
   ```
+  
+  - Change the settings to let Apache use rewrite on SciBib
+  ```
+ /etc/apache2/sites-available/default
+ <Directory /your/path/to/SciBib>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+ </Directory>
+ ```
   
 ----------
 
@@ -119,7 +130,9 @@ ln -s /home/ubuntu/litmgmt/SciBib/SciBib /var/www/html/SciBib
 ```
 
 - Change permissions so that Apache2 can access the files
+```
 chown -R www-data /home/ubuntu/litmgmt/SciBib/*
+```
 
 - Patch users directory
 ``` 
