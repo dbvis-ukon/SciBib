@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@
    limitations under the License.
  **/
 
-body{
+body {
     color: #4d4d4d;
     display: block;
     font-size: 0.875rem;
@@ -57,7 +57,7 @@ body{
 }
 
 /* no border at the bottom */
-table tr{
+table tr {
     border-bottom: 0px solid #ebebec;
 }
 tr td {
@@ -70,31 +70,41 @@ table tr th, table tr td {
     text-align: left;
 }
 
-#PublicationPublicationdate{
+#documents tr td input {
+    margin: 0;
+
+}
+
+#documents tr td {
+    padding: 5px;
+    vertical-align: middle;
+}
+
+#PublicationPublicationdate {
     width: 125px;
     display: inline-block;
 }
 
-.radioBtnInLine{
+.radioBtnInLine {
     display: inline;
     margin-left: 15px !important;
 }
 
-.labelField{
+.labelField {
     width: 50px;
     float: left;
     margin-top: 10px;
 }
 
-.labelCopyrightField{
+.labelCopyrightField {
     width: 80px;
     float: left;
     margin-top: 10px;
 }
 
-.inputFieldTitle{
+.inputFieldTitle {
     width: 80% !important;
-}     
+}
 
 .inputFieldTitle:focus {
     border-width: 3px;
@@ -116,7 +126,7 @@ input[type="radio"] {
 }
 
 /* KOPS Label */
-.kopsLabel{
+.kopsLabel {
     margin-left: 50px !important;
     line-height: 0 !important;
     font-size: 0.7rem;
@@ -125,8 +135,7 @@ input[type="radio"] {
 }
 
 /*Author Ordering */
-
-#authorsSort{
+#authorsSort {
     margin-left:20px;
 }
 
@@ -154,7 +163,7 @@ input[type="radio"] {
     margin-bottom: 2px;
 }
 
-#abstractInfoText, #bibtex_help_text{
+#abstractInfoText, #bibtex_help_text {
     background-color: #E6E6E6;
     color: #000000;
     padding: 8px;
@@ -163,8 +172,7 @@ input[type="radio"] {
 }
 
 /*add author css */
-
-#addAuthorButton{
+#addAuthorButton {
     font-weight:normal;
     border: 1px solid #aaa;
     font-size:1em;
@@ -174,12 +182,12 @@ input[type="radio"] {
     display: inline;
 }
 
-#addAuthorButton:hover{
+#addAuthorButton:hover {
     background: #aaa;
     color: white;
 }
 
-#SubmitAuthor{
+#SubmitAuthor {
     background: #969696;
     border-radius: 8px;
     color: #ffffff;
@@ -191,13 +199,12 @@ input[type="radio"] {
     background: #737373;
 }
 
-#addAuthorTable td{
+#addAuthorTable td {
     padding: 5px;
 }
 
 /*add keyword css */
-
-#addKeywordButton{
+#addKeywordButton {
     font-weight:normal;
     border: 1px solid #aaa;
     font-size:1em;
@@ -207,12 +214,12 @@ input[type="radio"] {
     display: inline;
 }
 
-#addKeywordButton:hover{
+#addKeywordButton:hover {
     background: #aaa;
     color: white;
 }
 
-#SubmitKeyword{
+#SubmitKeyword {
     background: #969696;
     border-radius: 8px;
     color: #ffffff;
@@ -224,7 +231,7 @@ input[type="radio"] {
     background: #737373;
 }
 
-#addKeywordTable td{
+#addKeywordTable td {
     padding: 5px;
 }
 
@@ -238,6 +245,26 @@ input[type="radio"] {
     background-color: #DFF2BF;
 }
 
-.success:before{
+.success:before {
     content: "\2714";
+}
+
+.addButton {
+    font-weight:normal;
+    border: 1px solid #aaa;
+    font-size:1em;
+    text-align:left;
+    line-height:1;
+    padding:9px;
+    display: inline;
+    margin: 0 10px 0 0;
+}
+
+.addButton:hover {
+    background: #aaa;
+    color: white;
+}
+
+.divider {
+    margin-bottom: 20px;
 }

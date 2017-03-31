@@ -52,14 +52,14 @@
 return [
     'Users.SimpleRbac.permissions' => [
         [
-            // public user for viewing the publications index and the view 
+            // public user for viewing the publications index and the view
             'role' => '*',
             'controller' => ['Publications', 'Authors'],
-            'action' => ['Index', 'view','tojson'],
+            'action' => ['Index', 'view','tojson', 'tobibtex'],
             'allowed' => true,
         ],
         [
-            // normal user for viewing change password and logout 
+            // normal user for viewing change password and logout
             'role' => 'user',
             'plugin' => 'CakeDC/Users',
             'controller' => 'Users',

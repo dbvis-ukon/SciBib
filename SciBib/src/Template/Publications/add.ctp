@@ -5,7 +5,7 @@
 </script>
 
 <?php
-//Javascirpt libs 
+//Javascirpt libs
 echo $this->Html->script('/js/jquery-1.12.0.js');
 echo $this->Html->script('/js/jquery-ui.js');
 echo $this->Html->script('/js/select2.full.js');
@@ -16,7 +16,7 @@ echo $this->Html->script('/js/Sortable.js');
 ?>
 
 <?php
-//CSS files 
+//CSS files
 echo $this->Html->css('jquery-ui.css');
 echo $this->Html->css('select2.css');
 echo $this->Html->css('publications-add.css');
@@ -37,8 +37,8 @@ echo $this->Html->css('publications-add.css');
     <!--    Type of the Publication and the title-->
     <table>
         <tbody style="vertical-align: top;">
-            <tr>    
-                <td> 
+            <tr>
+                <td>
                     <?=
                     $this->Form->input('title', ['label' => ['class' => 'labelField'],
                         'class' => 'inputFieldTitle',
@@ -46,20 +46,20 @@ echo $this->Html->css('publications-add.css');
                         'placeholder' => 'Good research paper title']);
                     ?>
                 </td>
-                <td> 
-                    Type &nbsp 
+                <td>
+                    Type &nbsp
                     <?=
                     $this->Form->select('type', $optionsType, ['empty' => false,
                         'id' => 'typebox'])
                     ?>
-                </td> 
+                </td>
             </tr>
         </tbody>
     </table>
 
     <table>
         <tbody style="vertical-align: top;">
-            <tr>    
+            <tr>
                 <td id="institution">
                     <?=
                     $this->Form->input('chairs._ids', ['options' => $chair,
@@ -69,14 +69,14 @@ echo $this->Html->css('publications-add.css');
                     ?>
                 </td>
                 <!--Submitted, Published Checkbox with the Publication data option-->
-                <td> 
-                    <?= $this->Form->checkbox('submitted', ['id' => 'PublicationSubmitted']) ?> 
-                    Submitted &nbsp 
+                <td>
+                    <?= $this->Form->checkbox('submitted', ['id' => 'PublicationSubmitted']) ?>
+                    Submitted &nbsp
                 </td>
-                <td> 
-                    <?= $this->Form->checkbox('published', ['id' => 'PublicationPublished']) ?> 
-                    Published &nbsp 
-                </td> 
+                <td>
+                    <?= $this->Form->checkbox('published', ['id' => 'PublicationPublished']) ?>
+                    Published &nbsp
+                </td>
                 <td>
                     <!-- Checkboxes not public, public, made ... -->
                     <?=
@@ -105,8 +105,8 @@ echo $this->Html->css('publications-add.css');
 
     <table>
         <tbody style="vertical-align: top;">
-            <tr>    
-                <td style="width: 30%;"> 
+            <tr>
+                <td style="width: 30%;">
                     Year &nbsp
                     <?php
                     $years = array_combine(range(date('Y') + 1, date('Y') - 20), range(date('Y') + 1, date('Y') - 20));
@@ -114,16 +114,16 @@ echo $this->Html->css('publications-add.css');
                         'class' => 'inputFieldTitle']);
                     ?>
                 </td>
-                <td> 
+                <td>
                     <?=
                     $this->Form->input('kops', ['label' => ['class' => 'labelField'],
                         'class' => 'inputFieldTitle',
                         'placeholder' => 'Example: http://kops.uni-konstanz.de/handle/1234567/1235']);
                     ?>
-                    <p class="kopsLabel"> 
-                        Please search <a href='http://kops.uni-konstanz.de/discover?query=""' target='_blank'>KOPS</a> for the full URL!
+                    <p class="kopsLabel">
+                        Please search <a href='http://kops.uni-konstanz.de/discover?query=' target='_blank'>KOPS</a> for the full URL!
                     </p>
-                </td> 
+                </td>
             </tr>
         </tbody>
     </table>
@@ -165,8 +165,8 @@ echo $this->Html->css('publications-add.css');
     <br>
     <table id="addKeywordTable" style="display: none;">
         <tbody style="vertical-align: top;">
-            <tr>    
-                <td> 
+            <tr>
+                <td>
                     Keyword &nbsp;
                     <input type="text" id="AddKeyword" value="" />
                 </td>
@@ -190,8 +190,8 @@ echo $this->Html->css('publications-add.css');
     ?>
     <table>
         <tbody style="vertical-align: top;">
-            <tr>    
-                <td style="width: 30%;"> 
+            <tr>
+                <td style="width: 30%;">
                     <br> Thumbnail
                     <?=
                     $this->Form->input('thumb', ['type' => 'file',
@@ -199,9 +199,9 @@ echo $this->Html->css('publications-add.css');
                         'label' => false]);
                     ?>
                 </td>
-                <td> 
+                <td>
                     <div id="imagePreview"></div>
-                </td> 
+                </td>
             </tr>
         </tbody>
     </table>
@@ -210,8 +210,8 @@ echo $this->Html->css('publications-add.css');
     <h4>Authors</h4>
     <table id="authors">
         <tbody style="vertical-align: top;">
-            <tr>    
-                <td style="width: 70%;"> 
+            <tr>
+                <td style="width: 70%;">
                     <?=
                     $this->Form->input('authors._ids', ['options' => $authors,
                         'multiple' => 'multiple',
@@ -220,7 +220,7 @@ echo $this->Html->css('publications-add.css');
                     ]);
                     ?>
                 </td>
-                <td> 
+                <td>
                     <div id="authorsSort">
                         Sequence of Authors
                         <?=
@@ -229,9 +229,9 @@ echo $this->Html->css('publications-add.css');
                         ?>
                         <!--The sortable authors list -->
                         <ul id="authorsSortable">
-                        </ul> 
+                        </ul>
                     </div>
-                </td> 
+                </td>
             </tr>
         </tbody>
     </table>
@@ -242,15 +242,15 @@ echo $this->Html->css('publications-add.css');
     <br>
     <table id="addAuthorTable" style="display: none;">
         <tbody style="vertical-align: top;">
-            <tr>    
-                <td> 
+            <tr>
+                <td>
                     Forename &nbsp;
                     <input type="text" id="AddForename" value="" />
                 </td>
-                <td> 
+                <td>
                     Surname &nbsp;
                     <input type="text" id="AddSurname" value="" />
-                </td> 
+                </td>
                 <td>
                     <input type="button" value="Add"  name="SubmitAuthor" id="SubmitAuthor" />
                 </td>
@@ -288,18 +288,52 @@ echo $this->Html->css('publications-add.css');
 
     <h4>Documents </h4>
 
-    <?=
-    /* FILES */
-    $this->Form->input('mainfile', ['type' => 'file', 'label' => false]);
-    ?>
+    <table id="documents">
+        <tr>
+            <th>
+                Mainfile
+            </th>
+            <th>
+                URL/Filepath
+            </th>
+            <th>
+            </th>
+        </tr>
+        <tr>
+          <td>
+              <input type="radio" name="file" value="files[0]" checked>
+          </td>
+          <td>
+            <?=
+            /* FILES */
+            $this->Form->input('files[0]', ['type' => 'file', 'label' => false]);
+            ?>
+          </td>
+          <td>
+          </td>
+        </tr>
+    </table>
+
+    <p onclick='javascript:addDocument(true, "/img/remove.png"); return false;' class="addButton">
+      Add external document
+      <?php echo $this->Html->image('/img/add.png', ['width' => '16', 'height' => '16']); ?>
+    </p>
+
+    <p onclick='javascript:addDocument(false, "/img/remove.png"); return false;' class="addButton">
+      Upload PDF document
+      <?php echo $this->Html->image('/img/add.png', ['width' => '16', 'height' => '16']); ?>
+    </p>
+
+    <div class="divider">
+    </div>
 
     <h4>
         Paper Abstract
         <?php echo $this->Html->image('/img/info_icon.png', ['width' => '32', 'height' => '32', 'id' => 'info_icon']); ?>
     </h4>
     <div id="abstractInfoText">
-        This additional information is optional. 
-        It is shown in the detailed view of the paper. The image is resized to 400x400. 
+        This additional information is optional.
+        It is shown in the detailed view of the paper. The image is resized to 400x400.
     </div>
     <?=
     /* FILES */
@@ -308,15 +342,15 @@ echo $this->Html->css('publications-add.css');
 
     <table>
         <tbody style="vertical-align: top;">
-            <tr>    
-                <td style="width: 20%;"> 
-                    Image which represents the paper 
+            <tr>
+                <td style="width: 20%;">
+                    Image which represents the paper
                 </td>
-                <td> 
+                <td>
                     <?=
                     $this->Form->input('abstractphoto', ['type' => 'file', 'label' => false]);
                     ?>
-                </td> 
+                </td>
             </tr>
         </tbody>
     </table>

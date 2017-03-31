@@ -59,7 +59,7 @@ class PublicationsTable extends Table {
             'targetForeignKey' => 'category_id',
             'joinTable' => 'categories_publications'
         ]);
-         
+
 
 
         // Add the search behaviour to the table
@@ -277,4 +277,3 @@ class PublicationsTable extends Table {
                         return $rules;
                     }
                 }
-                

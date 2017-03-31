@@ -46,6 +46,18 @@ class DocumentsTable extends Table {
         $this->belongsTo('Publications', [
             'foreignKey' => 'publication_id'
         ]);
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'filename' => [
+                'path' => 'webroot{DS}uploadedFiles{DS}',
+                // rename PDF
+                'nameCallback' => function (array $data, array $options) {
+                    return date('Y-m-d') . 'doc' . $data['name'];
+                }
+            ]
+          ]
+        );
+
     }
 
     /**

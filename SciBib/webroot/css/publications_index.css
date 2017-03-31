@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@
     width: 80px;
     height: 80px;
     vertical-align: top;
-    padding: 3px !important; 
+    padding: 3px !important;
 }
 .publicationText{
     color: #666;
@@ -58,7 +58,7 @@ table.publicationListEntry:nth-child(odd) {
 table.publicationListEntry:nth-child(n) :hover {
     background: #f2f2f2;
     background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
-    background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+    background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);
 }
 /**********
  * FILTER *
@@ -97,4 +97,3 @@ table.publicationListEntry:nth-child(n) :hover {
         font-size: 85%;
         padding-top: 3px;
 }
-

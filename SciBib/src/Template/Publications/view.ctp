@@ -86,6 +86,17 @@ echo $this->Html->css('publications_view.css');
                     <button class="large button">Get Bibtex</button>
                 </a>
             </li>
+            <?php
+            foreach ($publication->documents as $document) {
+                if ($document->remote) {
+                    echo '<li><a href="' . $document->filename .
+                '"><button class="large button">External Resource</button></a></li>';
+                } else {
+                    echo '<li><a href="' . $this->request->webroot . './uploadedFiles/' . $document->filename .
+                '"><button class="large button">Get PDF</button></a></li>';
+                }
+            }
+            ?>
         </ul>
     </div>
     <br>
@@ -106,7 +117,6 @@ echo $this->Html->css('publications_view.css');
                 if (array_key_exists($loweredType, $typeColors))
                     $typeColor = $typeColors[$loweredType];
                 ?>
-
                 <table class="publicationListEntry">
                     <tbody>
                         <tr>
@@ -175,11 +185,12 @@ echo $this->Html->css('publications_view.css');
                                 }
                                 ?>
                             </td>
+                        </tr>
+                    </tbody>
+                </table>
                             <?php
                         endif;
                     endif;
                 endforeach;
                 ?>
-
-
-                </div>
+</div>

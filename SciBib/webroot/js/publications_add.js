@@ -2,12 +2,12 @@
  * ON DOCUMENT READY *
  *********************/
 
-$(document).ready(function () {
+$(document).ready(function() {
 
-    /* 
-     * 
+    /*
+     *
      * BIBTEX
-     * 
+     *
      *
      */
 
@@ -30,7 +30,7 @@ $(document).ready(function () {
     };
 
     // On change  change the bibtex fields in the add method
-    $("#typebox").change(function () {
+    $("#typebox").change(function() {
         for (var i = 0; i < 17; i++) {
             if (bibtex[$("#typebox option:selected").text()][i]) {
                 $('#BibtexFields > div:nth-child(' + (i + 1) + ')').show();
@@ -45,8 +45,8 @@ $(document).ready(function () {
     // Trigger for the first time
     $("#typebox").trigger("change");
 
-    /* 
-     * 
+    /*
+     *
      * PUBLICATION STATUS
      *
      */
@@ -64,7 +64,7 @@ $(document).ready(function () {
     $("#PublicationPublicationdate").datepicker('disable');
 
     // Feedback Text
-    $("#PublicationSubmitted").change(function () {
+    $("#PublicationSubmitted").change(function() {
         var beginActive = '<span style="color: green;">';
         var endActive = "</span>";
         var beginInactive = '<span style="color: darkorange;">';
@@ -110,19 +110,18 @@ $(document).ready(function () {
             $("#publicationStatusMessage").css('display', '');
             $("#publicationStatusWarning").css('display', 'none');
         }
-    }
-    );
+    });
 
     // On change functions for the buttons
-    $("#PublicationPublished").change(function () {
+    $("#PublicationPublished").change(function() {
         $("#PublicationSubmitted").trigger("change");
     });
-    $("#PublicationPublic").change(function () {
+    $("#PublicationPublic").change(function() {
         $("#PublicationSubmitted").trigger("change");
         $("#data-publication-publicitystatus-2").trigger("change");
     });
     $("#PublicationSubmitted").trigger("change");
-    $('#PublicationDate').change(function () {
+    $('#PublicationDate').change(function() {
         if ($("#PublicationDate").prop('checked')) {
             $("#PublicationPublicationdate").datepicker('enable');
             $("#PublicationPublic").prop('checked', true);
@@ -134,14 +133,14 @@ $(document).ready(function () {
         }
         $("#PublicationSubmitted").trigger("change");
     });
-    $("#PublicationPublicationdate").change(function () {
+    $("#PublicationPublicationdate").change(function() {
         $("#PublicationSubmitted").trigger("change");
     });
 
-    /* 
-     * 
+    /*
+     *
      * CATEGORY
-     * 
+     *
      */
 
     // Use the Plugin Select2
@@ -161,7 +160,7 @@ $(document).ready(function () {
     /*
      * On Change select all the children and parents in the hierarchie
      */
-    $("#categories-ids").on("select2:select", function (e) {
+    $("#categories-ids").on("select2:select", function(e) {
         var selectedId = e.params.data.id;
         var nodes = getAllChildNodes(selectedId);
         nodes = nodes.concat(getAllParentNodes(selectedId));
@@ -178,7 +177,7 @@ $(document).ready(function () {
     /*
      * On Change unselect all the children and parents in the hierarchie
      */
-    $("#categories-ids").on("select2:unselect", function (e) {
+    $("#categories-ids").on("select2:unselect", function(e) {
         var selectedId = e.params.data.id;
         var nodes = getAllChildNodes(selectedId);
         for (var i = 0; i < nodes.length; i++) {
@@ -192,13 +191,13 @@ $(document).ready(function () {
     });
 
     /**
-     * Get all children node ids of the category selected 
-     * 
+     * Get all children node ids of the category selected
+     *
      * @param selectedId category id.
-     * @return array of ids of categories 
+     * @return array of ids of categories
      */
     function getAllChildNodes(selectedId) {
-        //first level of recursion 
+        //first level of recursion
         var nodes = [];
         for (var i = 0; i < categories.length; i++) {
             if (selectedId == categories[i].parent_id) {
@@ -214,13 +213,13 @@ $(document).ready(function () {
     }
 
     /**
-     * Get all parent node ids of the category selected 
+     * Get all parent node ids of the category selected
      *
      * @param selectedId category id.
-     * @return array of ids of categories 
+     * @return array of ids of categories
      */
     function getAllParentNodes(selectedId) {
-        //first level of recursion 
+        //first level of recursion
         var nodes = [];
         for (var i = 0; i < categories.length; i++) {
             if (selectedId == categories[i].id) {
@@ -235,12 +234,12 @@ $(document).ready(function () {
     }
 
     /*
-     * 
+     *
      * Abstract Photo Preview
-     * 
+     *
      */
     $("#imagePreview2").hide();
-    $("#abstractphoto").on("change", function () {
+    $("#abstractphoto").on("change", function() {
         $("#imagePreview2").show();
         $("#imagePreview2").empty();
         var files = !!this.files ? this.files : [];
@@ -251,19 +250,19 @@ $(document).ready(function () {
             var reader = new FileReader(); // instance of the FileReader
             reader.readAsDataURL(files[0]); // read the local file
 
-            reader.onloadend = function () { // set image data as background of div
+            reader.onloadend = function() { // set image data as background of div
                 $("#imagePreview2").css("background-image", "url(" + this.result + ")");
             };
         }
     });
 
-    /* 
-     * 
+    /*
+     *
      * Thumb Preview
-     * 
+     *
      */
     $("#imagePreview").hide();
-    $("#thumb").on("change", function () {
+    $("#thumb").on("change", function() {
         $("#imagePreview").show();
         $("#imagePreview").empty();
         var files = !!this.files ? this.files : [];
@@ -274,16 +273,16 @@ $(document).ready(function () {
             var reader = new FileReader(); // instance of the FileReader
             reader.readAsDataURL(files[0]); // read the local file
 
-            reader.onloadend = function () { // set image data as background of div
+            reader.onloadend = function() { // set image data as background of div
                 $("#imagePreview").css("background-image", "url(" + this.result + ")");
             };
         }
     });
 
-    /* 
-     * 
+    /*
+     *
      * AUTHORS
-     * 
+     *
      */
 
     // Use the Plugin Select2
@@ -294,19 +293,19 @@ $(document).ready(function () {
     });
 
     /*
-     * On Change add the author to the list 
+     * On Change add the author to the list
      */
-    $("#authors-ids").on("select2:select", function (e) {
+    $("#authors-ids").on("select2:select", function(e) {
         var selectedId = e.params.data.id;
         var selectedName = e.params.data.text;
-        $("#authorsSortable").append('<li id="' + selectedId + '"> <span class="drag-handle">☰</span>'
-                + selectedName + '</li>');
+        $("#authorsSortable").append('<li id="' + selectedId + '"> <span class="drag-handle">☰</span>' +
+            selectedName + '</li>');
     });
 
     /*
-     * On Change remove the author to the list 
+     * On Change remove the author to the list
      */
-    $("#authors-ids").on("select2:unselect", function (e) {
+    $("#authors-ids").on("select2:unselect", function(e) {
         var selectedId = e.params.data.id;
         $("#authorsSortable #" + selectedId).remove();
     });
@@ -322,18 +321,18 @@ $(document).ready(function () {
         for (var i = 0; i < selectedAuthors.length; i++) {
             var selectedId = selectedAuthors[i].id;
             var selectedName = selectedAuthors[i].cleanname;
-            $("#authorsSortable").append('<li id="' + selectedId + '"> <span class="drag-handle">☰</span>'
-                    + selectedName + '</li>');
+            $("#authorsSortable").append('<li id="' + selectedId + '"> <span class="drag-handle">☰</span>' +
+                selectedName + '</li>');
         }
     }
 
     // Observer for the order of the authors
     // We add the ordering to a string
     // Then we put it into the hidden form so we have it on the server side also
-    var observer = new MutationObserver(function () {
+    var observer = new MutationObserver(function() {
         // Fresh string
         var authorsPosition = "";
-        $('#authorsSortable li').each(function (li) {
+        $('#authorsSortable li').each(function(li) {
             // For each author save the => id,position;
             authorsPosition = authorsPosition + $(this).attr('id') + ',' + li + ';';
         });
@@ -341,14 +340,19 @@ $(document).ready(function () {
         $('#authorsPos').val(authorsPosition);
     });
     // Configuration of the observer:
-    var config = {attributes: false, childList: true, characterData: true, subtree: true};
+    var config = {
+        attributes: false,
+        childList: true,
+        characterData: true,
+        subtree: true
+    };
     // Pass in the target node, as well as the observer options
     observer.observe(document.querySelector('#authorsSortable'), config);
 
     /*
-     * 
+     *
      * KEYWORDS
-     * 
+     *
      */
 
     // Use the Plugin Select2
@@ -357,12 +361,12 @@ $(document).ready(function () {
         placeholder: 'Start typing to get suggestions',
     });
 
-    /* 
-     * 
+    /*
+     *
      * Info Icon
-     * 
+     *
      */
-    $("#info_icon").click(function () {
+    $("#info_icon").click(function() {
         $('#abstractInfoText').toggle("slow");
     });
     $('#abstractInfoText').hide();
@@ -370,11 +374,11 @@ $(document).ready(function () {
     /*
      * AUTHORS add new
      */
-    $("#addAuthorButton").click(function () {
+    $("#addAuthorButton").click(function() {
         $("#addAuthorButton").slideUp();
         $("#addAuthorTable").css('display', 'block');
     });
-    $("#SubmitAuthor").click(function () {
+    $("#SubmitAuthor").click(function() {
         var forename = $("#AddForename").val();
         var surname = $("#AddSurname").val();
         if (forename && surname) {
@@ -387,11 +391,11 @@ $(document).ready(function () {
     /*
      * Keyword add new
      */
-    $("#addKeywordButton").click(function () {
+    $("#addKeywordButton").click(function() {
         $("#addKeywordButton").slideUp();
         $("#addKeywordTable").css('display', 'block');
     });
-    $("#SubmitKeyword").click(function () {
+    $("#SubmitKeyword").click(function() {
         var keyword = $("#AddKeyword").val();
         if (keyword) {
             createKeyword(keyword);
@@ -415,11 +419,11 @@ function createAuthor(forename, surname) {
         type: 'post',
         url: "/authors/ajaxCreate/?forename=" + forename + "&surname=" + surname,
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             $("#CreateAuthorSuccess").empty().append('<span class="success">Author created</span>');
             addAuthor(data);
         },
-        error: function (one, two, three) {
+        error: function(one, two, three) {
             $("#CreateAuthorError").empty().append('<span class="error">Unable to create a new author</span>');
         },
     });
@@ -431,14 +435,14 @@ function createAuthor(forename, surname) {
 function addAuthor(author) {
     var select = $('#authors-ids');
     var option = $('<option></option>').
-            attr('selected', true).
-            text(author['cleanname']).
-            val(author['id']);
+    attr('selected', true).
+    text(author['cleanname']).
+    val(author['id']);
     option.appendTo(select);
     select.trigger('change');
-    $("#authorsSortable").append('<li id="' + author['id'] + '"> <span class="drag-handle">☰</span>'
-            + author['cleanname'] + '</li>');
-    setTimeout(function () {
+    $("#authorsSortable").append('<li id="' + author['id'] + '"> <span class="drag-handle">☰</span>' +
+        author['cleanname'] + '</li>');
+    setTimeout(function() {
         if ($(".success").length > 0) {
             $(".success").remove();
         }
@@ -455,10 +459,10 @@ function createKeyword(keyword) {
         type: 'post',
         url: '/keywords/add/?keyword=' + keyword,
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             addKeyword(data);
         },
-        error: function (one, two, three) {
+        error: function(one, two, three) {
             $("#CreateKeywordError").empty().append('<span class="error">Unable to create a new keyword</span>');
         },
     });
@@ -470,17 +474,50 @@ function createKeyword(keyword) {
 function addKeyword(keyword) {
     var select = $('#keywords-ids');
     var option = $('<option></option>').
-            attr('selected', true).
-            text(keyword['name']).
-            val(keyword['id']);
+    attr('selected', true).
+    text(keyword['name']).
+    val(keyword['id']);
     option.appendTo(select);
     select.trigger('change');
     $("#CreateKeywordSuccess").empty().append('<span class="success">Keyword created</span>');
-    setTimeout(function () {
+    setTimeout(function() {
         if ($(".success").length > 0) {
             $(".success").remove();
         }
     }, 5000)
+}
+
+function addDocument(external, remove) {
+    if (typeof addDocument.external == 'undefined') {
+        addDocument.external = 0;
+        addDocument.files = 1;
+    }
+
+    if ((!external && addDocument.files > 4) || (external && addDocument.external > 4)) {
+        return -1;
+    }
+
+    var table_row = "<tr>";
+    table_row += "<td>";
+    if (!external) {
+        table_row += '<input type="radio" name="file" value="files['+addDocument.files+']">';
+    }
+    table_row += "</td>";
+    table_row += "<td>";
+    if (external) {
+        table_row += '<input type="text" name="external['+addDocument.external+']">';
+        ++addDocument.external;
+    } else {
+        table_row += '<input type="file" name="files['+addDocument.files+']">';
+        ++addDocument.files;
+    }
+    table_row += "</td>";
+    table_row += "<td>";
+    table_row += '<img onclick="$(this).parent().parent().remove();" src="' + remove + '" width="16" height="16">';
+    table_row += "</td>";
+    table_row += "</tr>";
+
+    $('#documents tr:last').after(table_row);
 }
 
 /**
@@ -489,9 +526,9 @@ function addKeyword(keyword) {
 
 function valid(event) {
 
-//    // selector for inputs
+    // selector for inputs
     var check_value_ids = ['#title'];
-//    // selector to show user whats missing
+    // selector to show user whats missing
     var alert_value_ids = ['#title'];
 
     for (var id in check_value_ids) {

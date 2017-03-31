@@ -84,20 +84,23 @@ class PublicationsController extends AppController {
                     'sort' => ['AuthorsPublications.position' => 'ASC']
                 ], 'Categories', 'Documents', 'Keywords']
         ]);
+
         //show related publications of the first and second author
         $firstAuthor = $publication->authors[0];
-        $secondAuthor = $publication->authors[0];
+        $secondAuthor = $publication->authors[1];
+
         //related publications
-        $relatedPublications = $this->Publications->find('all', [
-                    'contain' => ['Authors' => [
-                            'sort' => ['AuthorsPublications.position' => 'ASC']
-                        ], 'AuthorsPublications'],
-                    'order' => [
-                        'Publications.year' => 'desc',
-                        'Publications.created' => 'desc'
-                    ]
-                ])
-                //load only authors with the specify id
+        if (isset($secondAuthor)) {
+            $relatedPublications = $this->Publications->find('all', [
+                        'contain' => ['Authors' => [
+                                'sort' => ['AuthorsPublications.position' => 'ASC']
+                            ], 'AuthorsPublications'],
+                        'order' => [
+                            'Publications.year' => 'desc',
+                            'Publications.created' => 'desc'
+                        ]
+                    ])
+                    //load only authors with the specify id
                 ->matching('AuthorsPublications')
                 ->where([
                     'AuthorsPublications.author_id ' => $firstAuthor['id']
@@ -105,8 +108,25 @@ class PublicationsController extends AppController {
                 ->where([
                     'AuthorsPublications.author_id ' => $secondAuthor['id']
                 ])
-                //show only 5 pubications
                 ->limit(5);
+        } else {
+            $relatedPublications = $this->Publications->find('all', [
+                        'contain' => ['Authors' => [
+                                'sort' => ['AuthorsPublications.position' => 'ASC']
+                            ], 'AuthorsPublications'],
+                        'order' => [
+                            'Publications.year' => 'desc',
+                            'Publications.created' => 'desc'
+                        ]
+                    ])
+                    //load only authors with the specify id
+                ->matching('AuthorsPublications')
+                ->where([
+                    'AuthorsPublications.author_id ' => $firstAuthor['id']
+                ])
+                ->limit(5);
+        }
+
         //setting view variables
         $this->set('publication', $publication);
         $this->set('relatedPublications', $relatedPublications);
@@ -126,6 +146,37 @@ class PublicationsController extends AppController {
         if ($this->request->is('post')) {
             // get the data
             $data = $this->request->data;
+            // set documents and mainfile
+            $data['documents'] = [];
+
+            $name = substr($data['file'], 0, strpos($data['file'], "["));
+            $pos = substr($data['file'], strpos($data['file'], "[")+1, 1);
+            if (isset($data[$name][intval($pos)]['name']) && $data[$name][intval($pos)]['name'] != '') {
+                $data['mainfile'] = $data[$name][intval($pos)];
+            } else {
+              $data['mainfile'] = '';
+            }
+
+            foreach ($data[$name] as $tmp) {
+                if (isset($tmp['name']) && $tmp['name'] != '') {
+                  $document = [];
+                  $document['filename'] = $tmp;
+                  $document['visible'] = true;
+                  $document['public'] = true;
+                  $document['remote'] = false;
+                  array_push($data['documents'], $document);
+                }
+            }
+
+            foreach ($data['external'] as $tmp) {
+                $document = [];
+                $document['filename'] = $tmp;
+                $document['visible'] = true;
+                $document['public'] = true;
+                $document['remote'] = true;
+                array_push($data['documents'], $document);
+            }
+
             // delete the authors input
             $data['authors'] = [];
             // get the authorsPosition hidden input
@@ -144,10 +195,11 @@ class PublicationsController extends AppController {
                     array_push($data['authors'], $author);
                 }
             }
+
             $publication = $this->Publications->patchEntity($publication, $data);
             if ($this->Publications->save($publication)) {
                 $this->Flash->success(__('The publication has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'private-index']);
             } else {
                 $this->Flash->error(__('The publication could not be saved. Please, try again.'));
             }
@@ -197,11 +249,39 @@ class PublicationsController extends AppController {
             'contain' => ['Authors' => [
                     //needed so that the authros are in the right ordering
                     'sort' => ['AuthorsPublications.position' => 'ASC']
-                ], 'Categories', 'Chairs']
+                ], 'Categories', 'Chairs', 'Documents']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
                         // get the data
             $data = $this->request->data;
+
+            // set documents and mainfile
+            $name = substr($data['file'], 0, strpos($data['file'], "["));
+            $pos = substr($data['file'], strpos($data['file'], "[")+1, 1);
+            if (isset($data[$name][intval($pos)]['name']) && $data[$name][intval($pos)]['name'] != '') {
+                $data['mainfile'] = $data[$name][intval($pos)];
+            }
+
+            foreach ($data[$name] as $tmp) {
+                if (isset($tmp['name']) && $tmp['name'] != '') {
+                  $document = [];
+                  $document['filename'] = $tmp;
+                  $document['visible'] = true;
+                  $document['public'] = true;
+                  $document['remote'] = false;
+                  array_push($data['documents'], $document);
+                }
+            }
+
+            foreach ($data['external'] as $tmp) {
+                $document = [];
+                $document['filename'] = $tmp;
+                $document['visible'] = true;
+                $document['public'] = true;
+                $document['remote'] = true;
+                array_push($data['documents'], $document);
+            }
+
             // delete the authors input
             $data['authors'] = [];
             // get the authorsPosition hidden input
@@ -276,7 +356,7 @@ class PublicationsController extends AppController {
         } else {
             $this->Flash->error(__('The publication could not be deleted. Please, try again.'));
         }
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'private-index']);
     }
 
     /**
