@@ -38,7 +38,8 @@ class PublicationsTable extends Table {
             'foreignKey' => 'copyright_id'
         ]);
         $this->hasMany('Documents', [
-            'foreignKey' => 'publication_id'
+            'foreignKey' => 'publication_id',
+            'dependent' => true
         ]);
         $this->hasMany('Keywords', [
             'foreignKey' => 'publication_id'

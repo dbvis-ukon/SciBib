@@ -24,7 +24,7 @@
         <li><?= $this->Html->link($this->Html->image('/img/university.png', ['width' => '16', 'height' => '16']) . ' ' . __('Add, edit or delete a chair'), ['controller' => 'Chairs', 'action' => 'index'], ['escape' => false]) ?></li>
         <li><?= $this->Html->link($this->Html->image('/img/change_password.png', ['width' => '16', 'height' => '16']) . ' ' . __('Change your user password'), ['controller' => 'users', 'action' => 'users/changePassword'], ['escape' => false]) ?></li>
         <?php
-        // check if user is superuser and if show the add users menu point 
+        // check if user is superuser and if show the add users menu point
         if ($user['is_superuser']) {
             echo '<li>' . $this->Html->link($this->Html->image('/img/new_user.png', ['width' => '16', 'height' => '16']) . ' '
                     . __('Add, edit or delete a user'), ['controller' => 'Users', 'action' => 'users'], ['escape' => false]) . '</li>';
@@ -35,7 +35,7 @@
 <div class="Admincenter index large-9 medium-8 columns content">
     <h3><?= __('Latest changes:') ?></h3>
 
-
+<!--
 
     <h3><?= __('Statistics:') ?></h3>
 
@@ -59,5 +59,7 @@
             <td><?php echo $result[6]; ?></td>
         </tr>
     </table>
+
+-->
 
 </div>

@@ -344,57 +344,54 @@ echo $this->Html->css('publications-add.css');
               <input type="radio" name="file" value="files[0]" checked>
           </td>
           <td>
-            <?=
-            /* FILES */
-            $this->Form->input('files[0]', ['type' => 'file', 'label' => false]);
+            <?php
+            if (!empty(trim($publication->mainfile)) &&
+               file_exists(WWW_ROOT . 'uploadedFiles' . DS . $publication->mainfile)
+                ) {
+                    echo '<a href="' . $this->request->webroot . './uploadedFiles/' . $publication->mainfile .
+                    '">' . $publication->mainfile . '</a>';
+            } else {
+                echo $this->Form->input('files[0]', ['type' => 'file', 'label' => false]);
+            }
             ?>
           </td>
           <td>
           </td>
         </tr>
+        <?php
+            $p = 1; $r = 0;
+            foreach ($publication->documents as $document) {
+                if ($document->remote) {
+                    echo '<tr>
+                        <td></td>
+                        <td><a href="' . $document->filename . '">' . $document->filename . '</a><input type="hidden" name="external[' . $r . ']" value="' . $document->filename . '"></td>
+                        <td><img onclick="$(this).parent().parent().remove();" src="/img/remove.png" width="16" height="16"></td>
+                    </tr>';
+                    $r++;
+                } else {
+                    echo '<tr>
+                        <td><input type="radio" name="file" value="files[' . $p . ']"></td>
+                        <td><a href="' . $this->request->webroot . './uploadedFiles/' . $document->filename . '"><input type="hidden" name="files[' . $p . ']" value="' . $document . '"></a></td>
+                        <td><img onclick="$(this).parent().parent().remove();" src="/img/remove.png" width="16" height="16"></td>
+                    </tr>';
+                    $p++;
+                }
+            }
+        ?>
     </table>
 
-    <p onclick='javascript:addDocument(true, "/img/remove.png"); return false;' class="addButton">
+    <p onclick='javascript:addDocument(true, "/img/remove.png", <?=$r ?>, <?=$p ?>); return false;' class="addButton">
       Add external document
       <?php echo $this->Html->image('/img/add.png', ['width' => '16', 'height' => '16']); ?>
     </p>
 
-    <p onclick='javascript:addDocument(false, "/img/remove.png"); return false;' class="addButton">
+    <p onclick='javascript:addDocument(false, "/img/remove.png", <?=$r ?>, <?=$p ?>); return false;' class="addButton">
       Upload PDF document
       <?php echo $this->Html->image('/img/add.png', ['width' => '16', 'height' => '16']); ?>
     </p>
 
     <div class="divider">
     </div>
-
-    <table>
-    <?php
-        if (!empty(trim($publication->mainfile)) &&
-           file_exists(WWW_ROOT . 'uploadedFiles' . DS . $publication->mainfile)
-            ) {
-                echo '<tr>
-                    <td>Current Document</td>
-                    <td><a href="' . $this->request->webroot . './uploadedFiles/' . $publication->mainfile .
-                '"><img src="' . $this->request->webroot . 'img/document_pdf.png" alt="PDF" style="width:50px;height:50px;"></a></td>
-                </tr>';
-              }
-        foreach ($publication->documents as $document) {
-            if ($document->remote) {
-                echo '<tr>
-                    <td>Further Document</td>
-                    <td><a href="' . $document->filename .
-            '"><img src="' . $this->request->webroot . 'img/document_url.png" alt="URL" style="width:50px;height:50px;"></a></td>
-                </tr>';
-            } else {
-                echo '<tr>
-                    <td>Further Document</td>
-                    <td><a href="' . $this->request->webroot . './uploadedFiles/' . $document->filename .
-            '"><img src="' . $this->request->webroot . 'img/document_pdf.png" alt="PDF" style="width:50px;height:50px;"></a></td>
-                </tr>';
-            }
-        }
-    ?>
-    </table>
 
     <h4>
         Paper Abstract

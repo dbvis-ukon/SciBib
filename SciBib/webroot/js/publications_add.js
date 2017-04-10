@@ -318,12 +318,17 @@ $(document).ready(function() {
 
     // If the mode is the edit mode get the authors sorted
     if (window.location.href.indexOf("edit") > -1) {
+        var authorsPosition = "";
+
         for (var i = 0; i < selectedAuthors.length; i++) {
             var selectedId = selectedAuthors[i].id;
             var selectedName = selectedAuthors[i].cleanname;
             $("#authorsSortable").append('<li id="' + selectedId + '"> <span class="drag-handle">☰</span>' +
                 selectedName + '</li>');
+            authorsPosition = authorsPosition + selectedId + ',' + i + ';';
         }
+
+        $('#authorsPos').val(authorsPosition);
     }
 
     // Observer for the order of the authors
@@ -487,10 +492,19 @@ function addKeyword(keyword) {
     }, 5000)
 }
 
-function addDocument(external, remove) {
+function addDocument(external, remove, externalStart, filesStart) {
+
+    if (typeof externalStartl == 'undefined') {
+        externalStart = 0;
+    }
+
+    if (typeof filesStart == 'undefined') {
+        filesStart = 0;
+    }
+
     if (typeof addDocument.external == 'undefined') {
-        addDocument.external = 0;
-        addDocument.files = 1;
+        addDocument.external = 0 + externalStart;
+        addDocument.files = 1 + filesStart;
     }
 
     if ((!external && addDocument.files > 4) || (external && addDocument.external > 4)) {

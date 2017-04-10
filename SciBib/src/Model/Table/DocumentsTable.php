@@ -44,7 +44,8 @@ class DocumentsTable extends Table {
         $this->primaryKey('id');
 
         $this->belongsTo('Publications', [
-            'foreignKey' => 'publication_id'
+            'foreignKey' => 'publication_id',
+            'dependent' => true
         ]);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [

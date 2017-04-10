@@ -87,7 +87,7 @@ class PublicationsController extends AppController {
 
         //show related publications of the first and second author
         $firstAuthor = $publication->authors[0];
-        $secondAuthor = $publication->authors[1];
+        $secondAuthor = isset($publication->authors[1]) ? $publication->authors[1] : null;
 
         //related publications
         if (isset($secondAuthor)) {
@@ -252,10 +252,11 @@ class PublicationsController extends AppController {
                 ], 'Categories', 'Chairs', 'Documents']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-                        // get the data
+            // get the data
             $data = $this->request->data;
 
             // set documents and mainfile
+            $data['documents'] = [];
             $name = substr($data['file'], 0, strpos($data['file'], "["));
             $pos = substr($data['file'], strpos($data['file'], "[")+1, 1);
             if (isset($data[$name][intval($pos)]['name']) && $data[$name][intval($pos)]['name'] != '') {
@@ -273,13 +274,27 @@ class PublicationsController extends AppController {
                 }
             }
 
-            foreach ($data['external'] as $tmp) {
-                $document = [];
-                $document['filename'] = $tmp;
-                $document['visible'] = true;
-                $document['public'] = true;
-                $document['remote'] = true;
-                array_push($data['documents'], $document);
+            if (isset($data['external'])) {
+                foreach ($data['external'] as $tmp) {
+                    if (isset($tmp) && $tmp != '') {
+                        $skip = true;
+                        foreach ($publication['documents'] as $doc) {
+                            if ($doc['filename'] == $tmp) {
+                                break;
+                            }
+                        }
+                        if ($skip) {
+                            continue;
+                        }
+
+                        $document = [];
+                        $document['filename'] = $tmp;
+                        $document['visible'] = true;
+                        $document['public'] = true;
+                        $document['remote'] = true;
+                        array_push($data['documents'], $document);
+                    }
+                }
             }
 
             // delete the authors input
@@ -300,6 +315,7 @@ class PublicationsController extends AppController {
                     array_push($data['authors'], $author);
                 }
             }
+
             $publication = $this->Publications->patchEntity($publication, $data);
             if ($this->Publications->save($publication)) {
                 $this->Flash->success(__('The publication has been saved.'));
