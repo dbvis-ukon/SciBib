@@ -1,0 +1,27 @@
+version: '2'
+services:
+  db:
+    command: mysqld --sql_mode="" --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;'
+    image: mysql:5.7
+    volumes:
+      - "./.data/db:/var/lib/mysql"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ohgh5ohn5zu1aejaengiemaeL
+      MYSQL_DATABASE: scibib
+      MYSQL_USER: scibib
+      MYSQL_PASSWORD: ahsh5Aepingai7mik8chahgoh
+
+  scibib:
+    build:
+        context: .
+        dockerfile: scibib-Docker
+    depends_on:
+      - db
+    volumes:
+      - "./SciBib:/var/www/html/"
+    restart: always
+    links:
+      - db
+    ports:
+      - "80:80"

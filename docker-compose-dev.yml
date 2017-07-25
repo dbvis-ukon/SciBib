@@ -1,0 +1,12 @@
+version: '2'
+services:
+
+  scibib:
+    build:
+        context: .
+        dockerfile: scibib-Docker
+    volumes:
+      - "./SciBib:/var/www/SciBib/"
+    restart: always
+    ports:
+      - "81:80"
