@@ -1,0 +1,43 @@
+FROM php:7-apache
+
+RUN apt-get update -y && apt-get install -y libpng-dev zlib1g-dev libicu-dev g++
+RUN docker-php-ext-install gd mysqli pdo_mysql intl mbstring zip
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Enable apache mods.
+RUN a2enmod php7
+RUN a2enmod rewrite
+
+# Expose apache.
+EXPOSE 80
+
+# Copy this repo into place.
+RUN mkdir /var/www/SciBib/
+RUN chown www-data /var/www/SciBib
+ADD SciBib/ /var/www/SciBib/
+
+# Update the default apache site with the config we created.
+ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+
+# Fix server name
+RUN echo "127.0.0.1 localhost" | tee /etc/hosts && echo "ServerName localhost" | tee /etc/apache2/conf-available/servername.conf
+RUN a2enconf servername
+
+RUN service apache2 restart
+
+# Run composer and install dependencies
+WORKDIR /var/www/SciBib
+RUN composer update
+
+RUN salt=$(date +%s | sha256sum | base64 | head -c 32 ; echo) && sed -r -i "s/'salt' => '.*'/'salt' => '${salt}'/g" config/app.php
+RUN sed -r -i "s/'username' => '.*'/'username' => 'scibib'/g" config/app.php
+RUN sed -r -i "s/'password' => '.*'/'password' => 'ahsh5Aepingai7mik8chahgoh'/g" config/app.php
+RUN sed -r -i "s/'database' => '.*'/'database' => 'scibib'/g" config/app.php
+# RUN sed -r -i "s/\/\/'port' => 'nonstandard_port_number'/'port' => '3310'/g" config/app.php
+RUN sed -r -i "s/'host' => 'localhost'/'host' => 'db'/g" config/app.php
+
+ADD startuplogin/createlogin.sh createlogin.sh
+
+RUN chmod +x createlogin.sh
