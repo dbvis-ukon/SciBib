@@ -371,7 +371,7 @@ echo $this->Html->css('publications-add.css');
                 } else {
                     echo '<tr>
                         <td><input type="radio" name="file" value="files[' . $p . ']"></td>
-                        <td><a href="' . $this->request->webroot . './uploadedFiles/' . $document->filename . '"><input type="hidden" name="files[' . $p . ']" value="' . $document . '"></a></td>
+                        <td><a href="' . $this->request->webroot . './uploadedFiles/' . $document->filename . '">' . $document->filename . '</a><input type="hidden" name="files[' . $p . ']" value="' . $document . '"></td>
                         <td><img onclick="$(this).parent().parent().remove();" src="/img/remove.png" width="16" height="16"></td>
                     </tr>';
                     $p++;

@@ -1,15 +1,32 @@
 <?php
 
+/*
+ *
+ *     Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
+
 namespace App\Model\Table;
 
-use App\Model\Entity\Publication;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Publications Model
+ * Publications Model.
  *
  * @property \Cake\ORM\Association\BelongsTo $Copyrights
  * @property \Cake\ORM\Association\HasMany $Documents
@@ -17,15 +34,15 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsToMany $Authors
  * @property \Cake\ORM\Association\BelongsToMany $Categories
  */
-class PublicationsTable extends Table {
-
+class PublicationsTable extends Table
+{
     /**
-     * Initialize method
+     * Initialize method.
      *
-     * @param array $config The configuration for the Table.
-     * @return void
+     * @param array $config the configuration for the Table
      */
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         parent::initialize($config);
 
         $this->table('publications');
@@ -35,14 +52,14 @@ class PublicationsTable extends Table {
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Copyrights', [
-            'foreignKey' => 'copyright_id'
+            'foreignKey' => 'copyright_id',
         ]);
         $this->hasMany('Documents', [
             'foreignKey' => 'publication_id',
-            'dependent' => true
+            'dependent' => true,
         ]);
         $this->hasMany('Keywords', [
-            'foreignKey' => 'publication_id'
+            'foreignKey' => 'publication_id',
         ]);
         $this->belongsToMany('Authors', [
             'fields' => '*',
@@ -53,15 +70,13 @@ class PublicationsTable extends Table {
         $this->belongsToMany('Chairs', [
             'foreignKey' => 'publication_id',
             'targetForeignKey' => 'chair_id',
-            'joinTable' => 'chairs_publications'
+            'joinTable' => 'chairs_publications',
         ]);
         $this->belongsToMany('Categories', [
             'foreignKey' => 'publication_id',
             'targetForeignKey' => 'category_id',
-            'joinTable' => 'categories_publications'
+            'joinTable' => 'categories_publications',
         ]);
-
-
 
         // Add the search behaviour to the table
         $this->addBehavior('Search.Search');
@@ -74,15 +89,15 @@ class PublicationsTable extends Table {
                     'before' => true,
                     'after' => true,
                     'filterEmpty' => true,
-                    'field' => [$this->aliasField('title'), $this->aliasField('year')]
+                    'field' => [$this->aliasField('title'), $this->aliasField('year')],
                 ])
                 ->add('year', 'Search.Like', [
                     'filterEmpty' => true,
-                    'field' => [ $this->aliasField('year')]
+                    'field' => [$this->aliasField('year')],
                 ])
                 ->add('type', 'Search.Like', [
                     'filterEmpty' => true,
-                    'field' => [ $this->aliasField('type')]
+                    'field' => [$this->aliasField('type')],
         ]);
 
         // Add the Upload Plugin
@@ -96,7 +111,7 @@ class PublicationsTable extends Table {
                     // if the file has no extension
                     $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
                     // Store the thumbnail in a temporary file
-                    $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
+                    $tmp = tempnam(sys_get_temp_dir(), 'upload').'.'.$extension;
                     // Use the Imagine library to DO THE THING
                     $size = new \Imagine\Image\Box(80, 80);
                     $mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
@@ -107,174 +122,178 @@ class PublicationsTable extends Table {
                             ->save($tmp);
                     // Now return the original *and* the thumbnail
                     return [
-                        // $data['tmp_name'] => $data['name'],
+                        $tmp => $data['name'],
+                        $data['tmp_name'] => 'original-'.$data['name'],
+                    ];
+                },
+                //rename thumb
+                'nameCallback' => function (array $data, array $options) {
+                    return date('Y-m-d').$data['name'];
+                },
+            ],
+            'mainfile' => [
+                'path' => 'webroot{DS}uploadedFiles{DS}',
+                // rename PDF
+                'nameCallback' => function (array $data, array $options) {
+                    return date('Y-m-d').$data['name'];
+                },
+            ],
+            'abstractphoto' => [
+                'path' => 'webroot{DS}uploadedFiles{DS}abstractphotos{DS}',
+                // thumb resize
+                'transformer' => function (\Cake\Datasource\RepositoryInterface $table, \Cake\Datasource\EntityInterface $entity, $data, $field, $settings) {
+                    // get the extension from the file
+                    // there could be better ways to do this, and it will fail
+                    // if the file has no extension
+                    $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+                    // Store the thumbnail in a temporary file
+                    $tmp = tempnam(sys_get_temp_dir(), 'upload').'.'.$extension;
+                    // Use the Imagine library to DO THE THING
+                    $size = new \Imagine\Image\Box(600, 600);
+                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+                    $imagine = new \Imagine\Gd\Imagine();
+                    // Save that modified file to our temp file
+                    $imagine->open($data['tmp_name'])
+                            ->thumbnail($size, $mode)
+                            ->save($tmp);
+                    // Now return the original *and* the thumbnail
+                    return [
+                        $data['tmp_name'] => 'original-'.$data['name'],
                         $tmp => $data['name'],
                     ];
                 },
-                        //rename thumb
-                        'nameCallback' => function (array $data, array $options) {
-                    return date('Y-m-d') . $data['name'];
-                }
-                    ],
-                    'mainfile' => [
-                        'path' => 'webroot{DS}uploadedFiles{DS}',
-                        // rename PDF
-                        'nameCallback' => function (array $data, array $options) {
-                            return date('Y-m-d') . $data['name'];
-                        }
-                    ],
-                    'abstractphoto' => [
-                        'path' => 'webroot{DS}uploadedFiles{DS}abstractphotos{DS}',
-                        // thumb resize
-                        'transformer' => function (\Cake\Datasource\RepositoryInterface $table, \Cake\Datasource\EntityInterface $entity, $data, $field, $settings) {
-                            // get the extension from the file
-                            // there could be better ways to do this, and it will fail
-                            // if the file has no extension
-                            $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
-                            // Store the thumbnail in a temporary file
-                            $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
-                            // Use the Imagine library to DO THE THING
-                            $size = new \Imagine\Image\Box(600, 600);
-                            $mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
-                            $imagine = new \Imagine\Gd\Imagine();
-                            // Save that modified file to our temp file
-                            $imagine->open($data['tmp_name'])
-                                    ->thumbnail($size, $mode)
-                                    ->save($tmp);
-                            // Now return the original *and* the thumbnail
-                            return [
-                                $data['tmp_name'] => 'original-' . $data['name'],
-                                $tmp => $data['name'],
-                            ];
-                        },
-                                // rename abstract photo
-                                'nameCallback' => function (array $data, array $options) {
-                            return date('Y-m-d') . '-a-' . $data['name'];
-                        }
-                            ],
-                        ]);
-                    }
+                // rename abstract photo
+                'nameCallback' => function (array $data, array $options) {
+                    return date('Y-m-d').'-a-'.$data['name'];
+                },
+            ],
+        ]);
+    }
 
-                    /**
-                     * Default validation rules.
-                     *
-                     * @param \Cake\Validation\Validator $validator Validator instance.
-                     * @return \Cake\Validation\Validator
-                     */
-                    public function validationDefault(Validator $validator) {
-                        $validator
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator validator instance
+     *
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
                                 ->add('id', 'valid', ['rule' => 'numeric'])
                                 ->allowEmpty('id', 'create');
 
-                        $validator
+        $validator
                                 ->allowEmpty('address');
 
-                        $validator
+        $validator
                                 ->allowEmpty('booktitle');
 
-                        $validator
+        $validator
                                 ->add('chapter', 'valid', ['rule' => 'numeric'])
                                 ->allowEmpty('chapter');
 
-                        $validator
+        $validator
                                 ->allowEmpty('edition');
 
-                        $validator
+        $validator
                                 ->allowEmpty('editor');
 
-                        $validator
+        $validator
                                 ->allowEmpty('howpublished');
 
-                        $validator
+        $validator
                                 ->allowEmpty('institution');
 
-                        $validator
+        $validator
                                 ->allowEmpty('journal');
 
-                        $validator
+        $validator
                                 ->allowEmpty('month');
 
-                        $validator
+        $validator
                                 ->allowEmpty('note');
 
-                        $validator
+        $validator
                                 ->allowEmpty('number');
 
-                        $validator
+        $validator
                                 ->allowEmpty('organization');
 
-                        $validator
+        $validator
                                 ->allowEmpty('pages');
 
-                        $validator
+        $validator
                                 ->allowEmpty('school');
 
-                        $validator
+        $validator
                                 ->allowEmpty('series');
 
-                        $validator
+        $validator
                                 ->notEmpty('title');
 
-                        $validator
+        $validator
                                 ->allowEmpty('volume');
 
-                        $validator
+        $validator
                                 ->allowEmpty('url');
 
-                        $validator
+        $validator
                                 ->allowEmpty('doi');
 
-                        $validator
+        $validator
                                 ->notEmpty('year');
 
-                        $validator
+        $validator
                                 ->allowEmpty('citename')
                                 ->add('citename', 'unique', ['rule' => 'validateUnique',
-                                    'provider' => 'table']);
+                                    'provider' => 'table', ]);
 
-                        $validator
+        $validator
                                 ->allowEmpty('publisher');
 
-                        $validator
+        $validator
                                 ->add('published', 'valid', ['rule' => 'boolean'])
                                 ->allowEmpty('published');
 
-                        $validator
+        $validator
                                 ->add('submitted', 'valid', ['rule' => 'boolean'])
                                 ->allowEmpty('submitted');
 
-                        $validator
+        $validator
                                 ->add('public', 'valid', ['rule' => 'boolean'])
                                 ->allowEmpty('public');
 
-                        $validator
+        $validator
                                 ->notEmpty('type');
 
-                        $validator
+        $validator
                                 ->allowEmpty('thumb');
 
-                        $validator
+        $validator
                                 ->allowEmpty('abstractphoto');
 
-                        $validator
+        $validator
                                 ->allowEmpty('abstract');
 
-                        $validator
+        $validator
                                 ->allowEmpty('mainfile');
 
-                        return $validator;
-                    }
+        return $validator;
+    }
 
-                    /**
-                     * Returns a rules checker object that will be used for validating
-                     * application integrity.
-                     *
-                     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-                     * @return \Cake\ORM\RulesChecker
-                     */
-                    public function buildRules(RulesChecker $rules) {
-                        $rules->add($rules->existsIn([ 'copyright_id'], 'Copyrights'));
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules the rules object to be modified
+     *
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['copyright_id'], 'Copyrights'));
 
-                        return $rules;
-                    }
-                }
+        return $rules;
+    }
+}

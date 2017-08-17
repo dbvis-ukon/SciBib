@@ -1,7 +1,26 @@
 <?php
+
+/*
+ *
+ *     Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
+
 namespace App\Model\Table;
 
-/** Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
+/* Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,13 +35,11 @@ namespace App\Model\Table;
    limitations under the License.
 **/
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Chairs Model
+ * Chairs Model.
  *
  * @property \Cake\ORM\Association\BelongsToMany $Publications
  *
@@ -36,12 +53,10 @@ use Cake\Validation\Validator;
  */
 class ChairsTable extends Table
 {
-
     /**
-     * Initialize method
+     * Initialize method.
      *
-     * @param array $config The configuration for the Table.
-     * @return void
+     * @param array $config the configuration for the Table
      */
     public function initialize(array $config)
     {
@@ -54,14 +69,15 @@ class ChairsTable extends Table
         $this->belongsToMany('Publications', [
             'foreignKey' => 'chair_id',
             'targetForeignKey' => 'publication_id',
-            'joinTable' => 'chairs_publications'
+            'joinTable' => 'chairs_publications',
         ]);
     }
 
     /**
      * Default validation rules.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @param \Cake\Validation\Validator $validator validator instance
+     *
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator)

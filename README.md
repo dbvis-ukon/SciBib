@@ -1,6 +1,7 @@
 # SciBib
 
-SciBib is an online **Sci**entific **Bib**liography System. The aim of SciBib is to provide a system to organizes and distribute publications online.
+SciBib is an online **Sci**entific **Bib**liography System.  
+The aim of SciBib is to provide a system to organizes and distribute publications online.
 
 ### Features
 
@@ -10,20 +11,26 @@ SciBib is an online **Sci**entific **Bib**liography System. The aim of SciBib is
 - Filter publications by year, publication type, user
 - Publish publications as PDF files
 - Export bibtex functionality
+- JSON API
 
 ## Deployment
 
 SciBib can be deployed by using [Docker](https://www.docker.com/) or via command line on a linux system.  
 The recommended way is to use the docker deployment.  
-For the different prerequisites check the links below.  
-Troubleshooting and remarks can also be found in the links below.
+For prerequisites, troubleshooting and remarks the links below should hold all information.  
 
- - [Deploy with Docker](./Documentation/Deployment/docker.md)
- - [Deploy without Docker](./Documentation/Deployment/nodocker.md)
+- [Deploy with Docker](./Documentation/Deployment/docker.md)
+- [Deploy without Docker](./Documentation/Deployment/nodocker.md)
+
+## Update
+
+SciBib can be updated by copying the SciBib directory from the repo into the running directory.  
+This works for the Docker and the cmd line deployment.
 
 ## Built With
 
 * [CakePHP](https://github.com/cakephp/cakephp)
+* [Docker](https://www.docker.com/)
 
 ## License
 
