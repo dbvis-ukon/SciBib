@@ -1,19 +1,22 @@
 <?php
 
-/** Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-**/
+/*
+ *
+ *     Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
 
 namespace App\Model\Table;
 
@@ -24,19 +27,19 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Authors Model
+ * Authors Model.
  *
  * @property \Cake\ORM\Association\BelongsToMany $Publications
  */
-class AuthorsTable extends Table {
-
+class AuthorsTable extends Table
+{
     /**
-     * Initialize method
+     * Initialize method.
      *
-     * @param array $config The configuration for the Table.
-     * @return void
+     * @param array $config the configuration for the Table
      */
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         parent::initialize($config);
 
         // Add the behaviour to your table
@@ -50,14 +53,13 @@ class AuthorsTable extends Table {
                 ->add('q', 'Search.Like', [
                     'before' => true,
                     'after' => true,
-                    'field' => [$this->aliasField('surname'), $this->aliasField('forename'), $this->aliasField('cleanname')]
+                    'field' => [$this->aliasField('surname'), $this->aliasField('forename'), $this->aliasField('cleanname')],
                 ])
                 ->add('foo', 'Search.Callback', [
                     'callback' => function ($query, $args, $manager) {
                         // Modify $query as required
-                    }
+                    },
         ]);
-
 
         $this->table('authors');
         $this->displayField('id', 'cleanname');
@@ -67,17 +69,19 @@ class AuthorsTable extends Table {
             'fields' => '*',
             'foreignKey' => 'author_id',
             'targetForeignKey' => 'publication_id',
-            'joinTable' => 'authors_publications'
+            'joinTable' => 'authors_publications',
         ]);
     }
 
     /**
      * Default validation rules.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @param \Cake\Validation\Validator $validator validator instance
+     *
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator)
+    {
         $validator
                 ->add('id', 'valid', ['rule' => 'numeric'])
                 ->allowEmpty('id', 'create');
@@ -88,7 +92,6 @@ class AuthorsTable extends Table {
         $validator
                 ->notEmpty('forename', 'You need to provide a surname');
 
-
         $validator
                 ->allowEmpty('cleanname');
         $validator
@@ -98,11 +101,12 @@ class AuthorsTable extends Table {
     }
 
     //Rules checker classes are generally defined by the buildRules() method in your
-    // table class. Behaviors and other event subscribers can use the 
+    // table class. Behaviors and other event subscribers can use the
     // Model.buildRules event to augment the rules checker for a given Table class:
-    public function buildRules(RulesChecker $rules) {
+    public function buildRules(RulesChecker $rules)
+    {
         // Add a rule that is applied for create and update operations
-        // The combination of forename and surname is unique 
+        // The combination of forename and surname is unique
         $rules->add($rules->isUnique(['forename', 'surname']), 'Author name already exists ');
 
         return $rules;
@@ -112,12 +116,14 @@ class AuthorsTable extends Table {
      * CREATE CLEANNAME *
      * ***************** */
 
-    public function createCleanname($forename, $surname) {
-        if (!isset($forename) || !isset($surname))
+    public function createCleanname($forename, $surname)
+    {
+        if (!isset($forename) || !isset($surname)) {
             return '';
-        if (!is_string($forename) || !is_string($surname))
+        }
+        if (!is_string($forename) || !is_string($surname)) {
             return '';
-
+        }
         $result = '';
 
         $hasBlanks = !mb_strpos($forename, ' ') ? false : true;
@@ -128,40 +134,44 @@ class AuthorsTable extends Table {
         } else {
             $tokens = explode(' ', $forename);
 
-            for ($i = 0; $i < count($tokens); $i++) {
+            for ($i = 0; $i < count($tokens); ++$i) {
                 $result .= mb_strpos($tokens[$i], '-') === false ? $this->shortenToken($tokens[$i]) : $this->shortenTokenWithDash($tokens[$i]);
-                if ($i < count($tokens) - 1)
+                if ($i < count($tokens) - 1) {
                     $result .= ' ';
+                }
             }
         }
 
-        return $result . ' ' . $surname;
+        return $result.' '.$surname;
     }
 
     /** shortens a token with a dash */
-    public function shortenTokenWithDash($t) {
-        if (!$t || !is_string($t) || mb_strlen($t) <= 1)
+    public function shortenTokenWithDash($t)
+    {
+        if (!$t || !is_string($t) || mb_strlen($t) <= 1) {
             return $t;
-
+        }
         $result = '';
         $tokens = explode('-', $t);
 
-        for ($i = 0; $i < count($tokens); $i++) {
+        for ($i = 0; $i < count($tokens); ++$i) {
             $result .= $this->shortenToken($tokens[$i]);
 
-            if ($i < count($tokens) - 1)
+            if ($i < count($tokens) - 1) {
                 $result .= '-';
+            }
         }
 
         return $result;
     }
 
     /** shortens a token without a dash */
-    public function shortenToken($t) {
-        if (!$t || !is_string($t) || mb_strlen($t) <= 1)
+    public function shortenToken($t)
+    {
+        if (!$t || !is_string($t) || mb_strlen($t) <= 1) {
             return $t;
+        }
 
-        return mb_strtoupper(mb_substr($t, 0, 1)) . '.';
+        return mb_strtoupper(mb_substr($t, 0, 1)).'.';
     }
-
 }

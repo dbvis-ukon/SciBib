@@ -1,23 +1,25 @@
 <?php
 
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+/*
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ *     Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         3.0.4
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
  */
 
 namespace App\View;
 
-use Cake\Event\EventManager;
-use Cake\Network\Request;
 use Cake\Network\Response;
 
 /**
@@ -25,8 +27,8 @@ use Cake\Network\Response;
  * Currently only switches the default layout and sets the response type -
  * which just maps to text/html by default.
  */
-class AjaxView extends AppView {
-
+class AjaxView extends AppView
+{
     /**
      * The name of the layout file to render the view inside of. The name
      * specified is the filename of the layout in /app/Template/Layout without
@@ -38,13 +40,11 @@ class AjaxView extends AppView {
 
     /**
      * Initialization hook method.
-     *
-     * @return void
      */
-    public function initialize() {
+    public function initialize()
+    {
         parent::initialize();
 
         $this->response->type('ajax');
     }
-
 }

@@ -1,42 +1,58 @@
 <?php
 
+/*
+ *
+ *     Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
+
 namespace App\Controller;
 
-use Cake\View\Helper;
-use App\Controller\AppController;
-use Cake\Core\Configure;
+
 
 /**
- * Publications Controller
+ * Publications Controller.
  *
  * @property \App\Model\Table\PublicationsTable $Publications
  */
-class PublicationsController extends AppController {
-
-    public function initialize() {
-        parent::initialize();
-        //add the search to the index of the publications
-        $this->loadComponent('Search.Prg', [
-            'actions' => ['index', 'privateIndex']
-        ]);
-    }
-
+class PublicationsController extends AppController
+{
     // Paginator for the publications
     public $paginate = [
         'limit' => 100000,
         'order' => [
             'Publications.year' => 'desc',
-            'Publications.created' => 'desc'
-        ]
+            'Publications.created' => 'desc',
+        ],
     ];
+
+    public function initialize()
+    {
+        parent::initialize();
+        //add the search to the index of the publications
+        $this->loadComponent('Search.Prg', [
+            'actions' => ['index', 'privateIndex'],
+        ]);
+    }
 
     /**
      * Private index method
-     * To show all publications with title only and options to edit or delete
-     *
-     * @return void
+     * To show all publications with title only and options to edit or delete.
      */
-    public function privateIndex() {
+    public function privateIndex()
+    {
         //the result of the search
         $result = [];
         //resulting authors
@@ -62,7 +78,7 @@ class PublicationsController extends AppController {
         } else {
             //no search input - just show the regular Publications
             $result = $this->paginate($this->Publications->find('all', [
-                        'fields' => ['id', 'title', 'year', 'kops']
+                        'fields' => ['id', 'title', 'year', 'kops'],
             ]));
         }
         //setting view variables
@@ -72,17 +88,18 @@ class PublicationsController extends AppController {
     }
 
     /**
-     * View method
+     * View method.
      *
-     * @param string|null $id Publication id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @param string|null $id publication id
+     *
+     * @throws \Cake\Network\Exception\NotFoundException when record not found
      */
-    public function view($id = null) {
+    public function view($id = null)
+    {
         $publication = $this->Publications->get($id, [
             'contain' => ['Authors' => [
-                    'sort' => ['AuthorsPublications.position' => 'ASC']
-                ], 'Categories', 'Documents', 'Keywords']
+                    'sort' => ['AuthorsPublications.position' => 'ASC'],
+                ], 'Categories', 'Documents', 'Keywords'],
         ]);
 
         //show related publications of the first and second author
@@ -93,36 +110,36 @@ class PublicationsController extends AppController {
         if (isset($secondAuthor)) {
             $relatedPublications = $this->Publications->find('all', [
                         'contain' => ['Authors' => [
-                                'sort' => ['AuthorsPublications.position' => 'ASC']
+                                'sort' => ['AuthorsPublications.position' => 'ASC'],
                             ], 'AuthorsPublications'],
                         'order' => [
                             'Publications.year' => 'desc',
-                            'Publications.created' => 'desc'
-                        ]
+                            'Publications.created' => 'desc',
+                        ],
                     ])
                     //load only authors with the specify id
                 ->matching('AuthorsPublications')
                 ->where([
-                    'AuthorsPublications.author_id ' => $firstAuthor['id']
+                    'AuthorsPublications.author_id ' => $firstAuthor['id'],
                 ])
                 ->where([
-                    'AuthorsPublications.author_id ' => $secondAuthor['id']
+                    'AuthorsPublications.author_id ' => $secondAuthor['id'],
                 ])
                 ->limit(5);
         } else {
             $relatedPublications = $this->Publications->find('all', [
                         'contain' => ['Authors' => [
-                                'sort' => ['AuthorsPublications.position' => 'ASC']
+                                'sort' => ['AuthorsPublications.position' => 'ASC'],
                             ], 'AuthorsPublications'],
                         'order' => [
                             'Publications.year' => 'desc',
-                            'Publications.created' => 'desc'
-                        ]
+                            'Publications.created' => 'desc',
+                        ],
                     ])
                     //load only authors with the specify id
                 ->matching('AuthorsPublications')
                 ->where([
-                    'AuthorsPublications.author_id ' => $firstAuthor['id']
+                    'AuthorsPublications.author_id ' => $firstAuthor['id'],
                 ])
                 ->limit(5);
         }
@@ -133,13 +150,23 @@ class PublicationsController extends AppController {
         $this->set('_serialize', ['publication', 'relatedPublications']);
     }
 
-    /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     */
-    public function add() {
+    private function _removeType($data, $delete = false) {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->_removeType($data[$key], true);
+            }
+            if ($delete && $key === 'type') {
+                unset($data[$key]);
+            }
+        }
+        return $data;
+    }
 
+    /**
+     * Add method.
+     */
+    public function add()
+    {
         $publication = $this->Publications->newEntity();
 
         //the user submitted a form with data
@@ -149,22 +176,22 @@ class PublicationsController extends AppController {
             // set documents and mainfile
             $data['documents'] = [];
 
-            $name = substr($data['file'], 0, strpos($data['file'], "["));
-            $pos = substr($data['file'], strpos($data['file'], "[")+1, 1);
-            if (isset($data[$name][intval($pos)]['name']) && $data[$name][intval($pos)]['name'] != '') {
-                $data['mainfile'] = $data[$name][intval($pos)];
+            $name = substr($data['file'], 0, strpos($data['file'], '['));
+            $pos = substr($data['file'], strpos($data['file'], '[') + 1, 1);
+            if (isset($data[$name][(int) $pos]['name']) && $data[$name][(int) $pos]['name'] !== '') {
+                $data['mainfile'] = $data[$name][(int) $pos];
             } else {
-              $data['mainfile'] = '';
+                $data['mainfile'] = '';
             }
 
             foreach ($data[$name] as $tmp) {
-                if (isset($tmp['name']) && $tmp['name'] != '') {
-                  $document = [];
-                  $document['filename'] = $tmp;
-                  $document['visible'] = true;
-                  $document['public'] = true;
-                  $document['remote'] = false;
-                  array_push($data['documents'], $document);
+                if (isset($tmp['name']) && $tmp['name'] !== '') {
+                    $document = [];
+                    $document['filename'] = $tmp;
+                    $document['visible'] = true;
+                    $document['public'] = true;
+                    $document['remote'] = false;
+                    array_push($data['documents'], $document);
                 }
             }
 
@@ -182,13 +209,13 @@ class PublicationsController extends AppController {
             // get the authorsPosition hidden input
             // split the string, this results in an array
             // e.g. [[id,position],[id,position],....]
-            $authorsPositions = explode(";", $data['authorsPosition']);
+            $authorsPositions = explode(';', $data['authorsPosition']);
             // transform it to the form CakePHP needs it to be
             foreach ($authorsPositions as $tmp) {
                 $author = [];
                 if ($tmp) {
                     //split the string id,position
-                    $tmp = explode(",", $tmp);
+                    $tmp = explode(',', $tmp);
                     $author['id'] = $tmp[0];
                     $author['_joinData'] = ['position' => $tmp[1]];
                     //add the stuff to the authors array
@@ -196,26 +223,30 @@ class PublicationsController extends AppController {
                 }
             }
 
+            $data = $this->_removeType($data);
             $publication = $this->Publications->patchEntity($publication, $data);
+
             if ($this->Publications->save($publication)) {
                 $this->Flash->success(__('The publication has been saved.'));
+
                 return $this->redirect(['action' => 'private-index']);
-            } else {
-                $this->Flash->error(__('The publication could not be saved. Please, try again.'));
             }
+            $this->Flash->error(__('The publication could not be saved. Please, try again.'));
         }
 
         // a new publication will be created
         $copyrights = $this->Publications->Copyrights->find('list', ['limit' => 200]);
         $authors = $this->Publications->Authors->find('list', ['keyField' => 'id',
-            'valueField' => 'cleanname']);
+            'valueField' => 'cleanname', ]);
         // Categories are prepared for the later tree multiselect view
-        $tmp = $this->Publications->Categories->find('treelist', [
+        $tmp = $this->Publications->Categories->find(
+            'treelist',
+            [
                     'valuePath' => 'name',
-                    'spacer' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;']
+                    'spacer' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ]
                 )->toArray();
         $categories = $this->Publications->Categories->find('all', [
-            'order' => ['Categories.lft']]);
+            'order' => ['Categories.lft'], ]);
         // get the long name for the categories
         foreach ($categories as $value) {
             $value->longName = $tmp[$value->id];
@@ -225,31 +256,32 @@ class PublicationsController extends AppController {
             'Conference' => 'Conference', 'Inbook' => 'Inbook', 'Incollection' => 'Incollection',
             'Inproceedings' => 'Inproceedings', 'Manual' => 'Manual', 'Masterthesis' => 'Masterthesis', 'Misc' => 'Misc',
             'PhDThesis' => 'PhDThesis', 'Proceedings' => 'Proceedings', 'Techreport' => 'Techreport',
-            'Unpublished' => 'Unpublished'];
+            'Unpublished' => 'Unpublished', ];
         // get chairs
         $chair = $this->Publications->Chairs->find('list', ['keyField' => 'id',
-            'valueField' => 'name']);
+            'valueField' => 'name', ]);
         // get keywords
         $keywords = $this->Publications->Keywords->find('list', ['keyField' => 'id',
-            'valueField' => 'name']);
+            'valueField' => 'name', ]);
         // setting view variables
         $this->set(compact('publication', 'copyrights', 'authors', 'categories', 'chair', 'optionsType', 'keywords'));
         $this->set('_serialize', ['publication']);
     }
 
     /**
-     * Edit method
+     * Edit method.
      *
-     * @param string|null $id Publication id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @param string|null $id publication id
+     *
+     * @throws \Cake\Network\Exception\NotFoundException when record not found
      */
-    public function edit($id = null) {
+    public function edit($id = null)
+    {
         $publication = $this->Publications->get($id, [
             'contain' => ['Authors' => [
                     //needed so that the authros are in the right ordering
-                    'sort' => ['AuthorsPublications.position' => 'ASC']
-                ], 'Categories', 'Chairs', 'Documents']
+                    'sort' => ['AuthorsPublications.position' => 'ASC'],
+                ], 'Categories', 'Chairs', 'Documents'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             // get the data
@@ -257,29 +289,30 @@ class PublicationsController extends AppController {
 
             // set documents and mainfile
             $data['documents'] = [];
-            $name = substr($data['file'], 0, strpos($data['file'], "["));
-            $pos = substr($data['file'], strpos($data['file'], "[")+1, 1);
-            if (isset($data[$name][intval($pos)]['name']) && $data[$name][intval($pos)]['name'] != '') {
-                $data['mainfile'] = $data[$name][intval($pos)];
+            $name = substr($data['file'], 0, strpos($data['file'], '['));
+            $pos = substr($data['file'], strpos($data['file'], '[') + 1, 1);
+            if (isset($data[$name][(int) $pos]['name']) && $data[$name][(int) $pos]['name'] !== '') {
+                $data['mainfile'] = $data[$name][(int) $pos];
             }
 
             foreach ($data[$name] as $tmp) {
-                if (isset($tmp['name']) && $tmp['name'] != '') {
-                  $document = [];
-                  $document['filename'] = $tmp;
-                  $document['visible'] = true;
-                  $document['public'] = true;
-                  $document['remote'] = false;
-                  array_push($data['documents'], $document);
+                if (isset($tmp['name']) && $tmp['name'] !== '') {
+                    $document = [];
+                    $document['filename'] = $tmp;
+                    $document['visible'] = true;
+                    $document['public'] = true;
+                    $document['remote'] = false;
+                    array_push($data['documents'], $document);
                 }
             }
 
             if (isset($data['external'])) {
                 foreach ($data['external'] as $tmp) {
-                    if (isset($tmp) && $tmp != '') {
+                    if (isset($tmp) && $tmp !== '') {
+
                         $skip = true;
                         foreach ($publication['documents'] as $doc) {
-                            if ($doc['filename'] == $tmp) {
+                            if ($doc['filename'] === $tmp) {
                                 break;
                             }
                         }
@@ -302,13 +335,13 @@ class PublicationsController extends AppController {
             // get the authorsPosition hidden input
             // split the string, this results in an array
             // e.g. [[id,position],[id,position],....]
-            $authorsPositions = explode(";", $data['authorsPosition']);
+            $authorsPositions = explode(';', $data['authorsPosition']);
             // transform it to the form CakePHP needs it to be
             foreach ($authorsPositions as $tmp) {
                 $author = [];
                 if ($tmp) {
                     //split the string id,position
-                    $tmp = explode(",", $tmp);
+                    $tmp = explode(',', $tmp);
                     $author['id'] = $tmp[0];
                     $author['_joinData'] = ['position' => $tmp[1]];
                     //add the stuff to the authors array
@@ -316,26 +349,29 @@ class PublicationsController extends AppController {
                 }
             }
 
+            $data = $this->_removeType($data);
             $publication = $this->Publications->patchEntity($publication, $data);
             if ($this->Publications->save($publication)) {
                 $this->Flash->success(__('The publication has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The publication could not be saved. Please, try again.'));
             }
+            $this->Flash->error(__('The publication could not be saved. Please, try again.'));
         }
         //a new publication will be created
         $copyrights = $this->Publications->Copyrights->find('list', ['limit' => 200]);
         // get authors
         $authors = $this->Publications->Authors->find('list', ['keyField' => 'id',
-            'valueField' => 'cleanname']);
+            'valueField' => 'cleanname', ]);
         // Categories are prepared for the later tree multiselect view
-        $tmp = $this->Publications->Categories->find('treelist', [
+        $tmp = $this->Publications->Categories->find(
+            'treelist',
+            [
                     'valuePath' => 'name',
-                    'spacer' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;']
+                    'spacer' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ]
                 )->toArray();
         $categories = $this->Publications->Categories->find('all', [
-            'order' => ['Categories.lft']]);
+            'order' => ['Categories.lft'], ]);
         // get the long name for the categories
         foreach ($categories as $value) {
             $value->longName = $tmp[$value->id];
@@ -345,26 +381,29 @@ class PublicationsController extends AppController {
             'Conference' => 'Conference', 'Inbook' => 'Inbook', 'Incollection' => 'Incollection',
             'Inproceedings' => 'Inproceedings', 'Manual' => 'Manual', 'Masterthesis' => 'Masterthesis', 'Misc' => 'Misc',
             'PhDThesis' => 'PhDThesis', 'Proceedings' => 'Proceedings', 'Techreport' => 'Techreport',
-            'Unpublished' => 'Unpublished'];
+            'Unpublished' => 'Unpublished', ];
         // get chairs
         $chairs = $this->Publications->Chairs->find('list', ['keyField' => 'id',
-            'valueField' => 'name']);
+            'valueField' => 'name', ]);
         // get keywords
         $keywords = $this->Publications->Keywords->find('list', ['keyField' => 'id',
-            'valueField' => 'name']);
+            'valueField' => 'name', ]);
         //setting view variables
         $this->set(compact('publication', 'copyrights', 'authors', 'categories', 'chairs', 'optionsType', 'keywords'));
         $this->set('_serialize', ['publication']);
     }
 
     /**
-     * Delete method
+     * Delete method.
      *
-     * @param string|null $id Publication id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @param string|null $id publication id
+     *
+     * @return \Cake\Network\Response|null redirects to index
+     *
+     * @throws \Cake\Network\Exception\NotFoundException when record not found
      */
-    public function delete($id = null) {
+    public function delete($id = null)
+    {
         $this->request->allowMethod(['post', 'delete']);
         $publication = $this->Publications->get($id);
         if ($this->Publications->delete($publication)) {
@@ -372,118 +411,15 @@ class PublicationsController extends AppController {
         } else {
             $this->Flash->error(__('The publication could not be deleted. Please, try again.'));
         }
+
         return $this->redirect(['action' => 'private-index']);
     }
 
     /**
-     * Private getInformation method
-     * sub method to filter publications and hide header
-     *
-     * @return array containing 0: results for query 1: hide header
+     * Public index method.
      */
-    private function getInformation() {
-
-      // get all publications
-      $result = $this->paginate($this->Publications->find('all', [
-                  'contain' => [
-                    'Authors' => [
-                          'sort' => ['AuthorsPublications.position' => 'ASC']
-                      ],
-                    'Categories',
-                    'Documents'
-                  ]
-                ]
-      ));
-
-      // remove non public
-      $result = $result->filter(function ($publication) {
-        return $publication->public;
-      });
-
-      // filter year
-      if ($this->request->query('year')) {
-          if ($this->request->query('year') === 'lastTwoYears') {
-              $result = $result->filter(function ($publication) {
-                  return $publication->year >= (date('Y') - 1);
-              });
-          } else {
-              $result = $result->filter(function ($publication) {
-                  return $publication->year === $this->request->query('year');
-              });
-          }
-      }
-
-      // filter header
-      $hideHeader = false;
-      if ($this->request->query('hide')) {
-          $hideHeader = true;
-      }
-
-      // filter type
-      if ($this->request->query('type')) {
-          // Other option
-          if ($this->request->query('type') === 'other') {
-              $result = $result->filter(function ($publication) {
-                  return ($publication->type === "Booklet" ||
-                          $publication->type === "Conference" ||
-                          $publication->type === "Incollection" ||
-                          $publication->type === "Manual" ||
-                          $publication->type === "Masterthesis" ||
-                          $publication->type === "Misc" ||
-                          $publication->type === "PhDThesis" ||
-                          $publication->type === "Proceedings" ||
-                          $publication->type === "Techreport" ||
-                          $publication->type === "Unpublished" );
-              });
-          } else {
-              $result = $result->filter(function ($publication) {
-                  return strcasecmp($publication->type, $this->request->query('type')) == 0;
-              });
-          }
-      }
-
-      // filter author
-      if ($this->request->query('author')) {
-          $result = $result->filter(function ($publication) {
-              foreach ($publication->authors as $author) {
-                  if ($author->id === (int) $this->request->query('author')) {
-                      return true;
-                  }
-              }
-              return false;
-          });
-      }
-
-      // filter category
-      if ($this->request->query('category')) {
-          $result = $result->filter(function ($publication) {
-              foreach ($publication->categories as $category) {
-                  if ($category->id === (int) $this->request->query('category')) {
-                      return true;
-                  }
-              }
-              return false;
-          });
-      }
-
-      // filter by kops
-      if ($this->request->query('filterByKops')) {
-          $result = $result->filter(function ($publication) {
-              return $publication->kops;
-          });
-      }
-
-      return array($result, $hideHeader);
-
-    }
-
-    /**
-     * Public index method
-     *
-     * @return void
-     */
-    public function Index() {
-
+    public function Index()
+    {
         $information = $this->getInformation();
 
         //setting view variables
@@ -492,26 +428,23 @@ class PublicationsController extends AppController {
         $this->set('isEmbedded', $this->isEmbedded());
     }
 
-       /**
-     * Public index method
-     *
-     * @return void
+    /**
+     * Public index method.
      */
-    public function tojson() {
-
+    public function tojson()
+    {
         $information = $this->getInformation();
 
         //setting view variables
         $this->set(['publications' => $information[0],
-            '_serialize' => ['publications']]);
+            '_serialize' => ['publications'], ]);
     }
 
     /**
-     * Public index method
-     *
-     * @return void
+     * Public index method.
      */
-    public function tobibtex() {
+    public function tobibtex()
+    {
         $this->viewBuilder()->layout('ajax');
 
         $information = $this->getInformation();
@@ -520,22 +453,129 @@ class PublicationsController extends AppController {
         $this->set('publications', $information[0]);
     }
 
-    public function bibtex($id = null) {
+    public function bibtex($id = null)
+    {
         $this->viewBuilder()->layout('ajax');
 
         $publication = $this->Publications->get($id, [
             'contain' => ['Copyrights', 'Authors' => [
-                    'sort' => ['AuthorsPublications.position' => 'ASC']
-                ], 'Categories', 'Documents', 'Keywords']
+                    'sort' => ['AuthorsPublications.position' => 'ASC'],
+                ], 'Categories', 'Documents', 'Keywords'],
         ]);
         //setting view variables
         $this->set('publication', $publication);
     }
 
-    private function isEmbedded() {
+    /**
+     * Private getInformation method
+     * sub method to filter publications and hide header.
+     *
+     * @return array containing 0: results for query 1: hide header
+     */
+    private function getInformation()
+    {
+        // get all publications
+        $result = $this->paginate($this->Publications->find(
+          'all',
+          [
+                  'contain' => [
+                    'Authors' => [
+                          'sort' => ['AuthorsPublications.position' => 'ASC'],
+                      ],
+                    'Categories',
+                    'Documents',
+                  ],
+                ]
+      ));
+
+        // remove non public
+        $result = $result->filter(function ($publication) {
+            return $publication->public;
+        });
+
+        // filter year
+        if ($this->request->query('year')) {
+            if ($this->request->query('year') === 'lastTwoYears') {
+                $result = $result->filter(function ($publication) {
+                    return $publication->year >= (date('Y') - 1);
+                });
+            } else {
+                $result = $result->filter(function ($publication) {
+                    return $publication->year === $this->request->query('year');
+                });
+            }
+        }
+
+        // filter header
+        $hideHeader = false;
+        if ($this->request->query('hide')) {
+            $hideHeader = true;
+        }
+
+        // filter type
+        if ($this->request->query('type')) {
+            // Other option
+            if ($this->request->query('type') === 'other') {
+                $result = $result->filter(function ($publication) {
+                    return $publication->type === 'Booklet' ||
+                          $publication->type === 'Conference' ||
+                          $publication->type === 'Incollection' ||
+                          $publication->type === 'Manual' ||
+                          $publication->type === 'Masterthesis' ||
+                          $publication->type === 'Misc' ||
+                          $publication->type === 'PhDThesis' ||
+                          $publication->type === 'Proceedings' ||
+                          $publication->type === 'Techreport' ||
+                          $publication->type === 'Unpublished';
+                });
+            } else {
+                $result = $result->filter(function ($publication) {
+                    return strcasecmp($publication->type, $this->request->query('type')) === 0;
+                });
+            }
+        }
+
+        // filter author
+        if ($this->request->query('author')) {
+            $result = $result->filter(function ($publication) {
+                foreach ($publication->authors as $author) {
+                    if ($author->id === (int) $this->request->query('author')) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        }
+
+        // filter category
+        if ($this->request->query('category')) {
+            $result = $result->filter(function ($publication) {
+                foreach ($publication->categories as $category) {
+                    if ($category->id === (int) $this->request->query('category')) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        }
+
+        // filter by kops
+        if ($this->request->query('filterByKops')) {
+            $result = $result->filter(function ($publication) {
+                return $publication->kops;
+            });
+        }
+
+        return [$result, $hideHeader];
+    }
+
+    private function isEmbedded()
+    {
         //global $_SERVER, $embeddedHosts;
 
-        $result = array();
+        $result = [];
 
         /* Add an entry for each remote host here. Each array has to have the following entries:
           baseurl: A full, non-relative URL that is used as the base for links
@@ -547,22 +587,22 @@ class PublicationsController extends AppController {
           are used to identify the embedded settings. In the request, the User-Agent header is used as the embedded
           tag.
          */
-        $embeddedHosts = array(
-            '134.34.240.76' => array(
+        $embeddedHosts = [
+            '134.34.240.76' => [
                 'baseurl' => 'https://www.vis.uni-konstanz.de/publikationen/',
                 'linkstyle' => 'embedded',
                 'cssfile' => '',
-                'utf8compatible' => true
-            ),
-            '10.0.0.11' => array(
-                'TextVisualization' => array(
+                'utf8compatible' => true,
+            ],
+            '10.0.0.11' => [
+                'TextVisualization' => [
                     'baseurl' => 'http://research.dbvis.de/',
                     'linkstyle' => 'embedded',
                     'cssfile' => '',
                     'utf8compatible' => true,
-                )
-            )
-        );
+                ],
+            ],
+        ];
 
         $curClient = false;
 
@@ -572,7 +612,7 @@ class PublicationsController extends AppController {
         if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
             $curClient = $_SERVER['HTTP_X_FORWARDED_FOR'];
             $result['isEmbedded'] = array_key_exists($curClient, $embeddedHosts);
-        } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+        } elseif (array_key_exists('REMOTE_ADDR', $_SERVER)) {
             $curClient = $_SERVER['REMOTE_ADDR'];
             $result['isEmbedded'] = array_key_exists($curClient, $embeddedHosts);
         }
@@ -604,5 +644,4 @@ class PublicationsController extends AppController {
 
         return $result;
     }
-
 }

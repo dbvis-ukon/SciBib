@@ -1,51 +1,52 @@
 <?php
 
-/** Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-**/
+/*
+ *
+ *     Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ */
 
 namespace App\Controller;
 
-use App\Controller\AppController;
-
 /**
- * Copyrights Controller
+ * Copyrights Controller.
  *
  * @property \App\Model\Table\CopyrightsTable $Copyrights
  */
-class CopyrightsController extends AppController {
-
+class CopyrightsController extends AppController
+{
     /**
-     * Index method
-     *
-     * @return void
+     * Index method.
      */
-    public function index() {
+    public function index()
+    {
         $this->set('copyrights', $this->paginate($this->Copyrights));
         $this->set('_serialize', ['copyrights']);
     }
 
     /**
-     * View method
+     * View method.
      *
-     * @param string|null $id Copyright id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @param string|null $id copyright id
+     *
+     * @throws \Cake\Network\Exception\NotFoundException when record not found
      */
-    public function view($id = null) {
+    public function view($id = null)
+    {
         $copyright = $this->Copyrights->get($id, [
-            'contain' => ['Publications']
+            'contain' => ['Publications'],
         ]);
         //setting view variables
         $this->set('copyright', $copyright);
@@ -53,20 +54,19 @@ class CopyrightsController extends AppController {
     }
 
     /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
+     * Add method.
      */
-    public function add() {
+    public function add()
+    {
         $copyright = $this->Copyrights->newEntity();
         if ($this->request->is('post')) {
             $copyright = $this->Copyrights->patchEntity($copyright, $this->request->data);
             if ($this->Copyrights->save($copyright)) {
                 $this->Flash->success(__('The copyright has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The copyright could not be saved. Please, try again.'));
             }
+            $this->Flash->error(__('The copyright could not be saved. Please, try again.'));
         }
         //setting view variables
         $this->set(compact('copyright'));
@@ -74,24 +74,25 @@ class CopyrightsController extends AppController {
     }
 
     /**
-     * Edit method
+     * Edit method.
      *
-     * @param string|null $id Copyright id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @param string|null $id copyright id
+     *
+     * @throws \Cake\Network\Exception\NotFoundException when record not found
      */
-    public function edit($id = null) {
+    public function edit($id = null)
+    {
         $copyright = $this->Copyrights->get($id, [
-            'contain' => []
+            'contain' => [],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $copyright = $this->Copyrights->patchEntity($copyright, $this->request->data);
             if ($this->Copyrights->save($copyright)) {
                 $this->Flash->success(__('The copyright has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The copyright could not be saved. Please, try again.'));
             }
+            $this->Flash->error(__('The copyright could not be saved. Please, try again.'));
         }
         //setting view variables
         $this->set(compact('copyright'));
@@ -99,13 +100,16 @@ class CopyrightsController extends AppController {
     }
 
     /**
-     * Delete method
+     * Delete method.
      *
-     * @param string|null $id Copyright id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @param string|null $id copyright id
+     *
+     * @return \Cake\Network\Response|null redirects to index
+     *
+     * @throws \Cake\Network\Exception\NotFoundException when record not found
      */
-    public function delete($id = null) {
+    public function delete($id = null)
+    {
         $this->request->allowMethod(['post', 'delete']);
         $copyright = $this->Copyrights->get($id);
         if ($this->Copyrights->delete($copyright)) {
@@ -113,7 +117,7 @@ class CopyrightsController extends AppController {
         } else {
             $this->Flash->error(__('The copyright could not be deleted. Please, try again.'));
         }
+
         return $this->redirect(['action' => 'index']);
     }
-
 }

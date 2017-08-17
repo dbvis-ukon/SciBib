@@ -1,17 +1,21 @@
 <?php
 
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+/*
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ *     Copyright {2017} {University Konstanz -  Data Analysis and Visualization Group}
  *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link      http://cakephp.org CakePHP(tm) Project
- * @since     3.0.0
- * @license   http://www.opensource.org/licenses/mit-license.php MIT License
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
  */
 
 namespace App\Shell;
@@ -24,14 +28,15 @@ use Psy\Shell as PsyShell;
 /**
  * Simple console wrapper around Psy\Shell.
  */
-class ConsoleShell extends Shell {
-
+class ConsoleShell extends Shell
+{
     /**
      * Start the shell and interactive console.
      *
      * @return int|void
      */
-    public function main() {
+    public function main()
+    {
         if (!class_exists('Psy\Shell')) {
             $this->err('<error>Unable to load Psy\Shell.</error>');
             $this->err('');
@@ -42,10 +47,11 @@ class ConsoleShell extends Shell {
             $this->err('');
             $this->err('<info>$ php composer.phar require --dev psy/psysh</info>');
             $this->err('');
+
             return 1;
         }
 
-        $this->out("You can exit with <info>`CTRL-C`</info> or <info>`exit`</info>");
+        $this->out('You can exit with <info>`CTRL-C`</info> or <info>`exit`</info>');
         $this->out('');
 
         Log::drop('debug');
@@ -63,17 +69,18 @@ class ConsoleShell extends Shell {
      *
      * @return ConsoleOptionParser
      */
-    public function getOptionParser() {
+    public function getOptionParser()
+    {
         $parser = new ConsoleOptionParser('console');
         $parser->description(
-                'This shell provides a REPL that you can use to interact ' .
-                'with your application in an interactive fashion. You can use ' .
-                'it to run adhoc queries with your models, or experiment ' .
-                'and explore the features of CakePHP and your application.' .
-                "\n\n" .
+                'This shell provides a REPL that you can use to interact '.
+                'with your application in an interactive fashion. You can use '.
+                'it to run adhoc queries with your models, or experiment '.
+                'and explore the features of CakePHP and your application.'.
+                "\n\n".
                 'You will need to have psysh installed for this Shell to work.'
         );
+
         return $parser;
     }
-
 }
