@@ -429,7 +429,7 @@ class PublicationsController extends AppController
     }
 
     /**
-     * Public index method.
+     * Public tojson method.
      */
     public function tojson()
     {
@@ -441,7 +441,7 @@ class PublicationsController extends AppController
     }
 
     /**
-     * Public index method.
+     * Public tobibtex method.
      */
     public function tobibtex()
     {
@@ -453,6 +453,9 @@ class PublicationsController extends AppController
         $this->set('publications', $information[0]);
     }
 
+    /**
+     * Public bibtex method.
+     */
     public function bibtex($id = null)
     {
         $this->viewBuilder()->layout('ajax');
@@ -476,17 +479,18 @@ class PublicationsController extends AppController
     {
         // get all publications
         $result = $this->paginate($this->Publications->find(
-          'all',
-          [
-                  'contain' => [
+            'all',
+            [
+                'contain' => [
                     'Authors' => [
                           'sort' => ['AuthorsPublications.position' => 'ASC'],
                       ],
                     'Categories',
                     'Documents',
-                  ],
-                ]
-      ));
+                    'Chairs',
+                ],
+            ]
+        ));
 
         // remove non public
         $result = $result->filter(function ($publication) {
@@ -538,9 +542,17 @@ class PublicationsController extends AppController
         // filter author
         if ($this->request->query('author')) {
             $result = $result->filter(function ($publication) {
+                if (strpos($this->request->query('author'), ",") >= 0) {
+                    $authors_query = explode(",", $this->request->query('author'));
+                } else {
+                    $authors_query = array($this->request->query('author'));
+                }
+
                 foreach ($publication->authors as $author) {
-                    if ($author->id === (int) $this->request->query('author')) {
-                        return true;
+                    foreach ($authors_query as $author_query) {
+                        if ($author->id === (int) $author_query) {
+                            return true;
+                        }
                     }
                 }
 
@@ -553,6 +565,19 @@ class PublicationsController extends AppController
             $result = $result->filter(function ($publication) {
                 foreach ($publication->categories as $category) {
                     if ($category->id === (int) $this->request->query('category')) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        }
+
+        // filter chairs
+        if ($this->request->query('chairs')) {
+            $result = $result->filter(function ($publication) {
+                foreach ($publication->chairs as $chair) {
+                    if ($chair->id === (int) $this->request->query('chairs')) {
                         return true;
                     }
                 }
