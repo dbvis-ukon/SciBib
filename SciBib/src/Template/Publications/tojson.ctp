@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<?php 
+<?php
 
-echo json_encode($publications);
+echo json_encode($publications, JSON_PRETTY_PRINT);
 ?>
