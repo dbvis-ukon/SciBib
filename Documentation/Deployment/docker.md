@@ -29,4 +29,4 @@ This information should be saved by copying the console output or by pipeling th
 
 ## Troubleshooting
 
-Nothing yet.
+Permissions not working currently.
