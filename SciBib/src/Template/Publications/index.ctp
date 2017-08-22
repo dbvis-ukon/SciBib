@@ -26,7 +26,7 @@ echo $this->Html->css('publications_index.css');
 echo $this->Html->css('bootstrap.min.css');
 ?>
 
-<div class="col-xs-6 col-lg-12">
+<div class="">
 
     <?php
 
