@@ -7,9 +7,10 @@ $typeColors['book'] = '#b5a1c5';
 $typeColors['other'] = '#888888';
 //CSS Files
 echo $this->Html->css('publications_view.css');
+echo $this->Html->css('bootstrap.min.css');
 ?>
 
-<div class="publications view large-9 medium-8 columns content">
+<div class="col-lg-12">
     <?php
     // show login if user is not logged in
     if (!$user['active']) {
@@ -194,3 +195,8 @@ echo $this->Html->css('publications_view.css');
                 endforeach;
                 ?>
 </div>
+<!-- Placed at the end of the document so the pages load faster -->
+<?php
+echo $this->Html->script('jquery-3.2.1.min.js');
+echo $this->Html->script('bootstrap.min.js');
+?>

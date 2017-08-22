@@ -39,8 +39,8 @@ $title = 'BIB Vis LS Keim';
             ?>
             <nav class = "top-bar expanded" data-topbar role = "navigation">
                 <section class="top-bar-section">
-                    <ul class="left"> 
-                        <li class="name" > 
+                    <ul class="left">
+                        <li class="name" >
                             <h1 style="color: #FFF !important; margin-left: 5px;">
                                 Welcome, <?= $user['username'] ?>
                             </h1>
@@ -55,7 +55,7 @@ $title = 'BIB Vis LS Keim';
             </nav>
         <?php } ?>
         <?= $this->Flash->render() ?>
-        <section class="container clearfix">
+        <section class="container-fluid">
             <?= $this->fetch('content') ?>
         </section>
     </body>
