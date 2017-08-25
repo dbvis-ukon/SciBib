@@ -5,9 +5,6 @@ $typeColors['techreport'] = '#7fbf7f';
 $typeColors['inbook'] = '#c5b4a1';
 $typeColors['book'] = '#b5a1c5';
 $typeColors['other'] = '#888888';
-//CSS Files
-echo $this->Html->css('publications_view.css');
-echo $this->Html->css('bootstrap.min.css');
 ?>
 
 <div class="col-lg-12">

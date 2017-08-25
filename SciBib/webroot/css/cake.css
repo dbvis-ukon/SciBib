@@ -11,6 +11,10 @@ a {
     color: #005577;/*#1798A5;*/
 }
 
+nav a:hover {
+    text-decoration: none;
+}
+
 .side-nav li a:not(.button) {
     color: #327692;/*#15848F;*/
 }
@@ -498,6 +502,13 @@ div.message.hidden {
     height: 0;
 }
 
+td.publicationDownloadIcons a:hover {
+    text-decoration: none;
+}
+
+.container-fluid {
+    margin-top: 10px;
+}
 
 .vertical-table th {
     padding: 0.5625rem 0.625rem;

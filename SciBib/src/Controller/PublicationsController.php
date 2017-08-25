@@ -21,7 +21,6 @@
 namespace App\Controller;
 
 
-
 /**
  * Publications Controller.
  *
@@ -96,6 +95,8 @@ class PublicationsController extends AppController
      */
     public function view($id = null)
     {
+        $this->viewBuilder()->layout('view');
+
         $publication = $this->Publications->get($id, [
             'contain' => ['Authors' => [
                     'sort' => ['AuthorsPublications.position' => 'ASC'],
@@ -420,6 +421,8 @@ class PublicationsController extends AppController
      */
     public function Index()
     {
+        $this->viewBuilder()->layout('index');
+
         $information = $this->getInformation();
 
         //setting view variables
@@ -433,6 +436,8 @@ class PublicationsController extends AppController
      */
     public function tojson()
     {
+        $this->viewBuilder()->layout('ajax');
+
         $information = $this->getInformation();
 
         //setting view variables

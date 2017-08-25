@@ -83,7 +83,7 @@ if (isset($publication)) {
     //
     // CREATE TO APPEAR STRING
     //
- 
+
 	$toAppearString = '';
     if ($publication->published == false) {
         if (strlen($typeAdditions) < 1) {
@@ -93,11 +93,11 @@ if (isset($publication)) {
         }
     }
 
-    // 
+    //
     // CREATE YEAR STRING
     //
 	$yearString = "";
-    if (strlen($typeAdditions) > 0 || strlen($toAppearString) > 0) {
+    if (strlen($typeAdditions) > 0 || strlen($toAppearString) > 0 || strlen($doiString) > 0) {
         $yearString = ", ";
     }
     $yearString .= $publication->year;
@@ -105,7 +105,7 @@ if (isset($publication)) {
     $doiString = $publication->doi;
 
     if ($doiString) {
-        $doiString = ', DOI: <a href="http://dx.doi.org/' . $doiString . '" target="_blank">' . $doiString . "</a>";
+        $doiString = 'DOI: <a href="http://dx.doi.org/' . $doiString . '" target="_blank">' . $doiString . "</a>";
     }
 
     //change formatting for copyable print
@@ -123,11 +123,17 @@ if (isset($publication)) {
         $beforeTitle = "'";
         $afterTitle = "',";
     } else {
-        
+
     }
 
     $returnString = '<span class="' . $cssClass . '">';
-    $returnString .= '<span class="publicationAdditionalInfo">' . $typeAdditions . $doiString . $toAppearString . $yearString . '.</span>';
+	$doiAddition = $typeAdditions;
+	if (strlen($typeAdditions) > 0 && strlen($doiString) > 0) {
+		$doiAddition = $typeAdditions . ", " . $doiString . " ";
+	} else if (strlen($doiString) > 0) {
+		$doiAddition = $doiString . " ";
+	}
+    $returnString .= '<span class="publicationAdditionalInfo">' . $doiAddition . $toAppearString . $yearString . '.</span>';
     $returnString .= '</span>';
     echo $returnString;
 }
