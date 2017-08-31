@@ -563,9 +563,17 @@ class PublicationsController extends AppController
         // filter category
         if ($this->request->query('category')) {
             $result = $result->filter(function ($publication) {
+                if (strpos($this->request->query('category'), ",") >= 0) {
+                    $categories_query = explode(",", $this->request->query('category'));
+                } else {
+                    $categories_query = array($this->request->query('category'));
+                }
+
                 foreach ($publication->categories as $category) {
-                    if ($category->id === (int) $this->request->query('category')) {
-                        return true;
+                    foreach ($categories_query as $category_query) {
+                        if ($category->id === (int) $category_query) {
+                            return true;
+                        }
                     }
                 }
 
@@ -576,9 +584,17 @@ class PublicationsController extends AppController
         // filter chairs
         if ($this->request->query('chairs')) {
             $result = $result->filter(function ($publication) {
+                if (strpos($this->request->query('chairs'), ",") >= 0) {
+                    $chairs_query = explode(",", $this->request->query('chairs'));
+                } else {
+                    $chairs_query = array($this->request->query('chairs'));
+                }
+
                 foreach ($publication->chairs as $chair) {
-                    if ($chair->id === (int) $this->request->query('chairs')) {
-                        return true;
+                    foreach ($chairs_query as $chair_query) {
+                        if ($chair->id === (int) $chair_query) {
+                            return true;
+                        }
                     }
                 }
 
