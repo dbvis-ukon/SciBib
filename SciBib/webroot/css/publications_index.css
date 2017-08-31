@@ -14,20 +14,19 @@
    limitations under the License.
  **/
 
-html * {
+html {
     font-family: 'Helevtica', sans-serif;
-    font-size: 12pt;
+    font-size: 16px;
     font-weight: 100;
 }
 
 .publicationAuthors {
     margin: 1px;
     padding: 0px;
+    font-size: 15px;
 }
 
-
 /* Element containing one publication */
-
 .publicationListEntry {
     margin-bottom: 6px;
 }
@@ -48,20 +47,17 @@ html * {
 }
 
 .publicationTitle {
-    font-size: 1em;
+    font-size: 18px;
     font-weight: 400;
     text-decoration: underline;
     margin: 1px;
     padding: 0px;
 }
 
-
-/** Publication title */
-
 .publicationBookTitle {
     color: #bdbdbd;
     font-style: italic;
-    font-size: 10pt;
+    font-size: 14px;
 }
 
 

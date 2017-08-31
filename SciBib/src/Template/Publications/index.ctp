@@ -22,8 +22,6 @@ $typeColors['inbook'] = '#c5b4a1';
 $typeColors['book'] = '#b5a1c5';
 $typeColors['other'] = '#888888';
 
-echo $this->Html->css('publications_index.css');
-echo $this->Html->css('bootstrap.min.css');
 ?>
 
 <div class="">
@@ -174,7 +172,7 @@ echo $this->Html->css('bootstrap.min.css');
                         </p>
                         <p class="publicationTitle">
                         <?php
-                        echo $this->Html->link(__($publication->title), ['action' => 'view', $publication->id]) . '  <br>';
+                        echo $this->Html->link(__($publication->title), ['action' => 'view', $publication->id]);
                         ?>
                         </p>
                         <p class="publicationBookTitle">
