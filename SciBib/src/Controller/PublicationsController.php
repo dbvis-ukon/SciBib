@@ -436,7 +436,7 @@ class PublicationsController extends AppController
      */
     public function tojson()
     {
-        $this->viewBuilder()->layout('ajax');
+        $this->viewBuilder()->layout('json');
 
         $information = $this->getInformation();
 
