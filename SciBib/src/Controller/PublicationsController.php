@@ -534,7 +534,6 @@ class PublicationsController extends AppController
                           $publication->type === 'Misc' ||
                           $publication->type === 'PhDThesis' ||
                           $publication->type === 'Proceedings' ||
-                          $publication->type === 'Techreport' ||
                           $publication->type === 'Unpublished';
                 });
             } else {
