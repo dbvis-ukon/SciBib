@@ -34,12 +34,17 @@ WORKDIR /var/www/SciBib
 RUN composer update
 
 # Set configs for the database
+# Create Salt
 RUN salt=$(date +%s | sha256sum | base64 | head -c 32 ; echo) && sed -r -i "s/'salt' => '.*'/'salt' => '${salt}'/g" config/app.php
+# Change mysql user settings
 RUN sed -r -i "s/'username' => '.*'/'username' => 'scibib'/g" config/app.php
 RUN sed -r -i "s/'password' => '.*'/'password' => 'ahsh5Aepingai7mik8chahgoh'/g" config/app.php
 RUN sed -r -i "s/'database' => '.*'/'database' => 'scibib'/g" config/app.php
 # RUN sed -r -i "s/\/\/'port' => 'nonstandard_port_number'/'port' => '3310'/g" config/app.php
 RUN sed -r -i "s/'host' => 'localhost'/'host' => 'db'/g" config/app.php
+
+# Remove debug option
+RUN sed -r -i "s/'debug' => true/'debug' => false/g" config/app.php
 
 # Set the owner of the files to the apache server
 RUN chown www-data:www-data -R *
