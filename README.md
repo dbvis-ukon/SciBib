@@ -1,3 +1,6 @@
+[![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](./LICENSE)
+
+
 # SciBib
 
 SciBib is an online **Sci**entific **Bib**liography System.  
