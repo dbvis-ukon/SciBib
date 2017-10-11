@@ -141,11 +141,14 @@ $typeColors['other'] = '#888888';
                     <td class="publicationThumbWrapper">
                         <?php
                         //Use the standard thumbnail if no thumb is available
-                        if ($publication->thumb == null || !file_exists(WWW_ROOT . 'uploadedFiles' . DS . 'thumbs' . DS . $publication->thumb)) {
+                        if ($loweredType === 'phdthesis') {
+                            echo $this->Html->image(DS . 'img' . DS . 'dissertation.png'
+                                , ['width' => '100px', 'height' => '100px', 'style' => 'border: 2px solid ' . $typeColor . ';']);
+                        } else if ($publication->thumb == null || !file_exists(WWW_ROOT . 'uploadedFiles' . DS . 'thumbs' . DS . $publication->thumb)) {
                             echo $this->Html->image(DS . 'img' . DS . 'default.png'
                                 , ['width' => '100px', 'height' => '100px', 'style' => 'border: 2px solid ' . $typeColor . ';']);
                         } else {
-                            echo $this->Html->image(WWW_ROOT . 'uploadedFiles' . DS . 'thumbs' . DS . $publication->thumb, ['width' => '100px', 'height' => '100px', 'style' => 'border: 2px solid ' . $typeColor . ';']);
+                            echo $this->Html->image(DS . 'uploadedFiles' . DS . 'thumbs' . DS . $publication->thumb, ['width' => '100px', 'height' => '100px', 'style' => 'border: 2px solid ' . $typeColor . ';']);
                         }
                         ?>
                     </td>
