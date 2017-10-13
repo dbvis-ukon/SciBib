@@ -98,7 +98,7 @@ $typeColors['other'] = '#888888';
                 <div class="filterSection">
                     <span class="filterTitle">Show only publications from</span>
                     <?php
-                    foreach (range(1991, date("Y")) as $number) {
+                    foreach ($yearsFilterHeader as $number) {
                         echo "<span class=\"oneLineListEntry\">" . $this->Html->link($number, ['year' => $number, 'type' => $this->request->query('type'),
                                 'author' => $this->request->query('author')]) . "</span> ";
                     }
