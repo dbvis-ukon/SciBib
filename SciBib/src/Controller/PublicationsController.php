@@ -224,6 +224,8 @@ class PublicationsController extends AppController
                 }
             }
 
+            $data['citename'] = $this->createCiteName($data['authors'], $data['year']);
+
             $data = $this->_removeType($data);
             $publication = $this->Publications->patchEntity($publication, $data);
 
@@ -426,6 +428,7 @@ class PublicationsController extends AppController
         $information = $this->getInformation();
 
         //setting view variables
+        $this->set('yearsFilterHeader', $information[2]);
         $this->set('hideFilterHeader', $information[1]);
         $this->set('publications', $information[0]);
         $this->set('isEmbedded', $this->isEmbedded());
@@ -613,7 +616,17 @@ class PublicationsController extends AppController
             });
         }
 
-        return [$result, $hideHeader];
+        // get years
+        $years = array();
+        if (!$hideHeader) {
+            $query = $this->Publications->find('all', ['fields' => 'year'])->distinct();
+            foreach($query->all() as $year) {
+                array_push($years, $year['year']);
+            }
+            sort($years);
+        }
+
+        return [$result, $hideHeader, $years];
     }
 
     private function isEmbedded()
@@ -688,5 +701,67 @@ class PublicationsController extends AppController
         }
 
         return $result;
+    }
+
+    function createCiteName($authors, $year)
+    {
+
+        $author_surnames = array();
+        foreach ($authors as $author) {
+            $author_data = $this->Publications->Authors->get($author['id']);
+            array_push($author_surnames, $author_data['surname']);
+        }
+
+        $createdCitename = '';
+
+        if (strlen($year) === 4) {
+            $year = substr($year, 2, 2);
+        }
+
+        if (count($author_surnames) < 1) {
+            return false;
+        } else if (count($author_surnames) === 1) {
+            $createdCitename = mb_substr($author_surnames[0], 0, 3) . $year;
+        } else if (count($author_surnames) >= 2 && count($author_surnames) <= 4) {
+            foreach ($author_surnames as $author_surname) {
+                $createdCitename .= mb_substr($author_surname, 0, 2);
+            }
+            $createdCitename .= $year;
+        } else {
+            foreach ($author_surnames as $author_surname) {
+                $createdCitename .= mb_substr($author_surname, 0, 2);
+                if (strlen($createdCitename) === 3) {
+                    break;
+                }
+            }
+            $createdCitename .= '+'.$year;
+        }
+
+        $doesExist = $this->Publications->find('all', [
+            'conditions' => ['citename' => $createdCitename]
+        ])->count();
+        if ($doesExist === 0) {
+            return $createdCitename;
+        }
+
+        foreach (range('a', 'z') as $appendix) {
+            $doesExist = $this->Publications->find('all', [
+                'conditions' => ['citename' => $createdCitename.$appendix]
+            ])->count();
+            if ($doesExist === 0) {
+                return $createdCitename.$appendix;
+            }
+        }
+
+        foreach (range('A', 'Z') as $appendix) {
+            $doesExist = $this->Publications->find('all', [
+                'conditions' => ['citename' => $createdCitename.$appendix]
+            ])->count();
+            if ($doesExist === 0) {
+                return $createdCitename.$appendix;
+            }
+        }
+
+        return false;
     }
 }
