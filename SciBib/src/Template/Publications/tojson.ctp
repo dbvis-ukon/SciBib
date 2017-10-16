@@ -18,7 +18,12 @@
 
 */
 
-$json = json_encode($publications, JSON_PRETTY_PRINT);
+# Add file dir to let people know where files lay
+# $publications['file_dir'] = WWW_ROOT . 'uploadedFiles' . DS;
+$json = array();
+$json['publications'] = $publications;
+$json['file_dir'] = 'uploadedFiles';
+$json = json_encode($json, JSON_PRETTY_PRINT);
 echo $json;
 
 ?>

@@ -443,9 +443,10 @@ class PublicationsController extends AppController
 
         $information = $this->getInformation();
 
-        //setting view variables
+        // setting view variables
         $this->set(['publications' => $information[0],
-            '_serialize' => ['publications'], ]);
+            '_serialize' => ['publications'],
+        ]);
     }
 
     /**
@@ -651,14 +652,6 @@ class PublicationsController extends AppController
                 'linkstyle' => 'embedded',
                 'cssfile' => '',
                 'utf8compatible' => true,
-            ],
-            '10.0.0.11' => [
-                'TextVisualization' => [
-                    'baseurl' => 'http://research.dbvis.de/',
-                    'linkstyle' => 'embedded',
-                    'cssfile' => '',
-                    'utf8compatible' => true,
-                ],
             ],
         ];
 
