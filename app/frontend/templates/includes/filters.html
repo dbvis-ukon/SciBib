@@ -1,0 +1,47 @@
+<div class="row mb-2">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8 pt-2 border-top">
+        <div class="row pl-2 pr-2">
+            <div class="col-3">
+                <form class="form-inline">
+                    <input class="form-control form-control-sm mr-2 w-100" id="search-input" type="search"
+                           placeholder="Search text"
+                           aria-label="Search"
+                           value="{{ data['filter-search'] if data and 'filter-search' in data else '' }}">
+                </form>
+            </div>
+            <div class="col-3">
+                <div class="btn-group w-100">
+                    <button type="button" class="btn btn-light btn-sm dropdown-toggle w-100 text-left white border no-triangle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Year <i class="fa fa-caret-down float-right pr-1"></i>
+                    </button>
+                    <div id="filter-years" class="dropdown-menu overflow-auto max-height-dropdown w-100">
+                        {% for year in data['years']|reverse %}
+                            <div class="dropdown-item clicky {{ 'active' if data and 'filter-years' in data and year|string in data['filter-years'] else '' }}" data-value="{{ year }}">{{ year }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="btn-group w-100">
+                    <button type="button" class="btn btn-light btn-sm dropdown-toggle w-100 text-left white border no-triangle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type <i class="fa fa-caret-down float-right pr-1"></i>
+                    </button>
+                    <div id="filter-types" class="dropdown-menu w-100">
+                        {% for type, color in data['types'].items() %}
+                            <div class="dropdown-item clicky {{ 'active' if data and 'filter-types' in data and type in data['filter-types'] else '' }}" data-value="{{ type }}"><i class="fa fa-circle"
+                                                                 style="color: {{ color }}"></i> {{ type }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <button id="run-filters" class="btn btn-sm btn-primary text-left">Search</button>
+            </div>
+        </div>
+        {% if data and (('filter-types' in data and data['filter-types']|length > 0) or ('filter-years' in data and data['filter-years']|length > 0) or ('filter-search' in data and data['filter-search']|length > 0))%}
+            <a class="text-secondary pl-2 mt-2" href="/">(Remove filters)</a>
+        {% endif %}
+    </div>
+    <div class="col-lg-2"></div>
+</div>

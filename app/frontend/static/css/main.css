@@ -1,0 +1,257 @@
+@import "~animate.css/source/_base.css";
+@import "~animate.css/source/fading_entrances/fadeIn.css";
+
+.card {
+    border: none;
+}
+
+/*  */
+/*body {*/
+/*    padding-top: 55px;*/
+/*}*/
+
+body.nav-pad {
+    padding-top: 55px;
+}
+
+.btn-margin-left {
+    margin-left: 2px;
+}
+.btn-margin-right {
+    margin-right: 2px;
+}
+
+.warp {
+    display: flex;
+}
+
+.publication_item > li:hover {
+    color: #fff;
+}
+
+.cat-list {
+    margin: 0;
+}
+
+.download-thumb {
+    /*width: 50px;*/
+    height: 75px;
+}
+
+.document {
+    min-height: 95vh;
+}
+
+.drag-list:hover {
+    cursor: pointer;
+}
+
+/* Width of select2, since plugin default is not responsive */
+span.select2.select2-container.select2-container--bootstrap4-select2-container--below {
+    width: 100% !important;
+}
+
+
+/* For aligning all the listings of the images correctly e.g. http://localhost:5000/view/authors/1  */
+.list-img {
+    max-width: 74px;
+    width: 74px;
+    height: 74px;
+    max-height: 74px;
+}
+
+/* For aligning all the listings of the images correctly e.g. http://localhost:5000/view/authors/1  */
+.list-img-sm {
+    max-width: 50px;
+    width: 50px;
+    height: 50px;
+    max-height: 50px;
+}
+
+.img-xs {
+    max-width: 34px;
+    width: 34px;
+    height: 34px;
+    max-height: 34px;
+}
+
+
+/*
+    Button to upload multiples files in form nicely
+    See this blogpost https://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3
+*/
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.center-vertical {
+    vertical-align: middle !important;
+}
+
+.clicky {
+    cursor: pointer;
+}
+
+.color-lightslategray {
+    color: lightslategray;
+}
+
+.background-color-whitesmoke {
+    background-color: #F5F5F5;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+    .text-center-sm {
+        text-align: center;
+    }
+}
+
+@media (min-width: 992px) {
+    .float-left-big {
+        float: left;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (max-width: 992px) {
+    .text-center-md {
+        text-align: center;
+    }
+}
+
+#sentinel {
+    margin-bottom: 50px !important;
+}
+
+@media (min-width: 34em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+@media (min-width: 62em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-columns {
+        -webkit-column-count: 5;
+        -moz-column-count: 5;
+        column-count: 5;
+    }
+}
+
+.card:hover {
+    /*box: shadow 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;*/
+    /*background-color: green;*/
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    transition: .5s;
+}
+
+.text-sm {
+    font-size: 15px;
+}
+
+.btn-xsm {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+    line-height: 1;
+    border-radius: 0.2rem;
+    min-width: 44px;
+}
+
+.min-width-ul {
+    min-width: 150px;
+}
+
+.max-height-dropdown {
+    max-height: 190px;
+}
+
+.white {
+    background-color: #ffffff;
+}
+
+.no-triangle::after {
+    content: none;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (max-width: 991px) {
+    .hide-sm {
+        display: none;
+    }
+}
+
+.hover-pub-item-light {
+    background-color: #f8f9fa;
+    border-radius: 3px;
+    margin: 5px;
+    /*margin-top: 5px;*/
+    /*margin-bottom: 5px;*/
+}
+
+.hover-pub-item-light:hover {
+    /*background-color: #F0F0F0;*/
+    /*border-radius: 5px;*/
+    /*margin-top: 10px;*/
+    /*box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;*/
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important
+    /*margin-bottom: 10px;*/
+}
+
+.background-color-whitesmoke {
+    background-color: #F5F5F5;
+    border-radius: 3px;
+    margin: 5px;
+    /*margin-top: 5px;*/
+    /*margin-bottom: 5px;*/
+}
+
+
+.hover-pub-item-dark:hover {
+    /*background-color: #F0F0F0;*/
+    /*border-radius: 5px;*/
+    /*box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;*/
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important
+    /*margin-bottom: 10px;*/
+}
+
+.cursor-default {
+    cursor: default;
+}
+
+.opacity-1 {
+    opacity: 1 !important;
+}

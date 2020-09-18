@@ -1,0 +1,34 @@
+<template id="template-publication">
+    <div class="col-12 mb-2">
+        <div class="d-flex flex-row h-100">
+            <div>
+                <ul class="list-inline min-width-ul m-0">
+                    <li class="list-inline-item mr-1">
+                        <button id="circle-type" class="btn btn-sm pt-0 pb-0 cursor-default opacity-1" disabled><i class="fa fa-circle"></i>
+                        </button>
+                    </li>
+                    <li class="list-inline-item mr-1" id="doi-item"></li>
+                    <li class="list-inline-item mr-1" id="bib-item"></li>
+                </ul>
+                <ul class="list-inline min-width-ul">
+                    <li class="list-inline-item mr-1">
+                        <button class="btn btn-sm invisible" disabled><i class="fa fa-circle"></i></button>
+                    </li>
+                    <li class="list-inline-item mr-1" id="pdf-item"></li>
+                    <li class="list-inline-item mr-1" id="url-item"></li>
+                </ul>
+            </div>
+            <div class="p-1"><img id="thumb-item" src="{{ url_for('static', filename='uploadedFiles/thumbs/') }}"
+                                  alt="thumbnail" class="img-thumbnail list-img"
+                                  onerror="if (this.src != '/static/images/thumb-default.png') this.src = '/static/images/thumb-default.png'">
+            </div>
+            <div class="p-1">
+                <div id="authors"></div>
+                <div class="card-title text-sm p-0 m-0"><b><a id="title" class="text-dark"></a></b>
+                </div>
+                <small id="info-item"></small>
+                <div id="keywords" class="keywords"></div>
+            </div>
+        </div>
+    </div>
+</template>

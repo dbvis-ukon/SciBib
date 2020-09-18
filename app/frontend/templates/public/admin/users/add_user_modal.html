@@ -1,0 +1,54 @@
+<!-- Modal to add a user -->
+<div class="modal fade" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="add-user-form-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-user-title">Add User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form action="/add/user" method="post" id="add-user-form">
+             <div class="form-group">
+                 <label for="input-firstname">First Name</label>
+                 <input type="text" class="form-control" name="input-firstname" id="input-firstname">
+             </div>
+             <div class="form-group">
+                 <label for="input-lastname">Last Name</label>
+                 <input type="text" class="form-control" name="input-lastname" id="input-lastname">
+             </div>
+{#             <div class="form-group">#}
+{#                 <label for="input-username">Username</label>#}
+{#                 <input type="text" class="form-control" name="input-username" id="input-username">#}
+{#             </div>#}
+             <div class="form-group">
+                 <label for="input-email">E-Mail</label>
+                 <input type="email" class="form-control" name="input-email" id="input-email">
+                 <div class="invalid-feedback">Please provide a valid email address.</div>
+             </div>
+             <div class="form-group">
+                 <label for="input-password">Password</label>
+                 <input type="password" class="form-control" name="input-password" id="input-password">
+             </div>
+             <div class="form-group">
+                 <label for="select-roles">Roles</label>
+                 <select type="text" class="form-control" name="select-roles" id="select-roles" multiple="multiple">
+                     {% for role in data['roles'] %}
+                         <option value="{{ role['id'] }}">{{ role['name'] }}</option>
+{#                         <option value="{{ author['id'] }}" {{ 'selected' if data['authors-selected'][author['id']] else '' }}>{{ author['cleanname'] }}</option>#}
+                     {% endfor %}
+                 </select>
+             </div>
+             <div class="form-check pl-4">
+                 <input class="form-check-input" type="checkbox" value="1" name="input-active" id="input-active">
+                 <label for="input-active">Active</label>
+             </div>
+             <button id="submit-add-user" type="submit" value="Submit-User" class="btn btn-primary">Submit</button>
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         </form>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>

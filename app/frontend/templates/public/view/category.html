@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      {% include 'includes/references.html' %}
+  </head>
+  <body class="nav-pad">
+  {% include 'includes/navbar.html' %}
+
+  <template id="alert">
+      <div class="row">
+          <div class="col-lg-12">
+              <div class="alert mb-0" id="alert-msg"></div>
+          </div>
+      </div>
+  </template>
+
+{% include 'includes/messages.html' %}
+  <div class="row pt-5 bg-light border-bottom" id="content">
+      <!--############## MENU START ####################### -->
+      <div class="col-lg-3 bg-light" id="menu">
+          <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-8 text-center">
+                  <h4>Actions</h4>
+              </div>
+              <div class="col-lg-2"></div>
+          </div>
+          <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-8">
+                  <div class="container">
+                      <button type="button" class="btn btn-primary btn-block edit-category-btn" data-categoryid="{{ data['category']['id'] }}">
+                          <i class="fa fa-edit"></i> Edit Category
+                      </button>
+                      <button type="button" class="btn btn-danger btn-block delete-category-btn" data-categoryid="{{ data['category']['id'] }}">
+                          <i class="fa fa-times"></i> Delete Category
+                      </button>
+                      <a href="/admin/categories" class="btn btn-primary btn-block">
+                          <i class="fa fa-list"></i> List Categories
+                      </a>
+                  </div>
+              </div>
+              <div class="col-lg-2"></div>
+          </div>
+      </div>
+      <!-- ########### MENU END ###################### -->
+
+      <!-- ########### CONTENT START ################# -->
+      <div class="col-lg-9 bg-light" id="authors">
+        <div class="row p-2">
+            <div class="col-lg-12">
+                <h4>Category</h4>
+                <table class="table" id="table-category">
+                    <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td id="cat_name">{{ data['category']['name'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Parent</td>
+                        <td><a class="text-dark" href="/view/categories/{{ data['parent']['id'] }}">{{ data['parent']['name'] }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td id="cat_desc">{{ data['category']['description'] }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-lg-12">
+                <h4>Related Categories</h4>
+                  {% if data['related']|length > 1 %}
+                      <table class="table table-striped" id="table-authors">
+                        <thead>
+                          <tr>
+                              <th>Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for related in data['related'][1:] %}
+                                <tr>
+                                    <td><a class="text-dark" href="/view/categories/{{ related['id'] }}">{{ related['name'] }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                  {% else  %}
+                      <p>No related categories.</p>
+                  {% endif %}
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-lg-12">
+                <h4>Publications</h4>
+                  {% if data['publications']|length > 0 %}
+                      <table class="table bg-light" id="table-authors">
+                        <tbody>
+                            {% for publication in data['publications']|sort(attribute='year', reverse=True) %}
+                                <tr>
+                                    <td>
+                                        {% if publication['thumb'] %}
+                                            <img src="/static/uploadedFiles/thumbs/{{ publication['thumb'] }}" alt="thumbnail" class="img-thumbnail list-img" onerror="if (this.src != '/static/images/thumb-default.png') this.src = '/static/images/thumb-default.png'">
+                                        {% else %}
+                                            <img src="/static/images/thumb-default.png" alt="thumbnail" class="img-thumbnail list-img">
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <h4 class="mb-0"><a class="text-secondary" href="/publications/view/{{ publication['id'] }}">{{ publication['title'] }}</a></h4>
+                                        <p class="mb-0">{{ publication['authors'] }}</p>
+                                        <small class="mb-0">
+                                            {% if publication['journal'] %}
+                                                {{ publication['journal'] }},
+                                            {% elif publication['booktitle'] %}
+                                                {{ publication['booktitle'] }},
+                                            {% endif %}
+                                            {% if publication['doi'] %}
+                                                <a class="text-muted" href="http://dx.doi.org/{{ publication['doi'] }}">{{ publication['doi'] }}</a>,
+                                            {% endif %}
+                                            {{ publication['year'] }}
+                                        </small>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                  {% else  %}
+                      <p>No publications found.</p>
+                  {% endif %}
+            </div>
+        </div>
+      </div>
+      <!-- ########### CONTENT END ################# -->
+  </div>
+
+  <!-- edit category modal -->
+  {% include 'public/admin/categories/edit_category_modal.html' %}
+  <!-- -->
+
+    {% include 'includes/footer.html' %}
+  <script src="{{url_for('static', filename='js/categories/categories_view.js')}}"></script>
+  <script src="{{url_for('static', filename='js/categories/validate_category.js')}}"></script>
+  </body>
+</html>

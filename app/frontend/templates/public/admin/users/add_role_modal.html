@@ -1,0 +1,29 @@
+<!-- Modal to add an author -->
+<div class="modal fade" id="add-role-modal" tabindex="-1" role="dialog" aria-labelledby="add-role-form-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-role-title">Add Role</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form action="/add/role" method="post" id="add-role-form">
+             <div class="form-group">
+                 <label for="input-username">Name</label>
+                 <input type="text" class="form-control" name="input-name" id="input-name">
+                 <div class="invalid-feedback">Please provide a name.</div>
+             </div>
+             <div class="form-group">
+                 <label for="input-email">Description</label>
+                 <input type="text" class="form-control" name="input-description" id="input-description">
+             </div>
+             <button id="submit-add-role" type="submit" value="Submit-Role" class="btn btn-primary">Submit</button>
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         </form>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>

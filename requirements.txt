@@ -1,0 +1,11 @@
+Flask
+Flask-SQLAlchemy
+Flask-Security-Too
+SQLAlchemy-serializer
+mysqlclient
+bcrypt
+rfc3339
+ansicolors
+bibtexparser
+pillow
+gunicorn

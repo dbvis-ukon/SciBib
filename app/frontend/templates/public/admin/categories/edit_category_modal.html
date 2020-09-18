@@ -1,0 +1,33 @@
+<!-- Modal to edit a role -->
+<template id="edit-category-modal_template">
+    <div class="modal fade" id="edit-category-modal" tabindex="-1" role="dialog" aria-labelledby="edit-category-form-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="edit-category-title">Edit Category</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <form action="/edit/category" method="post" id="edit-category-form">
+                 <div class="form-group">
+                     <label for="input-name">Name</label>
+                     <input type="text" class="form-control" name="input-name" id="input-name">
+                     <div class="invalid-feedback">
+                     Please provide a category name.
+                    </div>
+                 </div>
+                 <div class="form-group">
+                     <label for="input-description">Description</label>
+                     <input type="text" class="form-control" name="input-description" id="input-description">
+                 </div>
+                 <button id="submit-edit-category" type="submit" value="Submit-category edit-dialog" class="btn btn-primary">Submit</button>
+                 <button type="button" class="btn btn-secondary close-edit-dialog" data-dismiss="modal">Close</button>
+             </form>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+</template>

@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% include 'includes/references.html' %}
+    </head>
+  <body class="nav-pad">
+  {% include 'includes/navbar.html' %}
+
+  <template id="alert">
+      <div class="row">
+          <div class="col-lg-12">
+              <div class="alert mb-0" id="alert-msg"></div>
+          </div>
+      </div>
+  </template>
+
+
+  <!-- Include a message when redirected after editing a publication -->
+  {% include 'includes/messages.html' %}
+
+  <div class="row pt-5 bg-light border-bottom" id="content">
+      <!--############## MENU START ####################### -->
+      <div class="col-lg-3 bg-light" id="menu">
+          <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-8 text-center">
+                  <h4>Actions</h4>
+              </div>
+              <div class="col-lg-2"></div>
+          </div>
+          <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-8">
+                  <div class="container">
+                      <a href="/admin/publications" class="btn btn-primary btn-block">
+                          <i class="fa fa-list"></i> List Publication
+                      </a>
+                  </div>
+              </div>
+              <div class="col-lg-2"></div>
+          </div>
+      </div>
+      <!-- ########### MENU END ###################### -->
+
+      <!-- ########### CONTENT START ################# -->
+      <div class="col-lg-9 bg-light" id="edit_publication">
+          <form class="needs-validation" action="/edit/publication/{{ data['id'] }}" method="post" id="publication-form" enctype="multipart/form-data" novalidate>
+              <div class="row p-3">
+                  <div class="col-lg-12">
+                      <h4 class="border-bottom">General Information</h4>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-4">
+                                      <label for="input-title"><pre class="m-0">Title: </pre></label>
+                                      <input type="text" class="form-control" name="input-title" id="input-title" required value="{{ data['title'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide a title.
+                                      </div>
+                                </div>
+                                  <div class="form-group col-lg-2">
+                                      <label for="input-type"><pre class="m-0">Type: </pre></label>
+                                      <select type="text" class="form-control" name="input-type" id="input-type">
+                                        <option value="Article" {{ 'selected' if data['type'] == 'Article' else ''}}>Article</option>
+                                        <option value="Book" {{ 'selected' if data['type'] == 'Book' else ''}}>Book</option>
+                                        <option value="Booklet" {{ 'selected' if data['type'] == 'Booklet' else ''}}>Booklet</option>
+                                        <option value="Conference" {{ 'selected' if data['type'] == 'Conference' else ''}}>Conference</option>
+                                        <option value="Inbook" {{ 'selected' if data['type'] == 'Inbook' else ''}}>Inbook</option>
+                                        <option value="Incollection" {{ 'selected' if data['type'] == 'Incollection' else ''}}>Incollection</option>
+                                        <option value="Inproceedings" {{ 'selected' if data['type'] == 'Inproceedings' else ''}}>Inproceedings</option>
+                                        <option value="Manual" {{ 'selected' if data['type'] == 'Manual' else ''}}>Manual</option>
+                                        <option value="Masterthesis" {{ 'selected' if data['type'] == 'Masterthesis' else ''}}>Masterthesis</option>
+                                        <option value="Misc" {{ 'selected' if data['type'] == 'Misc' else ''}}>Misc</option>
+                                        <option value="PhDThesis" {{ 'selected' if data['type'] == 'PhDThesis' else ''}}>PhDThesis</option>
+                                        <option value="Proceedings" {{ 'selected' if data['type'] == 'Proceedings' else ''}}>Proceedings</option>
+                                        <option value="Techreport" {{ 'selected' if data['type'] == 'Techreport' else ''}}>Techreport</option>
+                                        <option value="Unpublished" {{ 'selected' if data['type'] == 'Unpublished' else ''}}>Unpublished</option>
+                                      </select>
+                                  </div>
+                                  <div class="form-group col-lg-6"></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-12">
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="input-submitted" id="input-submitted" {{ 'checked' if data['submitted'] else '' }}>
+                                        <label class="form-check-label" for="input-submitted">Submitted</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                          <input class="form-check-input" type="checkbox" name="input-published" id="input-published" {{ 'checked' if data['published'] else '' }}>
+                                          <label class="form-check-label" for="input-published">Published</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="input-public" id="input-public" {{ 'checked' if data['public'] else '' }}>
+                                        <label class="form-check-label" for="input-public">Public</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="input-madepublic" id="input-madepublic" {{ 'checked' if data['publicationdate'] else '' }}>
+                                        <label class="form-check-label" for="input-madepublic">Made public on</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                           <input id="input-pubdate" type="date" data-date-format="DD/MM/YYYY" name="input-pubdate" class="form-check-input form-control" {{ 'disabled' if not data['publicationdate'] else '' }} value="{{ data['publicationdate'] if data['publicationdate'] else '' }}">
+                                      </div>
+                                      <br>
+                                      <small id="info-public-check">This paper is <span class="text-warning">not yet published</span> and is <span class="text-warning">hidden from public</span></small>
+                                    </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-2">
+                                     <label class="form-group" for="input-year"><pre class="m-0">Year: </pre></label>
+                                      <select class="form-control" id="input-year" name="input-year">
+                                          {% for year in data['years'] %}
+                                            <option value="{{ year['year'] }}" {{ 'selected' if year['current'] else '' }}>{{ year['year'] }}</option>
+                                          {% endfor %}
+                                      </select>
+                                 </div>
+                                  <div class="form-group col-lg-5">
+                                     <label class="form-group" for="input-doi"><pre class="m-0">DOI: </pre></label>
+                                     <input type="text" class="form-control" id="input-doi" name="input-doi" placeholder="Example: 10.123/Conf/123-4" value="{{ data['doi'] }}">
+                                      <small><pre class="m-0 text-info"><b> NOTE:</b> Without the URL part of the DOI</pre></small>
+                                 </div>
+                                  <div class="form-group col-lg-5"></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-7">
+                                      <label for="input-kops"><pre class="m-0">KOPS: </pre></label>
+                                      <input type="text" class="form-control" id="input-kops" name="input-kops" placeholder="Example: http://kops.uni-konstanz.de/handle/1234567/1235">
+                                      <small><pre class="m-0"> Please search <a class="text-info" href="http://kops.uni-konstanz.de/discover?query=" target="_blank">KOPS</a> for the full URL!</pre></small>
+                                  </div>
+                                  <div class="form-group col-lg-5">
+
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-7">
+                                      <label for="select-categories"><pre class="m-0">Categories: </pre></label>
+                                      <select type="text" class="form-control" name="select-categories" id="select-categories" multiple="multiple">
+                                          {% for category in data['categories'] %}
+                                            <option value="{{ category['id'] }}" {{ 'selected' if data['categories-selected'][category['id']] else ''}}>{{ category['name'].replace(' ', '&nbsp;')|safe }}</option>
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                                  <div class="form-group col-lg-5"></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-7">
+                                      <label for="select-keywords"><pre class="m-0">Keywords: </pre></label>
+                                      <select type="text" class="form-control" name="select-keywords" id="select-keywords" multiple="multiple">
+                                          {% for keyword in data['keywords'] %}
+                                            <option value="{{ keyword['id'] }}" {{ 'selected' if data['keywords-selected'][keyword['name']] else '' }}>{{ keyword['name'] }}</option>
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                                  <div class="form-group col-lg-3">
+                                      <label for="btn-add-keyword"><pre class="m-0"></pre></label>
+                                      <button type="button" id="btn-add-keyword" name="btn-add-keyword" class="btn btn-primary form-control mt-1" data-toggle="modal" data-target="#add-keyword-modal">
+                                          <i class="fa fa-plus"></i> Add Keyword
+                                      </button>
+                                  </div>
+                                  <div class="form-group col-lg-2"></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-7">
+                                      <label for="select-copyright"><pre class="m-0">Copyright: </pre></label>
+                                      <select type="text" class="form-control" name="select-copyright" id="select-copyright">
+                                        <option value="1">Default Policy</option>
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-5"></div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-3">
+                                      <label for="input-thumbnail"><pre class="m-0">Thumbnail:</pre></label>
+                                      <input type="file" class="form-control-file" name="input-thumbnail" id="input-thumbnail" accept="image/*">
+                                      <small class="text-dark"><b>NOTE:</b> Image will be resized to 74x74 pixels</small>
+                                  </div>
+                                  <div class="form-group col-lg-2 text-center">
+                                      <p class="m-0 p-0">Current Thumbnail</p>
+                                      <img id="thumbnail-preview" class="img-thumbnail list-img" alt="thumbnail" src="{{  url_for('static', filename='uploadedFiles/thumbs/' + data['thumb']) if data['thumb'] else '/static/images/thumb-default.png' }}" />
+                                      <input type="text" class="d-none" name="input-current-thumbnail" id="input-current-thumbnail" value="{{ data['thumb'] if data['thumb'] else '' }}">
+                                  </div>
+                                  <div class="form-group col-lg-7"></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- Add authors  -->
+              <div class="row p-3">
+                  <div class="col-lg-12">
+                      <h4 class="border-bottom">Authors</h4>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-6">
+                                      <label for="input-authors"><pre class="m-0">Authors: </pre></label>
+                                      <select type="text" class="form-control" name="select-authors" id="select-authors" multiple="multiple">
+                                          {% for author in data['authors'] %}
+                                              <option value="{{ author['id'] }}" {{ 'selected' if data['authors-selected'][author['id']] else '' }}>{{ author['cleanname'] }}</option>
+                                          {% endfor %}
+                                      </select>
+                                      <div class="invalid-feedback">
+                                            Please provide an author.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-3">
+                                      <label for="input-authors"><pre class="m-0">Sequence of Authors: </pre></label>
+                                      <ul id="author-list" class="list-group drag-list">
+                                      </ul>
+                                  </div>
+                                  <div class="form-group col-lg-3"></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-3">
+                                      <button type="button" id="btn-add-author" name="btn-add-author" class="btn btn-primary form-control mt-1" data-toggle="modal" data-target="#add-author-modal">
+                                          <i class="fa fa-plus"></i> Add Author
+                                      </button>
+                                  </div>
+                                  <div class="form-group col-lg-9"></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- Add bibtex -->
+              <div class="row p-3">
+                  <div class="col-lg-12">
+                      <h4 class="border-bottom">BibTeX Information</h4>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row" id="bibtex-info-r-0">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-address"><pre class="m-0">Address: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-address" id="input-bibtex-0" maxlength="10000" value="{{ data['address'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide an address.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-1">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-booktitle"><pre class="m-0">Booktitle: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-booktitle" id="input-bibtex-1" maxlength="255" value="{{ data['booktitle'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide a booktitle.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-2">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-chapter"><pre class="m-0">Chapter: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="number" name="input-bibtex-chapter" id="input-bibtex-2" value="{{ data['chapter'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide a chapter.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-3">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-edition"><pre class="m-0">Edition: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-edition" id="input-bibtex-3" value="{{ data['edition'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide an edition.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-4">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-editor"><pre class="m-0">Editor: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-editor" id="input-bibtex-4" maxlength="255" value="{{ data['editor'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide an editor.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-5">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-howpublished"><pre class="m-0">Howpublished: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-howpublished" id="input-bibtex-5" maxlength="10000" value="{{ data['howpublished'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide how the work was published.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-6">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-institution"><pre class="m-0">Institution: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-institution" id="input-bibtex-6" maxlength="255" value="{{ data['institution'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide an institution.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-7">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-journal"><pre class="m-0">Journal: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-journal" id="input-bibtex-7" maxlength="255" value="{{ data['journal'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide a journal.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-8">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-month"><pre class="m-0">Month: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-month" id="input-bibtex-8" maxlength="3" value="{{ data['month'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the month of publication.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-9">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-note"><pre class="m-0">Note: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-note" id="input-bibtex-9" maxlength="10000" value="{{ data['note'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide additional information.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-10">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-number"><pre class="m-0">Number: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-number" id="input-bibtex-10" maxlength="255" value="{{ data['number'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the "(issue) number" of the journal, magazine, or tech-report.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-11">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-organization"><pre class="m-0">Organization: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-organization" id="input-bibtex-11" maxlength="255" value="{{ data['organization'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the conference sponsor.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-12">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-pages"><pre class="m-0">Pages: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-pages" id="input-bibtex-12" maxlength="255" value="{{ data['pages'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the page numbers.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-13">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-school"><pre class="m-0">School: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-school" id="input-bibtex-13" maxlength="255" value="{{ data['school'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the school the work was written at.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-14">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-series"><pre class="m-0">Series: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-series" id="input-bibtex-14" maxlength="255" value="{{ data['series'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the series of books the book was published.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-15">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-volume"><pre class="m-0">Volume: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-volume" id="input-bibtex-15" maxlength="255" value="{{ data['volume'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the volume.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-info-r-16">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-publisher"><pre class="m-0">Publisher: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-publisher" id="input-bibtex-16" maxlength="255" value="{{ data['publisher'] }}">
+                                      <div class="invalid-feedback">
+                                            Please provide the publisher.
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                              <div class="form-row" id="bibtex-additional-r">
+                                  <div class="form-group col-lg-8">
+                                      <label for="input-bibtex-additional"><pre class="m-0">Other: </pre></label>
+                                      <input class="form-control bibtex-inputs" type="text" name="input-bibtex-additional" id="input-bibtex-additional" maxlength="2000" placeholder="e.g. maintitle=The title;isbn=978-3-16-148410-0;..." value="{{ data['other'] }}">
+                                      <small class="text-dark">Add additional bib entries here</small>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- Add Documents -->
+              <div class="row p-3">
+                  <div class="col-lg-12">
+                      <h4 class="border-bottom">Documents</h4>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-8">
+                                      <table id="input-docs-table" class="table table-sm">
+                                          <thead>
+                                            <tr>
+                                                <th>Mainfile</th>
+                                                <th>URL/Filepath</th>
+                                                <th></th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                          {% for document in data['docs'] %}
+                                              <!-- PDF documents -->
+                                              {% if document['remote'] == 0 %}
+                                                  <tr class="input-docs-db" id="tr-input-docs-{{ loop.index0 }}">
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="input-docs-checkbox" id="input-docs-checkbox" value="{{ loop.index0 }}" {{ 'checked' if document['filename'] == data['mainfile'] else '' }}>
+                                                        </div>
+                                                    </td>
+                                                  <td>
+                                                      {{ document['filename'] }}
+                                                      <!-- keep an input for the names of the already added documents to avoid an extra query in the backend when changing the mainfile for already existing files-->
+{#
+                                                      <input class="d-none" type="text" name="input-docs-db-name-{{ loop.index0 }}" id="input-docs-db-name-{{ loop.index0 }}" value="{{ document['filename'] }}">
+#}
+                                                  </td>
+                                                  <td>
+                                                      <button class="btn input-docs-db-del" type="button" data-inputid="{{ loop.index0 }}" data-dbid="{{ document['id'] }}" data-pubid="{{ document['publication_id'] }}">
+                                                          <i class="fa fa-times text-danger"></i>
+                                                      </button>
+                                                  </td>
+                                                  </tr>
+                                              <!-- External documents -->
+                                              {% elif document['remote'] == 1 %}
+                                                  <tr class="input-docs-db" id="tr-input-docs-{{ loop.index0 }}">
+                                                    <td></td>
+                                                    <td>
+                                                        <div>
+                                                            <p class="m-0 p-0">{{ document['filename'] }}</p>
+                                                        </div>
+                                                    </td>
+                                                  <td class="center-vertical">
+                                                      <button type="button" class="btn center-vertical input-docs-db-del" data-inputid="{{ loop.index0 }}" data-dbid="{{ document['id'] }}" data-pubid="{{ document['publication_id'] }}">
+                                                          <i class="fa fa-times text-danger"></i>
+                                                      </button>
+                                                  </td>
+                                                  </tr>
+                                              {% endif %}
+                                          {% endfor %}
+                                          </tbody>
+                                        </table>
+                                  </div>
+                                  <div class="col-lg-4"></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-row">
+                                  <div class="form-group col-lg-4">
+                                      <span class="btn btn-primary btn-block btn-default btn-file">
+                                          <i class="fa fa-plus"></i> Upload PDF <input name="input-docs" id="input-docs" type="file">
+                                      </span>
+                                  </div>
+                                  <div class="form-group col-lg-4">
+                                      <button type="button" id="btn-add-external-doc" name="btn-add-external-doc" class="btn btn-primary btn-block">
+                                          <i class="fa fa-plus"></i> Add External Link
+                                      </button>
+                                  </div>
+                                  <div class="form-group col-lg-4"></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row p-3">
+                  <div class="col-lg-12">
+                      <h4 class="border-bottom">Paper Abstract</h4>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-group col-lg-12">
+                                  <label for="input-abstract"><pre class="m-0">Abstract: </pre></label>
+                                  <textarea class="form-control" name="input-abstract" id="input-abstract">{{ data['abstract'] }}</textarea>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row p-3">
+                  <div class="col-lg-12">
+                      <h4 class="border-bottom">Bibtex Input</h4>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-group col-lg-12">
+                                  <textarea class="form-control" name="input-bibtexcode" id="input-bibtextcode"></textarea>
+                                  <small class="text-dark">Just paste your Bibtex Code and it will fill in the inputs above. <b>Please recheck the inputs before submitting.</b></small>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="form-group col-lg-3">
+                                  <button type="button" class="btn btn-primary btn-block">Fill in bibtex</button>
+                              </div>
+                              <div class="form-group col-lg-9"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row p-3">
+                  <div class="col-lg-12">
+                      <div class="form-row">
+                          <div class="col-lg-4">
+                              <button type="submit" value="Submit-Pub" class="btn btn-primary btn-block">Submit</button>
+                          </div>
+                          <div class="col-lg-8"></div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <!-- ########### CONTENT END ################# -->
+      <!-- MODAL START for adding author and keywords -->
+      {% include 'public/admin/keywords/add_keyword_modal.html' %}
+      {% include 'public/admin/authors/add_author_modal.html' %}
+      <!-- MODAL END -->
+
+  </div>
+
+  {% include 'includes/footer.html' %}
+  <script src="{{url_for('static', filename='js/publications/publication_form.js')}}"></script>
+  <script src="{{url_for('static', filename='js/publications/publications_form_edit.js')}}"></script>
+  <script src="{{url_for('static', filename='js/publications/autofill.js')}}"></script>
+  <script src="{{url_for('static', filename='js/publications/validate_publication.js')}}"></script>
+  <script src="{{url_for('static', filename='js/authors/validate_author.js')}}"></script>
+  <script src="{{url_for('static', filename='js/keywords/validate_keyword.js')}}"></script>
+  </body>
+</html>

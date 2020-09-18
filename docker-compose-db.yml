@@ -1,17 +1,28 @@
 version: "3"
 
 services:
+  db:
+    container_name: scibib_db
+    restart: always
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SCIBIB_MYSQL_DATABASE: ${SCIBIB_MYSQL_DATABASE}
+      SCIBIB_MYSQL_USER: ${SCIBIB_MYSQL_USER}
+      SCIBIB_MYSQL_PASSWORD: ${SCIBIB_MYSQL_PASSWORD}
+    volumes:
+    - db-volume:/var/lib/mysql
+    - ./db/init_script:/docker-entrypoint-initdb.d
   scibib:
     container_name: scibib
     restart: always
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_db
       args:
         - SCIBIB_MYSQL_DATABASE=${SCIBIB_MYSQL_DATABASE}
         - SCIBIB_MYSQL_USER=${SCIBIB_MYSQL_USER}
         - SCIBIB_MYSQL_PASSWORD=${SCIBIB_MYSQL_PASSWORD}
-        - SCIBIB_MYSQL_HOST=${SCIBIB_MYSQL_HOST}
         - SCIBIB_EMAIL_SENDER=${SCIBIB_EMAIL_SENDER}
         - SCIBIB_BIND_ADDRESS=${SCIBIB_BIND_ADDRESS}
         - SCIBIB_BIND_PORT=${SCIBIB_BIND_PORT}
@@ -24,3 +35,10 @@ services:
       - ./app/frontend/static/uploadedFiles:/srv/scibib/frontend/static/uploadedFiles
     ports:
       - ${SCIBIB_BIND_ADDRESS}:${SCIBIB_BIND_PORT}:8080
+    links:
+      - db:db
+    depends_on:
+      - db
+
+volumes:
+  db-volume:
