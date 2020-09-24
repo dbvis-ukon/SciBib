@@ -1,6 +1,12 @@
 'use strict';
 
+/*
+Activate delete button for the publications view and format publications table
+ */
 $(document).ready(function () {
+    /*
+    Display confirmation dialog when trying to delete a publiation.
+     */
     $('.delete-publication-btn').on('click', function() {
         let publication_id = $(this).data().publicationid;
 
@@ -12,7 +18,7 @@ $(document).ready(function () {
         );
     });
 
-    // Nicely format Authors Table
+    // Nicely format publications table
     $('#table-publications').DataTable({
         'order': [[1, "desc"]],
         'initComplete': function() {

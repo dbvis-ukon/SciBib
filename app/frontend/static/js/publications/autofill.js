@@ -1,10 +1,12 @@
 'use strict';
 
+/*
+Activate autofill from bibtex functionality when adding a publication.
+ */
 $(document).ready(function () {
     $('#btn-autofill').on('click', function () {
         let bib_str = $('#input-bibtextcode').val();
 
-        // TODO fix this better
         let count = 0;
         let replaceWith = 'U+0040';
         bib_str = bib_str.replace(/\@/g, function (match) {

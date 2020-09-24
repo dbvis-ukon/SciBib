@@ -2,7 +2,9 @@
 
 let required_inputs_keyword = ['input-name'];
 
-
+/*
+Validate add keyword form.
+ */
 $('#submit-add-keyword').on('submit click', function () {
     event.preventDefault();
 

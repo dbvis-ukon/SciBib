@@ -2,7 +2,9 @@
 
 let required_inputs = ['input-forename', 'input-surname'];
 
-
+/*
+Validate form to add an author.
+ */
 $('#submit-author').on('submit click', function () {
     event.preventDefault();
 

@@ -1,5 +1,8 @@
 'use strict';
 
+/*
+Create a new dialog to edit a category
+ */
 function createEditCategoryDialog(data) {
     let modal_id = 'edit-category-modal';
 
@@ -46,7 +49,9 @@ function createEditCategoryDialog(data) {
     return false;
 }
 
-
+/*
+Activate buttons to edit/delete categories.
+ */
 $(document).ready(function () {
     $('.edit-category-btn').on('click', function() {
         let category_id = $(this).data().categoryid;

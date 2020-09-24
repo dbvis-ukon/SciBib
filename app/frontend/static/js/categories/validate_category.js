@@ -2,7 +2,9 @@
 
 let required_inputs = ['input-name'];
 
-
+/*
+Validate form to add a new category.
+ */
 $('#submit-add-category').on('submit click', function () {
     event.preventDefault();
 

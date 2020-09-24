@@ -1,9 +1,11 @@
 'use strict';
 
+/*
+Handles interactive elements only needed when adding a new publication
+ */
 $(document).ready(function () {
 
     /* Events to handle uploading multiples files */
-
     $('#input-docs').on('change', function () {
         let nRows = $('#input-docs-table tr.input-docs-toadd').length;
 

@@ -11,18 +11,33 @@ admin_blueprint = Blueprint('admin', __name__)
 @admin_blueprint.route('/adminarea')
 @login_required
 def render_adminarea():
+    """
+    Render the admin area.
+    @return: the template for displaying the admin area with an object holding all publications.
+    @rtype: unicode string
+    """
     publications = getLatestPublications()
     return render_template('public/admin.html', publications=publications)
 
 @admin_blueprint.route('/admin/publications')
 @login_required
 def edit_publications():
+    """
+    Render the publications section in the admin area.
+    @return: the template for displaying the publications area with an object holding all publications.
+    @rtype: unicode string
+    """
     publications = getPublications()
     return render_template('public/admin/publications/publications.html', publications=publications)
 
 @admin_blueprint.route('/admin/publications/add')
 @login_required
 def add_publication_view():
+    """
+    Render the form to add a new publication
+    @return: the form template to add a new publication
+    @rtype: unicode string
+    """
     data = {}
     data['authors'] = getAuthors()
     data['keywords'] = getKeywords()
@@ -39,19 +54,33 @@ def add_publication_view():
 @admin_blueprint.route('/admin/authors')
 @login_required
 def edit_authors():
+    """
+    Renders a view to add/edit/delete authors.
+    @return: the view to render
+    @rtype: unicode string
+    """
     authors = getAuthorsAndCountPubs()
     return render_template('public/admin/authors/authors.html', authors=authors)
 
 @admin_blueprint.route('/admin/keywords')
 @login_required
 def edit_keywords():
+    """
+    Renders a view add/edit/delete keywords.
+    @return: the view to render
+    @rtype: unicode string
+    """
     keywords = getKeywords()
     return render_template('public/admin/keywords/keywords.html', keywords=keywords)
 
 @admin_blueprint.route('/admin/categories')
 @login_required
 def edit_categories():
-    #categories = [c.to_dict() for c in Categories.query.all()]
+    """
+    Renders a view to add/edit/delete categories.
+    @return: the view to render
+    @rtype: unicode string
+    """
     categories = getCategories()
     return render_template('public/admin/categories/categories.html', categories=categories)
 

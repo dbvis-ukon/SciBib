@@ -2,8 +2,6 @@ import os
 import logging
 import logging.handlers
 import time, datetime
-from rfc3339 import rfc3339
-import colors
 
 from flask_security.forms import LoginForm
 from wtforms import StringField
@@ -34,6 +32,9 @@ app = Flask(__name__,
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
+    """
+    Ensure cloing open db connection
+    """
     db.session.remove()
 
 # add continue and break to jinja loops
@@ -121,9 +122,18 @@ app.register_blueprint(user_blueprint)
 
 @app.route('/error')
 def render_error_page():
+    """
+    Render error page
+    @return: the error page to render
+    @rtype: unicode string
+    """
     return render_template('public/error.html')
 
 def init_logging():
+    """
+    Initialize logging for the app.
+    Creates a new var folder and starts a logger.
+    """
     # init logger using syslog
     os.makedirs(os.path.dirname(LOG_FOLDER), exist_ok=True)
     handler = logging.handlers.WatchedFileHandler(LOG_FOLDER)
@@ -136,17 +146,19 @@ def init_logging():
 @app.before_request
 def start_timer():
     """
-    Store the time of the request to fetch calculate its duration
-    :return:
+    Store the time of the request to calculate the request duration. Request duration is added to the logs.
     """
     g.start = time.time()
 
 @app.after_request
 def log_request(response):
     """
-    log requests to file
-    :param response: the response object of the request
-    :return: response
+    Log request to file and just forward the response unaltered.
+
+    @param response: the response object of the request
+    @type response:  HTTP response
+    @return: just forward the response
+    @rtype: HTT response
     """
     if request.path == '/favicon.ico' or request.path == '/favicon':
         return response
@@ -155,8 +167,7 @@ def log_request(response):
 
     now = time.time()
     duration = round(now - g.start, 2)
-    dt = datetime.datetime.fromtimestamp(now)
-    timestamp = rfc3339(dt)
+    timestamp = datetime.datetime.fromtimestamp(now).isoformat()
 
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
     host = request.host.split(':', 1)[0]
@@ -177,12 +188,15 @@ def log_request(response):
     if request_id:
         log_params.append(('request_id', request_id, 'yellow'))
 
-    app.logger.info(" ".join([colors.color("{}={}".format(name, value), fg=color) for name, value, color in log_params]))
+    app.logger.info(" ".join("{}={}".format(name, value)) for name, value, _ in log_params)
     return response
 
 
 @app.teardown_request
 def log_request_error(error=None):
+    """
+    Log errors in requests.
+    """
     if error:
         app.logger.error(str(error))
 

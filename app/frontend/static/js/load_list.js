@@ -28,7 +28,6 @@ $(document).ready(function () {
         if (!(scroller))
             return;
 
-        //fetch('/loadItems?c=${counter}').then((response) => {
         fetch('/loadItems?c=' + counter).then((response) => {
             response.json().then((data) => {
                 if (!data.length)

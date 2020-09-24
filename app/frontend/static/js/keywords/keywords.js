@@ -1,5 +1,8 @@
 'use strict';
 
+/*
+Create new dialog to edit a keyword
+ */
 function createEditKeywordDialog(data) {
     let modal_id = 'edit-keyword-modal';
 
@@ -50,6 +53,9 @@ function createEditKeywordDialog(data) {
 }
 
 
+/*
+Fetch info on keyword and render edit keyword dialog
+ */
 function editKeyword() {
     let keyword_id = $(this).data().keywordid;
     $.ajax({
@@ -64,6 +70,9 @@ function editKeyword() {
     });
 }
 
+/*
+Render confirmation dialog to delete a keyword.
+ */
 function deleteKeyword() {
     let keyword_id = $(this).data().keywordid;
 
@@ -75,6 +84,9 @@ function deleteKeyword() {
     )
 }
 
+/*
+Submit new keyword and update page to display newly added keyword
+ */
 function addKeyword() {
     $.post($(this).attr('action'), $(this).serialize(), function (response) {
         addStatusMessage(response.msg, true);
@@ -106,6 +118,9 @@ function addKeyword() {
     return false;
 }
 
+/*
+Activate add/edit/delete keyword buttons and format HTML table
+ */
 $(document).ready(function () {
     $('.edit-keyword-btn').on('click', editKeyword);
 

@@ -30,6 +30,14 @@ bib_keys = [
 ]
 
 def _filterBibtexDataOfPublication(publication):
+    """
+    Helper function to prepare bibtex output. Fetches authors of a publication and handles special field 'Other', which
+    generates a string separated by ; for all non-standard bibtex fields.
+    @param publication: info on the publication to generate a bibtex string for
+    @type publication: dict
+    @return: dict containing info to generate a bibtex string for a publication
+    @rtype: dict
+    """
     if (len(publication) == 0):
         return {}
 
@@ -59,6 +67,13 @@ def _filterBibtexDataOfPublication(publication):
 
 @upload_blueprint.route('/uploadedFiles/<filename>')
 def send_pdf(filename):
+    """
+    Simply send a PDF from the uploads folder to the browser.
+    @param filename: the file to send
+    @type filename: string
+    @return: the PDF
+    @rtype: file
+    """
     try:
         return send_file('{}/uploadedFiles/{}'.format(app.config['STATIC_FOLDER'], filename))
     except Exception:
@@ -67,6 +82,13 @@ def send_pdf(filename):
 
 @upload_blueprint.route('/publications/bibtex/<pub_id>')
 def send_bibtex(pub_id):
+    """
+    Generates and sends a bibtex string for a publication to the frontend.
+    @param pub_id: the database id of the publication
+    @type pub_id: int
+    @return: a bibtex string for the publication
+    @rtype: bibtex in plain text
+    """
     publication = getPublicationById(pub_id)
     bibtex_data = _filterBibtexDataOfPublication(publication)
 

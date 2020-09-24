@@ -1,93 +1,10 @@
 'use strict';
-//
-// function ConfirmDialog(message, id, rowid, action_url) {
-//     let modal_id = "modal-delete-" + id;
-//     $('#content')
-//         .append($("<div>", {
-//                 class: "modal fade",
-//                 id: modal_id,
-//                 tabindex: "-1",
-//                 role: "dialog",
-//                 "aria-labelledby": "modal-title-" + id
-//             })
-//                 .append($("<div>")
-//                     .addClass("modal-dialog")
-//                     .append($("<div>", {class: "modal-content bg-light text-dark"})
-//                         .append($("<div>")
-//                             .addClass("modal-header")
-//                             .append($("<h5>", {
-//                                 class: "modal-title",
-//                                 id: "modal-title-" + id,
-//                                 html: "Delete Document from Database"
-//                             }))
-//                         )
-//                         .append($("<div>", {class: "modal-body"})
-//                             .append($("<p>", {html: "Are you sure you want to remove the document from the database?"}))
-//                         )
-//                         .append($("<div>", {class: "modal-footer"})
-//                             .append($("<button>", {
-//                                 class: "btn btn-primary close-dialog",
-//                                 type: "button",
-//                                 text: "Cancel",
-//                                 "data-id": modal_id,
-//                                 "data-rowid": rowid,
-//                                 "data-toggle": "modal",
-//                                 "data-target": modal_id
-//                             }))
-//                             .append($("<button>", {
-//                                 class: "btn btn-danger delete-dialog",
-//                                 type: "button",
-//                                 text: "Delete",
-//                                 "data-id": id
-//                             }))
-//                         )
-//                     )
-//                 )
-//         );
-//
-//     $('.close-dialog').on("click", function () {
-//         $('.modal-backdrop').remove();
-//         $('body').removeClass("modal-open");
-//         $('#' + modal_id).remove();
-//     });
-//
-//     $('.delete-dialog').on("click", function () {
-//         let id = $(this).data().id;
-//         let row_id = $(this).data().rowid;
-//         let div_to_delete = modal_id;
-//         let table_row = "tr-input-docs-" + row_id;
-//
-//         $.ajax({
-//             url: "/delete/publication/",
-//             type: "post",
-//             data: {"id": id}
-//         })
-//             .done(function () {
-//                 $('#' + table_row).remove();
-//                 $('.modal-backdrop').remove();
-//                 $('body').removeClass("modal-open");
-//                 $('#' + modal_id).remove();
-//             })
-//             .fail(function (response) {
-//                 let template = $(document.querySelector('#alert').content.cloneNode(true));
-//                 let content = $('#content');
-//
-//                 template.find('#alert-msg').html(response.responseText);
-//                 template.find('#alert-msg').addClass('alert-danger');
-//                 content.parent().prepend(template);
-//
-//                 $("html, body").animate({scrollTop: 0}, "slow");
-//                 $('#' + modal_id).modal("hide");
-//             });
-//
-//
-//     });
-//
-//     $("#" + modal_id).modal();
-// }
 
-
+/*
+Activate interactive elements for publication forms.
+ */
 $(document).ready(function () {
+    // Define text hints when checking/changing buttons for submitting/publishing publications
     let no_selection_text = 'This paper is <span class="text-warning">not yet published</span> and is <span class="text-warning">hidden from public</span>';
     let only_submitted_text = 'This paper was <span class="text-success">submitted</span > but is <span class="text-warning">yet to appear</span> and is <span class="text-warning">hidden from public</span>';
     let submitted_published_text = 'This paper was <span class="text-success">was successfully published</span> and is <span class="text-warning">hidden from public</span>';
@@ -96,6 +13,9 @@ $(document).ready(function () {
     let published_ispublic = '<span class="text-warning"><i class="fa fa-exclamation-triangle"></i></span> A publication usually needs to be submitted before it can be published';
     let submitted_published = 'This paper was <span class="text-success">successfully published</span> and is <span class="text-warning">hidden from public</span>';
 
+    /*
+    Handle rendering of appropriate texts when checking/changing buttons for submitting/publishing publications
+     */
     $('.form-check-input').on('change', function () {
             let submitted = $('#input-submitted').is(":checked");
             let published = $('#input-published').is(":checked");
@@ -126,6 +46,9 @@ $(document).ready(function () {
     );
     $('.form-check-input').trigger('change');
 
+    /*
+    Define bibtex entries for different publications types
+     */
     let bibtex = {
         Article: [false, false, false, false, false, false, false, true, true, true, true, false, true, false, false, true, false],
         Book: [true, false, false, true, true, false, false, false, true, true, true, false, false, false, true, true, true],
@@ -142,6 +65,10 @@ $(document).ready(function () {
         Techreport: [true, false, false, false, false, false, true, false, true, true, true, false, false, false, false, false, false],
         Unpublished: [false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false]
     };
+
+    /*
+    Render only the bibtex entries for the selected publication type
+     */
     $('#input-type').on('change', function () {
         let bibtext_input_row = 'bibtex-info-r-';
         let bibtex_input = 'input-bibtex-';
@@ -162,7 +89,9 @@ $(document).ready(function () {
     $('#input-type').trigger('change');
 
 
-    // init author list when editing a publication
+    /*
+    Init author list when editing a publication
+     */
     $('#select-authors option:selected').each(function () {
         let _selected = $(this);
         $('#author-list').append($('<li>', {
@@ -224,6 +153,7 @@ $(document).ready(function () {
     /* Authors select to select2 multi-value select box */
     initSelect2('select-authors');
 
+
     $('#select-authors').on('select2:select', function (e) {
         let element = e.params.data.element;
         let $element = $(element);
@@ -239,7 +169,7 @@ $(document).ready(function () {
     });
 
     /*
-      Change text on submition status dynamically
+      Change text on submitting status dynamically
     */
     $('#input-madepublic').on('change', function () {
         let is_checked = $('#input-madepublic').is(":checked");
@@ -247,7 +177,7 @@ $(document).ready(function () {
     });
 
     /*
-    Add Auhtor form submit actions
+    Add author form submit actions
     */
     $('#add-author-form').on('submit', function () {
         $.post($(this).attr('action'), $(this).serialize(), function (response) {
@@ -297,6 +227,9 @@ $(document).ready(function () {
         return false;
     });
 
+    /*
+    Append a new row for a new link to an external resource
+     */
     $('#btn-add-external-doc')
         .on('click', function () {
             let nRows = $('#input-docs-table tr.input-docs-external').length;
@@ -338,6 +271,9 @@ $(document).ready(function () {
         });
 
 
+    /*
+    Listener to delete a document
+     */
     $('.input-docs-db-del').on("click", function () {
         let id = $(this).data().dbid;
         let rowId = $(this).data().inputid;
@@ -346,6 +282,9 @@ $(document).ready(function () {
         DeleteDocumentDialog('Are you sure', id, rowId, pubid);
     });
 
+    /*
+    Display thumbnail if exists
+     */
     $('#input-thumbnail').on('change', function () {
         if (this.files && this.files[0])
             document.getElementById('thumbnail-preview').src = window.URL.createObjectURL(this.files[0]);

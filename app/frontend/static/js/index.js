@@ -5,7 +5,6 @@ import 'popper.js';
 import 'bootstrap';
 import 'font-awesome/css/font-awesome.css';
 import 'datatables.net-responsive-bs4';
-import 'bootstrap-datepicker';
 
 import 'select2/dist/js/select2';
 import 'select2/dist/css/select2.css'

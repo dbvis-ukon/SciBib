@@ -4,6 +4,9 @@
 
 'use strict';
 
+/*
+Check if a string is a valid URL
+ */
 const isUrl = (str) => {
   try {
     new URL(str);
@@ -13,6 +16,10 @@ const isUrl = (str) => {
   }
 };
 
+/*
+Handle lazy loading of the publications. Keeps track of the position of already loaded publications and loads next
+chunk of publications when scrolling to page end.
+ */
 $(document).ready(function () {
 
     let scroller = document.querySelector('#publications');

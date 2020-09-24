@@ -335,6 +335,12 @@ def add_category():
 @login_required
 @roles_accepted('editor', 'admin')
 def add_publication():
+    """
+    Add a new publication to the database. It receives and processes a web form. See below for detailed comments.
+    In any case of failure, everything's roled-back.
+    @return: In case of success a HTTP 200 response. In  case of failure a HTTP 500 error response.
+    @rtype: HTTP response
+    """
     # create session for adding the publication
     session = db.session()
 
@@ -345,9 +351,6 @@ def add_publication():
     id = None
 
     # start transaction to be able to rollback everything in case of any issues happeing
-    #session.execute('SET autocommit=0')
-    #session.execute('START TRANSACTION')
-
     try:
         if not 'input-title' in request.form or len(request.form['input-title']) == 0:
             raise ValueError("a title must be specified.")
@@ -598,6 +601,14 @@ def add_publication():
 @login_required
 @roles_accepted('editor', 'admin')
 def edit_publication(pub_id):
+    """
+    Handles editing of publications. Handles the GET request to send the current status/information of a publications.
+    And handles the POST request to submit changes to the publication. Everything's rolled-back in case of failure.
+    @param pub_id: the database ID of the publication to add.
+    @type pub_id: int
+    @return: An HTTP response, either 200 in case of success or 500 in case of failure.
+    @rtype: HTTP response
+    """
     # check if the current user is the editor of the publication
     if not _is_authorized(pub_id, current_user):
        app.logger.warning("{} {}: Unauthorized user {} tried to edit publication {}".format(__file__, __name__, current_user.username, pub_id))
@@ -909,6 +920,13 @@ def edit_publication(pub_id):
 @manipulate_db.route('/edit/author/<author_id>', methods=['GET', 'POST'])
 @login_required
 def edit_author(author_id):
+    """
+    Handles GET and POST requests to edit an author.
+    @param author_id: the database ID of the author
+    @type author_id: int
+    @return: Either a HTTP 200 response in case of success or a HTTP 500 response in case of failure.
+    @rtype: HTTP response
+    """
     if not current_user.has_role('admin'):
         return ("User not authorized to edit author.", 403)
 
@@ -960,6 +978,13 @@ def edit_author(author_id):
 @manipulate_db.route('/edit/keyword/<keyword_id>', methods=['GET', 'POST'])
 @login_required
 def edit_keyword(keyword_id):
+    """
+    Handles GET and POST requests to edit a keyword. Every change is rolled-back in case of failure.
+    @param keyword_id: the database ID of the keyword to edit
+    @type keyword_id: int
+    @return: Either a HTTP 200 in case of success or a HTTP 500 in case of failure.
+    @rtype: HTTP response
+    """
     if not current_user.has_role('admin'):
         return ("User not authorized to edit keyword.", 403)
 
@@ -1001,6 +1026,13 @@ def edit_keyword(keyword_id):
 @manipulate_db.route('/edit/category/<category_id>', methods=['GET', 'POST'])
 @login_required
 def edit_category(category_id):
+    """
+    Handles GET and POST requests to edit a category.
+    @param category_id: the database ID of the category
+    @type category_id: int
+    @return: Either an HTTP 200 response in case of success or an HTTP 500 in case of failure
+    @rtype: HTTP response
+    """
     if not current_user.has_role('admin'):
         return ("User not authorized to edit category.", 403)
 
@@ -1052,6 +1084,12 @@ def edit_category(category_id):
 @manipulate_db.route('/delete/publication/', methods=['POST'])
 @login_required
 def delete_publication():
+    """
+    Handles POST requests to delete publications. Only an author that added the publication or an admin is allowed to
+    delete a publication.
+    @return: Either a HTTP 200 in case of success or a HTTP 500 in case of failure.
+    @rtype: HTTP response
+    """
     # if not current_user.has_role('admin'):
     #     return ("User not authorized to delete publication.", 403)
 
@@ -1123,6 +1161,11 @@ def delete_publication():
 @manipulate_db.route('/delete/document/', methods=['POST'])
 @login_required
 def delete_document():
+    """
+    Handles POST requests to delete a document from the database.
+    @return: Either a HTTP 200 in case of success or a HTTP 500 in case of failure.
+    @rtype: HTTP response
+    """
     if not current_user.has_role('admin') and not current_user.has_role('editor'):
         return ("User not authorized to delete document.", 403)
 
@@ -1177,6 +1220,11 @@ def delete_document():
 @manipulate_db.route('/delete/author/', methods=['POST'])
 @login_required
 def delete_author():
+    """
+    Handles POST requests to delete an author from the database.
+    @return: Either a HTTP 200 in case of success or a HTTP 500 in case of failure.
+    @rtype: HTTP response
+    """
     if not current_user.has_role('admin'):
         return ("User not authorized to delete author.", 403)
 
@@ -1211,6 +1259,11 @@ def delete_author():
 @manipulate_db.route('/delete/keyword/', methods=['POST'])
 @login_required
 def delete_keyword():
+    """
+    Handles POST requests to delete keywords from the database.
+    @return: Either a HTTP 200 in case of success or a HTTP 500 in case of failure.
+    @rtype: HTTP response
+    """
     if not current_user.has_role('admin'):
         return ("User not authorized to delete keyword.", 403)
 
@@ -1237,6 +1290,11 @@ def delete_keyword():
 @manipulate_db.route('/delete/category/', methods=['POST'])
 @login_required
 def delete_category():
+    """
+    Handles POST requests to delete a category from the database.
+    @return: Either a HTTP 200 in case of success or a HTTP 500 in case of failure
+    @rtype: HTTP response
+    """
     if not current_user.has_role('admin'):
         return ("User not authorized to delete category.", 403)
 

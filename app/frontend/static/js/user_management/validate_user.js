@@ -2,6 +2,9 @@
 
 let required_inputs_user = ['input-email'];
 
+/*
+Validate form to add new user
+ */
 $('#submit-add-user').on('submit click', function () {
     event.preventDefault();
 

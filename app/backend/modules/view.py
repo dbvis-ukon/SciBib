@@ -9,6 +9,13 @@ view_blueprint = Blueprint('view', __name__)
 @view_blueprint.route('/view/categories/<id>')
 @login_required
 def render_view_category(id):
+    """
+    Render view to get info on a specific category.
+    @param id: the database ID of the category
+    @type id: int
+    @return: the view to render
+    @rtype: unicode string
+    """
     data = {}
     publications = getPubsOfCat(id)
     related = getRelatedCategories(id)
@@ -27,6 +34,13 @@ def render_view_category(id):
 
 @view_blueprint.route('/publications/view/<id>')
 def render_view_publication(id):
+    """
+    Render view to get info on a specific publication.
+    @param id: the database ID of the publication
+    @type id: int
+    @return: the view to render
+    @rtype: unicode string
+    """
     data = {}
 
     publication = getPubAndAuthorsAndDocsById(id)
@@ -41,6 +55,13 @@ def render_view_publication(id):
 
 @view_blueprint.route('/view/authors/<id>')
 def render_view_author(id):
+    """
+    Render view to get info a specific author.
+    @param id: the database ID of the author
+    @type id: int
+    @return: the view to render
+    @rtype: unicode string
+    """
     data = {}
 
     # query data

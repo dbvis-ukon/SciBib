@@ -1,5 +1,5 @@
 from backend.db_controller.db import SQLAlchemy
-# from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 from sqlalchemy import func
 
 from backend.db_controller.db import Categories, Categories_publications, Publications, Authors, Authors_publications
@@ -8,9 +8,15 @@ from backend.db_controller.db import Categories, Categories_publications, Public
 db = SQLAlchemy()
 
 def getCategories():
+    """
+    Get the categories for publications as well as the count of publications with the category.
+    @note: empty strings are attached to indicate subcategories and being able to render them directly using empty spaces.
+    @return: list of categories
+    @rtype: list(dict)
+    """
     counts = countPubPerCat()
     result = db.engine.execute(
-        """
+        text("""
         SELECT CONCAT( REPEAT('  ', COUNT(parent.name) - 1), node.name), node.id AS name
         FROM categories AS node,
             categories AS parent
@@ -18,10 +24,16 @@ def getCategories():
         GROUP BY node.name
         ORDER BY node.lft;
         """)
+    )
     result = [{'name': r[0].decode('utf-8') if isinstance(r[0], bytes) else str(r[0]), 'id': r[1], 'count': counts.get(r[1], 0)} for r in result]
     return result
 
 def countPubPerCat():
+    """
+    Count publications per category
+    @return: a dict with the category as key and the count as value
+    @rtype: dict
+    """
     result = db.session.query(Categories.id, func.count(Categories_publications.id))\
         .filter(Categories_publications.category_id == Categories.id)\
         .group_by(Categories.id)
@@ -31,8 +43,15 @@ def countPubPerCat():
     return result
 
 def getRelatedCategories(id):
+    """
+    Get subcategories of a category. See for a detailed explanation http://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/
+    @param id: id of the category
+    @type id: int
+    @return: list of subcategories
+    @rtype: list(dict)
+    """
     result = db.engine.execute(
-        """
+        text("""
         SELECT node.id, node.name, node.parent_id, (COUNT(parent.name) - (sub_tree.depth + 1)) AS depth, node.description
         FROM categories AS node,
                 categories AS parent,
@@ -52,13 +71,20 @@ def getRelatedCategories(id):
         GROUP BY node.name
         HAVING depth <= 1
         ORDER BY node.lft;
-        """, (id, )
+        """), (id, )
     )
     # skip first one since it is the parent category
     result = [{'id': r[0], 'name': r[1], 'parent_id': r[2], 'description': r[4]} for r in result]
     return result
 
 def getPubsOfCat(id):
+    """
+    Get publications of a category by ID
+    @param id: the database category ID
+    @type id: int
+    @return: a list of publications under the category
+    @rtype: list(dict)
+    """
     result = db.session.query(
         Publications.id,
         Publications.title,
@@ -86,6 +112,13 @@ def getPubsOfCat(id):
     return result
 
 def getNameById(id):
+    """
+    Get a category by its category ID
+    @param id: the database category ID
+    @type id: int
+    @return: the category with the corresponding ID
+    @rtype: dict
+    """
     result = db.session.query(Categories)\
         .filter(Categories.id == id).first()
 

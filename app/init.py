@@ -12,29 +12,58 @@ from main import app, init_logging
 
 def init_tables():
     """
-    Initialize the database tables
+    Initialize database tables
     """
     engine = db.create_engine(DB_URL, {})
     db.metadata.create_all(engine)
-6
+
 def userExists(session, u):
+    """
+    Check if a user already exists in the database
+    @param session: An open SQLAlchemy session
+    @type session: SQLAlchemy session
+    @param u: the user object to check against
+    @type u: User object
+    @return: if the user already exists
+    @rtype: bool
+    """
     with app.app_context():
         exists = session.query(users).filter(users.username == u).first()
         return True if exists is not None else False
 
 def roleExists(session, r):
+    """
+    Check if a role already exists in the database
+    @param session: An open SQLAlchemy session
+    @type session: SQLAlchemy session
+    @param r: the role object to check against
+    @type r: Role object
+    @return: if the role already exists
+    @rtype: bool
+    """
     with app.app_context():
         exists = session.query(role).filter(role.name == r).first()
         return True if exists is not None else False
 
 def rolesUsersExists(session, r, u):
+    """
+    Check if a roles <-> users mapping already exists in the database
+    @param session: An open SQLAlchemy session
+    @type session: SQLAlchemy session
+    @param r: the role object to check against
+    @type r: Role object
+    @param u: the user object to check against
+    @type u: User object
+    @return: if the mapping already exists
+    @rtype: bool
+    """
     with app.app_context():
         exists = session.query(roles_users).filter(roles_users.c.role_id == r and roles_users.c.user_id == u).first()
         return True if exists is not None else False
 
 def create_admin_user_and_roles():
     """
-    Initialze an admin user for the database
+    Initialize the admin user for the database
     """
     engine = db.create_engine(DB_URL, {})
     Session = sessionmaker(bind=engine)
@@ -76,12 +105,22 @@ def create_admin_user_and_roles():
         session.close()
 
 def execute_sql_file(path):
+    """
+    Execute sql from file
+    @param path: path to sql file
+    @type path: string
+    """
     sql = open(path)
     engine = db.create_engine(DB_URL, {})
     escaped_sql = text(sql.read().replace('\n', ' '))
     engine.execute(escaped_sql)
 
 def main():
+    """
+    Initialize the database. Needs only to be executed when scibib is first initialized. If already initialized,
+    this file will just do nothing.
+    """
+    # log to get error messages
     init_logging()
     init_tables()
     create_admin_user_and_roles()

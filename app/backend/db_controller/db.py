@@ -45,23 +45,6 @@ class Categories_publications(db.Model, SerializerMixin):
     category_id = db.Column(db.Integer())
     publication_id = db.Column(db.Integer())
 
-#
-# class Chairs(db.Model, SerializerMixin):
-#     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-#     name = db.Column(db.String(255))
-#
-# class Chairs_publications(db.Model, SerializerMixin):
-#     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-#     chair_id = db.Column(db.Integer())
-#     publication_id = db.Column(db.Integer())
-
-# class Copyrights(db.Model, SerializerMixin):
-#     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-#     name = db.Column(db.String(255))
-#     disclaimer = db.Column(MEDIUMTEXT)
-#     created = db.Column(DATE)
-#     modified = db.Column(DATE)
-
 class Documents(db.Model, SerializerMixin):
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     publication_id = db.Column(db.Integer())
@@ -69,19 +52,6 @@ class Documents(db.Model, SerializerMixin):
     remote = db.Column(TINYINT)
     filename = db.Column(db.String(255))
     description = db.Column(db.String(255))
-
-# class Documents2(db.Model, SerializerMixin):
-#     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-#     publication_id = db.Column(db.Integer())
-#     visible = db.Column(TINYINT)
-#     remote = db.Column(TINYINT)
-#     filename = db.Column(db.String(255))
-#     description = db.Column(db.String(255))
-
-# class Keywords(db.Model, SerializerMixin):
-#     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-#     publication_id = db.Column(db.Integer())
-#     name = db.Column(db.String(255))
 
 class Keywords(db.Model, SerializerMixin):
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
@@ -139,24 +109,6 @@ class Publications(db.Model, SerializerMixin):
     other = db.Column(db.TEXT)
     abstract = db.Column(MEDIUMTEXT)
 
-# class Users(db.Model, UserMixin):
-#     id = db.Column(CHAR, primary_key=True)
-#     username = db.Column(db.String(255))
-#     email = db.Column(db.String(255))
-#     password = db.Column(db.String(255))
-#     first_name = db.Column(db.String(50))
-#     last_name = db.Column(db.String(50))
-#     token = db.Column(db.String(255))
-#     token_expires = db.Column(DATETIME)
-#     api_token = db.Column(db.String(255))
-#     activation_date = db.Column(DATETIME)
-#     tos_date = db.Column(DATETIME)
-#     active = db.Column(TINYINT)
-#     is_superuser = db.Column(TINYINT)
-#     role = db.Column(db.String(255))
-#     created = db.Column(DATETIME)
-#     modified = db.Column(DATETIME)
-
 roles_users = db.Table('roles_users',
                       db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
@@ -173,19 +125,6 @@ class role(db.Model, RoleMixin):
 
     users = db.relationship("users", secondary="roles_users",
                             backref=db.backref("users"))
-
-# class roles_users(db.Model, SerializerMixin):
-#     # user_id = db.Column(db.Integer(), primary_key=True)
-#     # role_id = db.Column(db.Integer(), primary_key=True)
-#     user_id = db.Column(db.Integer(), db.ForeignKey('users2.id'), primary_key=True)
-#     role_id = db.Column(db.Integer(), db.ForeignKey('role.id'), primary_key=True)
-
-# class roles_users(db.Model):
-#     __tablename__ = 'roles_users'
-#
-#     # id = db.Column(db.Integer(), primary_key=True)
-#     user_id = db.Column(db.Integer(), db.ForeignKey('users2.id'), primary_key=True)
-#     role_id = db.Column(db.Integer(), db.ForeignKey('role.id'), primary_key=True)
 
 class users(db.Model, UserMixin):
     __tablename__ = 'users'

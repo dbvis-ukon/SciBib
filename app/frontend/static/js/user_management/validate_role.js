@@ -2,6 +2,9 @@
 
 let required_inputs_role = ['input-name'];
 
+/*
+Validate form to add new role
+ */
 $('#submit-add-role').on('submit click', function () {
     event.preventDefault();
 

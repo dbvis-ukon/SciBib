@@ -10,22 +10,16 @@ from backend.db_controller.query.publications import \
 
 frontend_blueprint = Blueprint('frontend', __name__)
 
-# @frontend_blueprint.route('/getPublications')
-# def get_AllPubs():
-#     publications = [value for key, value in getPubAndAuthorsAndDocs().items()]
-#     publications = [(year, list(item)) for year, item in groupby(publications, key=itemgetter('year'))]
-#
-#     return jsonify(publications)
-
 @frontend_blueprint.route('/')
 def render_index():
+    """
+    Render the home page of SciBib.
+    @return: the main view to render
+    @rtype: unicode string
+    """
     data = {}
-    # data['types'] = [{'type': t, 'color': type_to_color.get(t, '#888888')} for t in getPublicationTypes()]
     data['types'] = {t:  type_to_color.get(t, '#888888') for t in getPublicationTypes()}
     data['years'] = getPublicationYears()
-
-    # data['publications'] = [{**value, 'keywords': getKeywordsOfPub(value['id'])} for key, value in getPubAndAuthorsAndDocs().items()][:200]
-    # data['publications'] = [ (year, list(item)) for year, item in groupby(data['publications'], key=itemgetter('year')) ]
 
     try:
         if 'year' in request.args:
@@ -44,8 +38,12 @@ def render_index():
 
 @frontend_blueprint.route('/all')
 def render_index_all():
+    """
+    Render alternative view which renders all publications at once.
+    @return: the view to render
+    @rtype: unicode string
+    """
     data = {}
-    # data['types'] = [{'type': t, 'color': type_to_color.get(t, '#888888')} for t in getPublicationTypes()]
     data['types'] = {t:  type_to_color.get(t, '#888888') for t in getPublicationTypes()}
     data['years'] = getPublicationYears()
 
@@ -68,12 +66,10 @@ def render_index_all():
 def load_items_all():
     """
     Load all items
-    :return all public publications
+    @return: a list of dicts containing all publications
+    @rtype: JSON
     """
     res = []
-
-    # if not request.args:
-    #     return jsonify(res)
     filters = {}
 
     try:
@@ -98,8 +94,10 @@ def load_items_all():
 @frontend_blueprint.route('/loadItems')
 def load_items():
     """
-    Implement lazy loading of the list view
-    :return: load_items publications
+    Implements lazy loading of the list view. Offset is stored in the frontend and the number of
+    publications is managed via the global parameter 'load_quantity' (default 40 publications) in configurations.py.
+    @return: a list of the next X publications in the database.
+    @rtype: unicode string
     """
     res = []
 
@@ -131,5 +129,10 @@ def load_items():
 
 @frontend_blueprint.route('/favicon')
 def send_favicon():
+    """
+    Render the favicon.
+    @return: the favicon image
+    @rtype: png image
+    """
     path_to_icon = os.path.join(app.config['STATIC_FOLDER'], 'images', 'favicon.png')
     return send_file(path_to_icon)

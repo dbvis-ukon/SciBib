@@ -19,6 +19,11 @@ db = SQLAlchemy()
 @login_required
 @roles_required('admin')
 def render_user_management():
+    """
+    Render the view to manage new users and roles.
+    @return: the view to render
+    @rtype: unicode string
+    """
     u = [ {'id': r.id,
                'username': r.username,
                'email': r.email,
@@ -35,6 +40,12 @@ def render_user_management():
 @login_required
 @roles_required('admin')
 def add_user():
+    """
+    Handles POST requests to add a new user to the database. Adds the new user to the database and sends a welcome email as well as
+    an email to change the user password.
+    @return: Either a JSON with an object of the new user or a HTTP 500 error
+    @rtype: JSON
+    """
     id = None
 
     session = db.session()
@@ -105,6 +116,11 @@ def add_user():
 @login_required
 @roles_required('admin')
 def delete_user():
+    """
+    Handles POST requests to delete a user from the database.
+    @return: Either a JSON with a success messages or an HTTP 500 error in case of failure.
+    @rtype: JSON
+    """
     session = db.session()
     try:
         if not 'user_id' in request.json or not isinstance(request.json['user_id'], int):
@@ -133,6 +149,14 @@ def delete_user():
 @login_required
 @roles_required('admin')
 def edit_user(user_id):
+    """
+    Handles GET and POST requests to edit a user. GET request sends info on user. POST request submits changes.
+    In case of failure, any change is rolled-back.
+    @param user_id: the database ID of the user to edit.
+    @type user_id: int
+    @return: JSON with the current user data or HTTP 500 in case of error
+    @rtype: JSON
+    """
     if request.method == 'GET':
 
         # user_id = request.args['user_id']
@@ -220,6 +244,11 @@ def edit_user(user_id):
 @login_required
 @roles_required('admin')
 def add_role():
+    """
+    Handles POST requests to add a new role to the database.
+    @return: Either a JSON containing an object of the new role or a HTTP 500 in case of error.
+    @rtype: JSON
+    """
     session = db.session()
 
     try:
@@ -250,6 +279,11 @@ def add_role():
 @login_required
 @roles_required('admin')
 def delete_role():
+    """
+    Handles POST requests to delete a role from the database.
+    @return: Either a JSON with a success message in case of success or a HTTP 500 in case of failure.
+    @rtype: JSON
+    """
     role_id = request.json['role_id']
     session = db.session()
     try:
@@ -274,6 +308,14 @@ def delete_role():
 @login_required
 @roles_required('admin')
 def edit_role(role_id):
+    """
+    Handles GET and POST requests to edit a role. GET requests sends current role info to the frontend. POST request
+    submits changes.
+    @param role_id: the database ID of the role to edit
+    @type role_id: int
+    @return: Either the current role info in case of success or a HTTP 500 in case of failure.
+    @rtype:
+    """
     if request.method == 'GET':
         session = db.session()
         try:

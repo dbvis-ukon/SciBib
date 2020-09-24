@@ -1,5 +1,8 @@
 'use strict';
 
+/*
+Create a new dialog to edit an author. Auto-updates author information in HTML table on success.
+ */
 function createEditAuthorDialog(data) {
     let modal_id = 'edit-author-modal';
 
@@ -56,6 +59,9 @@ function createEditAuthorDialog(data) {
 }
 
 
+/*
+Fetches information on author from the database and renders a new dialog to edit an author
+ */
 function editAuthor() {
     let author_id = $(this).data().authorid;
 
@@ -72,6 +78,9 @@ function editAuthor() {
     });
 }
 
+/*
+Submit form to add a new author.
+ */
 function addAuthor() {
     $.post($(this).attr('action'), $(this).serialize(), function (response) {
         addStatusMessage(response.msg, true);
@@ -117,6 +126,9 @@ function deleteAuthor() {
     )
 }
 
+/*
+Activate buttons to add/edit/delete authors and format authors table.
+ */
 $(document).ready(function () {
     $('.edit-author-btn').on('click', editAuthor);
 

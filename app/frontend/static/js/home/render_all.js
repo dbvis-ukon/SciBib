@@ -1,9 +1,12 @@
 /**
- * Lazy loading of the publications
+ * For rendering the view loading all publications at once.
  */
 
 'use strict';
 
+/*
+Check if a string is a valid URL
+ */
 const isUrl = (str) => {
     try {
         new URL(str);
@@ -17,6 +20,9 @@ $(document).ready(function () {
     loadAll();
 });
 
+/*
+Get all publications and render them.
+ */
 async function loadAll() {
     let scroller = document.querySelector('#publications');
     let template_pub = document.querySelector('#template-publication');

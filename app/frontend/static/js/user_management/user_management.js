@@ -1,5 +1,8 @@
 'use strict';
 
+/*
+Create dialog to edit a role
+ */
 function createEditRoleDialog(data) {
     let modal_id = 'edit-role-modal';
 
@@ -53,6 +56,9 @@ function createEditRoleDialog(data) {
     return false;
 }
 
+/*
+Create dialog to edit a user
+ */
 function createEditUserDialog(data) {
     let modal_id = 'edit-user-modal';
 
@@ -130,6 +136,9 @@ function createEditUserDialog(data) {
     $('#' + modal_id).modal();
 }
 
+/*
+Submit new role and add the new role interactively to the roles table
+ */
 function addRole() {
     $.post($(this).attr('action'), $(this).serialize(), function (response) {
         addStatusMessage(response.msg, true);
@@ -161,6 +170,9 @@ function addRole() {
     return false;
 }
 
+/*
+Submit new user and add the new user interactively to the users table
+ */
 function addUser() {
     $.post($(this).attr('action'), $(this).serialize(), function (response) {
         addStatusMessage(response.msg, true);
@@ -203,6 +215,9 @@ function addUser() {
     return false;
 }
 
+/*
+Fetch info on role to edit and create edit dialog
+ */
 function editRole() {
     let role_id = $(this).data().roleid;
 
@@ -219,6 +234,9 @@ function editRole() {
     });
 }
 
+/*
+Fetch info on user to edit and create edit dialog
+ */
 function editUser() {
     let user_id = $(this).data().userid;
 
@@ -235,6 +253,9 @@ function editUser() {
     });
 }
 
+/*
+Create confirmation dialog when trying to delete a role
+ */
 function deleteRole() {
     let role_id = $(this).data().roleid;
 

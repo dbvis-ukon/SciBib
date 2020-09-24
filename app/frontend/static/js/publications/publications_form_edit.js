@@ -1,5 +1,8 @@
 'use strict';
 
+/*
+Handles interactive elements only needed when editing a publication
+ */
 $(document).ready(function () {
     $('#input-docs').on('change', function () {
         let val = $('#input-docs-table tr.input-docs-db').length;
@@ -62,20 +65,4 @@ $(document).ready(function () {
             this.type = 'file';
         }
     });
-
-    // $('.input-docs-db-del').on("click", function () {
-    //     let id = $(this).data().dbid;
-    //     let rowId = $(this).data().inputid;
-    //     let pubid = $(this).data().pubid;
-    //
-    //     DeleteDocumentDialog('Are you sure', id, rowId, pubid);//('Are you sure you want to delete the document from the database');
-    // });
-    //
-    // $('#input-thumbnail').on('change', function () {
-    //     if (this.files && this.files[0])
-    //         document.getElementById('thumbnail-preview').src = window.URL.createObjectURL(this.files[0]);
-    //     else
-    //         document.getElementById('thumbnail-preview').src = '/static/images/thumb-default.png';
-    // });
-
 });

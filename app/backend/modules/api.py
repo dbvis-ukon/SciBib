@@ -27,41 +27,84 @@ api_blueprint = Blueprint('api', __name__)
 
 @api_blueprint.after_request
 def after_api_request(response):
+    """
+    Add Access-Control-Allow-Origin header to allow requests from public to the API.
+    @param response: HTTP response without Access-Control-Allow-Origin header
+    @type response: HTTP response
+    @return: HTTP response with Access-Control-Allow-Origin header
+    @rtype: HTTP response
+    """
     header = response.headers
     header['Access-Control-Allow-Origin'] = '*'
     return response
 
 @api_blueprint.route('/get/authors')
 def send_authors():
+    """
+    Send a list of all authors in the database.
+    @return: a list of authors
+    @rtype: JSON
+    """
     return jsonify(getAuthors())
 
 
 @api_blueprint.route('/get/keywords')
 def send_keywords():
+    """
+    Send a list of all keywords in the database.
+    @return: a list of keywords
+    @rtype: JSON
+    """
     return jsonify(getKeywords())
 
 @api_blueprint.route('/get/categories')
 def send_categories():
+    """
+    Send a list of all categories in the database
+    @return: a list of categories
+    @rtype: JSON
+    """
     return jsonify(getCategories())
 
 @api_blueprint.route('/get/authorByName', methods=['GET'])
 def get_authorId_():
+    """
+    Send a dict containing the complete author object of the database by specifying the forename and surname.
+    Useful to retrieve the ID of an author.
+    @return: a dict of the author
+    @rtype: JSON
+    """
     author = getAuthorByNames(request.args['forename'], request.args['surname'])\
         if 'forename' in request.args and 'surname' in request.args else {}
     return jsonify(author)
 
 @api_blueprint.route('/get/keywordByName', methods=['GET'])
 def get_keywordId_():
+    """
+    Send a dict containing the keyword complete keyword object of the database by specifying the keyword name.
+    Useful to retrieve the ID of a keyword.
+    @return: a dict of the keyword
+    @rtype: JSON
+    """
     keyword = getKeywordByName(request.args['name']) if 'name' in request.args else {}
     return jsonify(keyword)
 
 @api_blueprint.route('/publication')
 def send_publication():
+    """
+    Send a list of all publications.
+    @return: a list of all publications encoded as dict.
+    @rtype: JSON
+    """
     return jsonify([ p.to_dict() for p in Publications.query.order_by(Publications.id.desc()).all()])
 
 def uniquify(l):
         """
-        Uniquify list of dicts
+        Uniquify list of dicts.
+        @param l: the list of dicts
+        @type l: list(dict)
+        @return: the list of unique dicts
+        @rtype: list(dict)
         """
         s = set([json.dumps(i) for i in l])
         return [json.loads(i) for i in s]
@@ -70,6 +113,10 @@ def uniquify(l):
 def uniquifySorted(l):
     """
     Uniquify list of dicts + keep ordering
+    @param l: list of dicts
+    @type l: list(dict)
+    @return: the list of unique dicts
+    @rtype: list(dict)
     """
     s = set([json.dumps(i) for i in l])
     u = [json.loads(i) for i in s]
@@ -78,12 +125,11 @@ def uniquifySorted(l):
 
 def checkForEmtyDocument(r):
     """
-    checks whether a document(s) is available for the publication
+    Checks whether a document(s) is available for the publication
     - 1. we have null values and
     - 2. we have pseudo null values which are empty strings for every key.
     in our db-table.
     """
-
     if not r[5]: # 1. null value
         return []
 

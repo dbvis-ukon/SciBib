@@ -15,29 +15,44 @@ var type_to_color = {
       'Unpublished': '#808080'
 };
 
+/*
+Add string function to capitalize strings
+ */
 if(typeof String.prototype.toProperCase === "undefined") {
     String.prototype.toProperCase = function () {
         return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     };
 }
 
+/*
+Add string function to leading and trailing whitespace.
+ */
 if(typeof(String.prototype.trim) === "undefined") {
     String.prototype.trim = function() {
         return String(this).replace(/^\s+|\s+$/g, '');
     };
 }
 
+/*
+Check if str is a valid URL
+ */
 function isValidURL(str) {
    var a  = document.createElement('a');
    a.href = str;
    return (a.host && a.host !== window.location.host);
 }
 
+/*
+check if a string is a valid email address
+ */
 function validateEmail(email_str) {
     let email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
     return email_regex.test(email_str)
 }
 
+/*
+Init a select2 element (https://select2.org/)
+ */
 function initSelect2(id) {
     $('#' + id).select2({
         theme: 'bootstrap4',
@@ -48,6 +63,9 @@ function initSelect2(id) {
     });
 }
 
+/*
+Add a status message when trying to add/edit/delete data from the database.
+ */
 function addStatusMessage(message, is_success, refresh_url) {
     let template = $(document.querySelector('#alert').content.cloneNode(true));
     let content = $('#content');
@@ -71,6 +89,9 @@ function addStatusMessage(message, is_success, refresh_url) {
     $("html, body").animate({scrollTop: 0}, "slow");
 }
 
+/*
+Render a new delete dialog
+ */
 function DeleteDialog(title, message, del_type, del_id) {
     let modal_id = "modal-delete-" + del_id;
     $('#content')
@@ -204,6 +225,9 @@ function DeleteDialog(title, message, del_type, del_id) {
     $("#" + modal_id).modal();
 }
 
+/*
+Render dialog to delete a document from the database
+ */
 function DeleteDocumentDialog(message, id, row_id, pub_id) {
     let modal_id = "modal-delete-" + id;
     $('#content')

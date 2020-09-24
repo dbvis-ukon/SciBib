@@ -43,19 +43,7 @@ const config = {
                 }]
             }
         ]
-    }/*,
-    plugins: [
-        new webpack.ProvidePlugin({
-            '$': 'jquery',
-            jQuery: 'jquery',
-            'window.$': 'jquery',
-            'window.jQuery': 'jquery'
-            //'$.sortable' : ['jquery-sortablejs', 'Sortable']
-        })
-    ]/*,
-    node: {
-        fs: 'empty'
-    }*/
+    }
 };
 
 module.exports = config;

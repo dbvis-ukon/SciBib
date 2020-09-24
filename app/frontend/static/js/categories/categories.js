@@ -1,8 +1,9 @@
 'use strict';
 
+/*
+Handle form to add a new category to the database.
+ */
 $(document).ready(function () {
-    // Nicely format Authors Table
-    //$('#table-categories').DataTable();
 
     $('#add-category-form').on('submit', function (event) {
         event.preventDefault();

@@ -8,6 +8,15 @@ from flask_security.utils import hash_password
 db = SQLAlchemy()
 
 def addUser(session, **columns):
+    """
+    Add a new user to the database. At least a username and password are required
+    @param session: An open SQLAlchemy session
+    @type session: SQLAlchemy session
+    @param columns: a dict containing the columns to add.
+    @type columns: dict
+    @return: the new user object
+    @rtype: User object
+    """
     if columns.get('username', '') == '':
         raise ValueError('Cannot create a user without username')
     if columns.get('password', '') == '':

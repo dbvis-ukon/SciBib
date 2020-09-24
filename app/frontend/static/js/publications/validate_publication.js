@@ -17,6 +17,9 @@ let required_inputs_publication = {
     Unpublished: ['select-authors', 'input-title', 'input-bibtex-9']
 };
 
+/*
+Validate publication form
+ */
 $('#submit-publication').on('submit click', function(event) {
     event.preventDefault();
 

@@ -1,6 +1,14 @@
 'use strict';
 
+/*
+Activate search and filter functionality inside home page.
+ */
 $(document).ready(function () {
+
+    /*
+    Prevent search to start when pressing 'Enter' so that a user can add more filter options without accidentially
+    submiting.
+     */
     $('#search-input').on('keypress', function (event) {
         let keycode = event.keyCode ? event.keyCode : event.which;
         if (keycode == '13') {
@@ -11,11 +19,17 @@ $(document).ready(function () {
         }
     });
 
+    /*
+    Start search on clicking 'Search' button
+     */
     $('#run-filters').on('click', function () {
         applyFilter();
     });
 
 
+    /*
+    Extract search terms and re-render home page with the filters as HTTP parameters.
+     */
     function applyFilter() {
         let types = $('#filter-types').find('.active.clicky.dropdown-item').map(function() {return $(this).data().value}).get().join(',');
         let years = $('#filter-years').find('.active.clicky.dropdown-item').map(function() {return $(this).data().value}).get().join(',');
