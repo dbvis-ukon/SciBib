@@ -15,6 +15,7 @@
    You should have received a copy of the GNU General Public License
    along with SciBib.  If not, see <http://www.gnu.org/licenses/>.
 
+
 #
 #  SciBib is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

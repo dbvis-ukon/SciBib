@@ -1,5 +1,20 @@
-#  Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
-#  This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+#
+   Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
+   This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+
+   SciBib is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   SciBib is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with SciBib.  If not, see <http://www.gnu.org/licenses/>.
+
 #
 #  SciBib is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -608,7 +623,7 @@ def add_publication():
                 _rmDoc(os.path.join(pdf_dir, filename))
                 i += 1
                 app.logger.debug(
-                    "{} {}: Removed document {} from filesystem after exception".format(os.path.join(__file__, __name__, pdf_dir, filename)))
+                    "{} {}: Removed document {} from filesystem after exception".format(os.path.join(pdf_dir, __file__), __name__, pdf_dir, filename))
             _rmDir(pdf_dir)
             app.logger.debug(
                 "{} {}: Removed document directory {} from filesystem after exception".format(__file__, __name__, pdf_dir))

@@ -1,5 +1,20 @@
-#  Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
-#  This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+#
+   Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
+   This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+
+   SciBib is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   SciBib is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with SciBib.  If not, see <http://www.gnu.org/licenses/>.
+
 #
 #  SciBib is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -96,9 +111,9 @@ def getPubsOfAuthor(id):
         JOIN publications AS pub ON auth_pub.publication_id = pub.id
         JOIN authors_publications AS auth_pub2 ON auth_pub2.publication_id = pub.id
         JOIN authors AS auth2 ON auth_pub2.author_id = auth2.id
-        WHERE auth.id = %s AND pub.public = 1
+        WHERE auth.id = :id AND pub.public = 1
         GROUP BY pub.id
-        """), (id,)
+        """), id=id
     )
 
     result = [{'pub_id': r[0],

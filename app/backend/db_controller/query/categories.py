@@ -1,5 +1,20 @@
-#  Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
-#  This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+#
+   Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
+   This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+
+   SciBib is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   SciBib is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with SciBib.  If not, see <http://www.gnu.org/licenses/>.
+
 #
 #  SciBib is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -90,7 +105,7 @@ def getRelatedCategories(id):
                         FROM categories AS node,
                                 categories AS parent
                         WHERE node.lft BETWEEN parent.lft AND parent.rght
-                                AND node.id = %s
+                                AND node.id = :id
                         GROUP BY node.name
                         ORDER BY node.lft
                 )AS sub_tree
@@ -100,7 +115,7 @@ def getRelatedCategories(id):
         GROUP BY node.name
         HAVING depth <= 1
         ORDER BY node.lft;
-        """), (id, )
+        """), id=id
     )
     # skip first one since it is the parent category
     result = [{'id': r[0], 'name': r[1], 'parent_id': r[2], 'description': r[4]} for r in result]

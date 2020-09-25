@@ -1,5 +1,20 @@
-#  Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
-#  This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+#
+   Copyright (C) 2020 University of Konstanz -  Data Analysis and Visualization Group
+   This file is part of SciBib <https://github.com/dbvis-ukon/SciBib>.
+
+   SciBib is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   SciBib is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with SciBib.  If not, see <http://www.gnu.org/licenses/>.
+
 #
 #  SciBib is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -525,12 +540,12 @@ def getPublicationsOfAuthorWithLimit(pub, a_id, limit):
         FROM publications
         JOIN authors_publications ON authors_publications.publication_id = publications.id
         JOIN authors ON authors_publications.author_id = authors.id
-        WHERE publications.id != %s
+        WHERE publications.id != :pub_id
         GROUP BY publications.id
-        HAVING agg REGEXP %s
-        ORDER BY ABS(%s - CAST(publications.year AS SIGNED)) ASC
-        LIMIT %s
-        """), pub['id'], '^{}(,|$)'.format(a_id), pub['year'], limit)
+        HAVING agg REGEXP :regex
+        ORDER BY ABS(:year - CAST(publications.year AS SIGNED)) ASC
+        LIMIT :limit
+        """), pub_id=pub['id'], regex='^{}(,|$)'.format(a_id), year=pub['year'], limit=limit)
 
     result = [{'id': r[0],
       'title': r[1],
