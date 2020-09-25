@@ -2,7 +2,7 @@
 
 [![Foo](scibib.png)](https://bib.dbvis.de)
 
-SciBib an online **Sci**entific **Bib**liography System to organize and distribute publications online while having 
+SciBib is an online **Sci**entific **Bib**liography system to organize and distribute publications online while having 
 full control over the publication system.
 
 See https://bib.dbvis.de for a running instance of SciBib.
