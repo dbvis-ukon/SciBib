@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include 'includes/references.html' %}
+</head>
+<body class="nav-pad bg-light">
+{% include 'includes/navbar.html' %}
+{% include 'includes/welcome.html' %}
+{% include 'includes/filters.html' %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-2 hide-sm">
+                <div class="sticky-top float-right p-1">
+                    <div class="spacer" style="height: 75px; width: 100%">&nbsp;</div>
+                    <ul class="m-0 list-unstyled">
+                    {% for type, color in data['types'].items() %}
+                        <a class="text-dark" href='/?type={{ type }}'><li><button class="btn btn-sm pt-0 pb-0"><i class="fa fa-circle" style="color: {{ color }}"></i></button>{{ type }}</li></a>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-12" id="publications">
+                        {% include 'includes/item_publication.html' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 bg-light">
+                            <div class="d-flex justify-content-center mb-3 pt-2" id="sentinel">
+                                <div class="spinner-border" role="status"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </div>
+</div>
+    {% include 'includes/footer.html' %}
+    <script>
+        $('.dropdown-item').on("click", function () {
+            $(this).toggleClass('active');
+        });
+
+        $(document).on('click', '.dropdown-menu', function (e) {
+            e.stopPropagation();
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/home/render_publications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/home/filters.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!-- Modal to edit a user -->
+<template id="edit-user-modal_template">
+    <div class="modal fade" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-form-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="edit-user-title">Edit User</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <form action="/edit/user" method="post" id="edit-user-form">
+                 <div class="form-group">
+                     <label for="input-firstname">First Name</label>
+                     <input type="text" class="form-control" name="input-firstname" id="input-firstname">
+                 </div>
+                 <div class="form-group">
+                     <label for="input-lastname">Last Name</label>
+                     <input type="text" class="form-control" name="input-lastname" id="input-lastname">
+                 </div>
+                 <div class="form-group">
+                     <label for="input-username">Username</label>
+                     <input type="text" class="form-control" name="input-username" id="input-username" disabled>
+                 </div>
+                 <div class="form-group d-none">
+                     <label for="input-username-hidden">Username</label>
+                     <input type="text" class="form-control" name="input-username-hidden" id="input-username-hidden">
+                 </div>
+                 <div class="form-group">
+                     <label for="input-email">E-Mail</label>
+                     <input type="text" class="form-control" name="input-email" id="input-email">
+                     <div class="invalid-feedback">Please provide a valid email address.</div>
+                 </div>
+                 <div class="form-group">
+                     <label for="input-password">Password</label>
+                     <input type="text" class="form-control" name="input-password" id="input-password" placeholder="Leave empty to keep the current password.">
+                 </div>
+                 <div class="form-group">
+                     <label for="edit-select-roles">Roles</label>
+                     <select type="text" class="form-control" name="edit-select-roles" id="edit-select-roles" multiple="multiple">
+                         {% for role in data['roles'] %}
+                             <option value="{{ role['id'] }}">{{ role['name'] }}</option>
+    {#                         <option value="{{ author['id'] }}" {{ 'selected' if data['authors-selected'][author['id']] else '' }}>{{ author['cleanname'] }}</option>#}
+                         {% endfor %}
+                     </select>
+                 </div>
+                 <div class="form-check pl-4">
+                     <input class="form-check-input" type="checkbox" value="1" name="input-active" id="input-active">
+                     <label for="input-active">Active</label>
+                 </div>
+                 <button type="button" class="btn btn-secondary close-edit-dialog" data-dismiss="modal">Close</button>
+                 <button id="submit-edit-user" type="submit" value="Submit-User edit-dialog" class="btn btn-primary">Submit</button>
+             </form>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+</template>

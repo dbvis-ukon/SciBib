@@ -1,0 +1,29 @@
+<!-- Modal to edit a Keyword -->
+<template id="edit-keyword-modal_template">
+    <div class="modal fade" id="edit-keyword-modal" tabindex="-1" role="dialog" aria-labelledby="edit-keyword-form-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="edit-keyword-title">Edit Keyword</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <form action="/edit/keyword" method="post" id="edit-keyword-form">
+                 <div class="form-group">
+                     <label for="input-name">Name</label>
+                     <input type="text" class="form-control" name="input-name" id="input-name">
+                     <div class="invalid-feedback">
+                        Please provide a keyword name.
+                    </div>
+                 </div>
+                 <button type="button" class="btn btn-secondary close-edit-dialog" data-dismiss="modal">Close</button>
+                 <button type="submit" value="Submit-keyword edit-dialog" class="btn btn-primary">Submit</button>
+             </form>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+</template>

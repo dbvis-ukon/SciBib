@@ -1,0 +1,37 @@
+<!-- Modal to add an category -->
+<div class="modal fade" id="add-category-modal" tabindex="-1" role="dialog" aria-labelledby="add-category-form-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-category-title">Add category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form action="/add/category" method="post" id="add-category-form">
+             <div class="form-group">
+                 <label for="input-category">Name</label>
+                 <input type="text" class="form-control" name="input-name" id="input-name">
+                 <div class="invalid-feedback">
+                     Please provide a category name.
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="input-parent">Parent</label>
+                 <select class="form-control" name="select-parent" id="select-parent">
+                     <option value="0"></option>
+                 </select>
+             </div>
+             <div class="form-group">
+                 <label for="input-desc">Description</label>
+                 <textarea class="form-control" id="input-desc" name="input-desc" maxlength="500"></textarea>
+             </div>
+             <button id="submit-add-category" type="submit" value="Submit" class="btn btn-primary">Submit</button>
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         </form>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>

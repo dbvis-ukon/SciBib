@@ -1,0 +1,36 @@
+<!-- Modal to edit a role -->
+<template id="edit-author-modal_template">
+    <div class="modal fade" id="edit-author-modal" tabindex="-1" role="dialog" aria-labelledby="edit-author-form-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="edit-author-title">Edit Role</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <form action="/edit/author" method="post" id="edit-author-form">
+                 <div class="form-group">
+                     <label for="input-forename">Forename</label>
+                     <input type="text" class="form-control" name="input-forename" id="input-forename">
+                     <div class="invalid-feedback">
+                     Please provide a forename.
+                 </div>
+                 </div>
+                 <div class="form-group">
+                     <label for="input-surname">Surname</label>
+                     <input type="text" class="form-control" name="input-surname" id="input-surname">
+                     <div class="invalid-feedback">
+                     Please provide a surname.
+                 </div>
+                 </div>
+                 <button type="button" class="btn btn-secondary close-edit-dialog" data-dismiss="modal">Close</button>
+                 <button type="submit" value="Submit-author edit-dialog" class="btn btn-primary">Submit</button>
+             </form>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+</template>

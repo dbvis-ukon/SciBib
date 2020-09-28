@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include 'includes/references.html' %}
+</head>
+<body class="bg-light nav-pad">
+{% include 'includes/navbar.html' %}
+
+<template id="alert">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert mb-0" id="alert-msg"></div>
+        </div>
+    </div>
+</template>
+
+<div class="row pt-5 bg-light border-bottom container-fluid" id="content">
+
+    <!-- ########### CONTENT START ################# -->
+    <div class="col-lg-12 bg-light" id="publication">
+        {% if data['publication'] is not none %}
+            <div class="row mb-2 pl-2 pr-2">
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-10">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="d-flex flex-row h-100">
+                                <div class="d-inline-block align-top h-100 pr-1">
+                                    {% if data['publication']['thumb'] %}
+                                        <img src="/static/uploadedFiles/thumbs/{{ data['publication']['thumb'] }}"
+                                             class="rounded h-100 img-thumbnail list-img" alt="Thumbnail"
+                                             onerror="if (this.src != '/static/images/thumb-default.png') this.src = '/static/images/thumb-default.png'">
+                                    {% else %}
+                                        <img src="/static/images/thumb-default.png"
+                                             class="rounded h-100 img-thumbnail list-img" alt="Thumbnail">
+                                    {% endif %}
+                                </div>
+                                <div class="d-inline-block">
+                                    <h4 class="m-0">{{ data['publication']['title'] }}</h4>
+                                    <p class="mb-0">
+                                        {% for author in data['publication']['authors'] %}
+                                            <a class="text-dark" href="/?author={{ author['id'] }}">
+                                                {{ author['name'] }}{{ ',' if loop.index < data['publication']['authors']|length else '' }}</a>
+                                        {% endfor %}
+                                    </p>
+
+                                    <small>
+                                        {% if data['publication']['journal'] %}
+                                            {{ data['publication']['journal'] }},
+                                        {% elif data['publication']['booktitle'] %}
+                                            {{ data['publication']['booktitle'] }},
+                                        {% endif %}
+                                        {% if data['publication']['doi'] %}
+                                            DOI:<a class="text-muted"
+                                                   href="http://dx.doi.org/{{ data['publication']['doi'] }}">{{ data['publication']['doi'] }}</a>,
+                                        {% endif %}
+                                        {{ data['publication']['year'] }}
+                                    </small>
+                                    <br>
+                                    <small>
+                                        {% for keyword in data['keywords'] %}
+                                            <a class="btn btn-secondary btn-xsm" href="/?keyword={{ keyword['id'] }}">{{ keyword['name'] }}</a>
+{#                                            <a class="text-dark" href="/?keyword={{ keyword['id'] }}">#}
+{#                                                {{ keyword['name'] }}{{ ',' if loop.index < data['keywords']|length else '' }}</a>#}
+                                        {% endfor %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% if data['publication']['abstract'] %}
+                            <div class="pl-5 pr-5">
+                                <b><a class="ml-5 mr-5 text-dark" data-toggle="collapse" href="#collapse-abstract">Abstract <i id="i-filter-abstract" class="fa fa-caret-right"></i></a></b>
+                            </div>
+                            <div class="col-lg-12 pl-5 pr-5 panel-collapse collapse" id="collapse-abstract">
+                                <p class="p-3 border rounded ml-5 mr-5">{{ data['publication']['abstract'] }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- <div class="container">-->
+                    <!-- </div>-->
+                </div>
+            </div>
+            <div class="row mb-2 pl-2 pr-2">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-10">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h6><b>Materials</b></h6>
+                            <!-- FIRST RENDER MAINFILE -->
+                            {% for doc in data['publication']['documents'] %}
+                                {% if data['publication']['mainfile'] != doc['filename'] %}
+                                    {% continue %}
+                                {% endif %}
+                                {% if doc['visible'] == 1 and doc['remote'] == 0 and doc['filename'] is not none %}
+                                    <div class="d-inline-block pr-3">
+                                        <a target="_blank" href="/uploadedFiles/{{ doc['filename'] }}" id="pdf-link">
+                                            <div class="bg-light">
+                                                <img class="list-img"
+                                                     src="{{ url_for('static', filename='images/pdf_sm.png') }}"
+                                                     alt="PNG">
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% elif doc['visible'] == 1 and doc['remote'] == 1 and doc['filename'] is not none %}
+                                    <div class="d-inline-block pr-3">
+                                        <a target="_blank" href="{{ doc['filename'] }}" id="pdf-link">
+                                            <div class="bg-light">
+                                                <img class="list-img"
+                                                     src="{{ url_for('static', filename='images/url_sm.png') }}"
+                                                     alt="PNG">
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <!-- RENDER THE OTHER DOCUMENTS -->
+                            {% for doc in data['publication']['documents'] %}
+                                {% if data['publication']['mainfile'] == doc['filename'] %}
+                                    {% continue %}
+                                {% endif %}
+                                {% if doc['visible'] == 1 and doc['remote'] == 0 and doc['filename'] is not none %}
+                                    <div class="d-inline-block pr-3">
+                                        <a target="_blank" href="/uploadedFiles/{{ doc['filename'] }}" id="pdf-link">
+                                            <div class="bg-light">
+                                                <img class="list-img"
+                                                     src="{{ url_for('static', filename='images/pdf_sm.png') }}"
+                                                     alt="PNG">
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% elif doc['visible'] == 1 and doc['remote'] == 1 and doc['filename'] is not none %}
+                                    <div class="d-inline-block pr-3">
+                                        <a target="_blank" href="{{ doc['filename'] }}" id="pdf-link">
+                                            <div class="bg-light">
+                                                <img class="list-img"
+                                                     src="{{ url_for('static', filename='images/url_sm.png') }}"
+                                                     alt="PNG">
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="d-inline-block pr-3">
+                                <a target="_blank" href="/publications/bibtex/{{ data['publication']['id'] }}"
+                                   id="bibtex-link">
+                                    <div class="bg-light">
+                                        <img class="list-img"
+                                             src="{{ url_for('static', filename='images/tex_sm.png') }}"
+                                             alt="PNG">
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pl-2 pr-2">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-10">
+                    <h6><b>Related Publication</b></h6>
+                    {% if data['related_publications']|length > 0 %}
+                        {% for publication in data['related_publications']|sort(attribute='year', reverse=True) %}
+                            <div class="d-flex flex-row">
+                                <div class="p-1">
+                                    <img id="thumb-item" src="{{ url_for('static', filename='uploadedFiles/thumbs') }}/{{ publication['thumb'] }}"
+                                                  alt="thumbnail" class="img-thumbnail list-img"
+                                                  onerror="if (this.src != '/static/images/thumb-default.png') this.src = '/static/images/thumb-default.png'">
+                                </div>
+                                <div class="p-1">
+                                    <div class="authors text-sm">
+                                        {% for author in publication['authors'] %}
+                                                <a class="text-dark" href="/?author={{ author['id'] }}">
+                                                    {{ author['name'] }}{{ ',' if loop.index < data['publication']['authors']|length else '' }}</a>
+                                            {% endfor %}
+                                    </div>
+                                    <div class="card-title p-0 m-0"><b><a class="text-dark" href="/publications/view/{{ publication['id'] }}">{{ publication['title'] }}</a></b></div>
+                                    <small class="info-item">
+                                        {% if publication['journal'] %}
+                                            {{ publication['journal'] }},
+                                        {% elif publication['booktitle'] %}
+                                            {{ publication['booktitle'] }},
+                                        {% endif %}
+                                        {% if publication['doi'] %}
+                                            DOI: <a class="text-muted" href="http://dx.doi.org/{{ publication['doi'] }}">{{ publication['doi'] }}</a>,
+                                        {% endif %}
+                                        {{ publication['year'] }}
+                                    </small>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No publications found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <p><b>Publication not found.</b></p>
+            </div>
+        {% endif %}
+    </div>
+    <!-- ########### CONTENT END ################# -->
+</div>
+
+<!-- Add author modal -->
+{% include 'public/admin/authors/add_author_modal.html' %}
+<!-- -->
+
+{% include 'includes/footer.html' %}
+<script>
+    $('#collapse-abstract').on('show.bs.collapse', function() {
+        $('#i-filter-abstract').removeClass('fa-caret-right');
+        $('#i-filter-abstract').addClass('fa-caret-down');
+    });
+
+    $('#collapse-abstract').on('hide.bs.collapse', function() {
+        $('#i-filter-abstract').removeClass('fa-caret-down');
+        $('#i-filter-abstract').addClass('fa-caret-right');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include 'includes/references.html' %}
+</head>
+<body class="nav-pad bg-light">
+{% include 'includes/navbar.html' %}
+
+<template id="alert">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert mb-0" id="alert-msg"></div>
+        </div>
+    </div>
+</template>
+
+
+<div class="row pt-5 bg-light border-bottom" id="content">
+    <!--############## MENU START ####################### -->
+    <div class="col-lg-3 bg-light" id="menu">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-5 text-center">
+                <h4>Actions</h4>
+            </div>
+            <div class="col-lg-5"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-5">
+                <div class="container">
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
+                            data-target="#add-user-modal">
+                        <i class="fa fa-plus"></i> Add User
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+        </div>
+    </div>
+    <!-- ########### MENU END ###################### -->
+
+    <!-- ########### CONTENT START ################# -->
+    <div class="col-lg-9 bg-light" id="Users">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Users</h2>
+                    <table class="table table-striped d-none" id="table-users">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>E-Mail</th>
+                            <th>Roles</th>
+                            <th>Active</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in data['users'] %}
+                            <tr id="user_{{ user['id'] }}">
+                                <td>{{ user['username'] }}</td>
+                                <td>{{ user['email'] }}</td>
+                                <td>
+                                    {{ user['roles']|join(', ', attribute='name') }}
+                                </td>
+                                {% if user['active'] %}
+                                    <td><span class="text-success"><i class="fa fa-check"></i></span></td>
+                                {% else %}
+                                    <td><span class="text-danger"><i class="fa fa-times"></i></span></td>
+                                {% endif %}
+                                <td>
+                                    <button type="button" class="btn text-primary edit-user-btn p-0"
+                                            data-userid="{{ user['id'] }}"><i class="fa fa-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn text-danger delete-user-btn p-0"
+                                            data-userid="{{ user['id'] }}"><i class="fa fa-times"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center mb-3 pt-2" id="spinner-user">
+                        <div class="spinner-border" role="status"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ########### CONTENT END ################# -->
+</div>
+<div class="row pt-5 bg-light border-bottom" id="content2">
+    <div class="col-lg-3 bg-light" id="menu">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-5 text-center">
+                <h4>Actions</h4>
+            </div>
+            <div class="col-lg-5"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-5">
+                <div class="container">
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
+                            data-target="#add-role-modal">
+                        <i class="fa fa-plus"></i> Add Role
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+        </div>
+    </div>
+    <div class="col-lg-9 bg-light" id="Roles">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Roles</h2>
+                    <table class="table table-striped" id="table-roles">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for role in data['roles'] %}
+                            <tr id="role_{{ role['id'] }}">
+                                <td>{{ role['name'] }}</td>
+                                <td>{{ role['description'] }}</td>
+                                <td>
+                                    <button type="button" class="btn text-primary edit-role-btn p-0"
+                                            data-roleid="{{ role['id'] }}"><i class="fa fa-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn text-danger delete-role-btn p-0"
+                                            data-roleid="{{ role['id'] }}"><i class="fa fa-times"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add modals -->
+{% include 'public/admin/users/add_user_modal.html' %}
+{% include 'public/admin/users/add_role_modal.html' %}
+{% include 'public/admin/users/edit_user_modal.html' %}
+{% include 'public/admin/users/edit_role_modal.html' %}
+<!-- -->
+
+{% include 'includes/footer.html' %}
+<script src="{{ url_for('static', filename='js/user_management/user_management.js') }}"></script>
+<script src="{{ url_for('static', filename='js/user_management/validate_role.js') }}"></script>
+<script src="{{ url_for('static', filename='js/user_management/validate_user.js') }}"></script>
+</body>
+</html>

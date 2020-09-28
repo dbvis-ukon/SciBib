@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      {% include 'includes/references.html' %}
+  </head>
+  <body class="nav-pad bg-light">
+  {% include 'includes/navbar.html' %}
+
+  <template id="alert">
+      <div class="row">
+          <div class="col-lg-12">
+              <div class="alert mb-0" id="alert-msg"></div>
+          </div>
+      </div>
+  </template>
+
+  <!-- Display messages after returning after redirects etc -->
+  {% include 'includes/messages.html' %}
+
+  <div class="row pt-5 bg-light border-bottom" id="content">
+      <!--############## MENU START ####################### -->
+      <div class="col-lg-3 bg-light" id="menu">
+          <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-10 text-center">
+                  <h4>Actions</h4>
+              </div>
+{#              <div class="col-lg-5"></div>#}
+          </div>
+          <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-10">
+                  <div class="container">
+                      <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-category-modal">
+                          <i class="fa fa-plus"></i> Add Category
+                      </button>
+                  </div>
+              </div>
+{#              <div class="col-lg-5"></div>#}
+          </div>
+      </div>
+      <!-- ########### MENU END ###################### -->
+
+      <!-- ########### CONTENT START ################# -->
+      <div class="col-lg-9 bg-light" id="categories">
+            <div class="container">
+                <h2>Categories</h2>
+                <div class="pl-3" id="categories_div">
+                    {% for cat in categories  %}
+                        <pre id="category_{{ cat['id'] }}" class="cat-list"><b><a id="a_category_{{ cat['id'] }}" class="text-dark" href="/view/categories/{{ cat['id'] }}">{{ cat['name'] }} - {{ cat['count'] }}</a></b></pre>
+                {% endfor %}
+                </div>
+            </div>
+      </div>
+      <!-- ########### CONTENT END ################# -->
+  </div>
+
+  <!-- Add category modal -->
+  {% include 'public/admin/categories/add_category_modal.html' %}
+  <!-- -->
+
+  {% include 'includes/footer.html' %}
+
+  <script src="{{url_for('static', filename='js/categories/categories.js')}}"></script>
+  <script src="{{url_for('static', filename='js/categories/validate_category.js')}}"></script>
+  </body>
+</html>
