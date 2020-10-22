@@ -19,6 +19,7 @@ import logging
 import logging.handlers
 import time, datetime
 
+from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_security.forms import LoginForm
 from wtforms import StringField
 from wtforms.validators import InputRequired
@@ -32,7 +33,7 @@ from backend.modules.manipulate_db import manipulate_db
 from backend.modules.view import view_blueprint
 from backend.modules.user_management import user_blueprint
 from configurations import DB_URL, UPLOAD_FOLDER, STATIC_FOLDER, TEMPLATE_FOLDER, PDF_FOLDER, THUMB_FOLDER, LOG_FOLDER, \
-    LOG_LEVEL, EMAIL_SENDER, MAIL_SERVER, MAIL_PORT, MAIL_USE_SSL, MAIL_USERNAME, SECURITY_PASSWORD_SALT
+    LOG_LEVEL, EMAIL_SENDER, MAIL_SERVER, MAIL_PORT, MAIL_USE_SSL, MAIL_USERNAME, SECURITY_PASSWORD_SALT, SECRET, BEHIND_PROXY
 from backend.db_controller.db import db
 from backend.db_controller.db import users, role
 from flask_security import Security, SQLAlchemyUserDatastore
@@ -45,6 +46,12 @@ class ExtendedLoginForm(LoginForm):
 app = Flask(__name__,
             static_folder=STATIC_FOLDER,
             template_folder=TEMPLATE_FOLDER)
+
+# if run behind a proxy, use this magic to observe necessary header from the proxy for secure
+# HTTPS responses from the app
+if BEHIND_PROXY:
+    app.wsgi_app = ProxyFix(app.wsgi_app)
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -61,7 +68,7 @@ app.config['STATIC_FOLDER'] = STATIC_FOLDER
 app.config['TEMPLATE_FOLDER'] = TEMPLATE_FOLDER
 
 # secret key for flask-security
-app.config['SECRET_KEY'] = 'secret'
+app.config['SECRET_KEY'] = SECRET
 
 # Password salt
 #app.config['SECURITY_PASSWORD_SALT'] = '123456789'

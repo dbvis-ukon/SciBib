@@ -12,11 +12,14 @@ Start by executing these first 6 steps and then continue either with deployment 
 
 3. Edit the default welcome message at `app/frontend/templates/includes/welcome_msg.html`
 
-4. Generate a password salt: 
+4. Generate a password salt and a secret (for encrypting cookies): 
 
-    `echo -n "value" | openssl dgst -sha1 -hmac "key"` 
+    ```
+   echo -n "value1" | openssl dgst -sha1 -hmac "key"
+   echo -n "value2" | openssl dgst -sha1 -hmac "key"
+   ```
 
-5. Update the environment variables in `.env` (Use the password salt generated in the last step for `SECURITY_PASSWORD_SALT`):
+5. Update the environment variables in `.env` (Use the keys generated in the last step to update `SECURITY_PASSWORD_SALT` and `SECRET` respectively):
 
    ```shell script
     ...
@@ -31,8 +34,15 @@ Start by executing these first 6 steps and then continue either with deployment 
    MAIL_USERNAME=user
 
    SECURITY_PASSWORD_SALT=57443a4c052350a44638835d64fd66822f813319
+   SECRET=e76dd6ae99f9c2872277b9dfe2edb8ec
    ```
 
+6. If you run the app behind a proxy, set `BEHIND_PROXY` to `true` in `.env`:
+
+   ```
+   BEHIND_PROXY=true
+   ```
+   
 ### A) Deploy all Docker
 Deploy SciBib with both, a docker container for a MariaDB database and a docker container for SciBib.
 

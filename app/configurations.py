@@ -37,6 +37,11 @@ MAIL_USERNAME = os.environ['MAIL_USERNAME']
 
 SECURITY_PASSWORD_SALT = os.environ['SECURITY_PASSWORD_SALT']
 
+# secret to encrypt cookies
+SECRET = os.environ['SECRET']
+
+BEHIND_PROXY = bool(strtobool(os.environ['BEHIND_PROXY']))
+
 DB_URL = 'mysql://{user}:{pw}@{url}/{db}?charset=utf8'.format(
      user=MYSQL_USER,
      pw= MYSQL_PW,
