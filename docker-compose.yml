@@ -20,6 +20,8 @@ services:
         - MAIL_USE_SSL=${MAIL_USE_SSL}
         - MAIL_USERNAME=${MAIL_USERNAME}
         - SECURITY_PASSWORD_SALT=${SECURITY_PASSWORD_SALT}
+        - SECRET=${SECRET}
+        - BEHIND_PROXY=${BEHIND_PROXY}
     volumes:
       - ./app/frontend/static/uploadedFiles:/srv/scibib/frontend/static/uploadedFiles
     ports:
