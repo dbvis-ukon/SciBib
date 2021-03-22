@@ -512,7 +512,7 @@ def getPublicationsOfAuthorWithLimit(pub, a_id, limit):
         FROM publications
         JOIN authors_publications ON authors_publications.publication_id = publications.id
         JOIN authors ON authors_publications.author_id = authors.id
-        WHERE publications.id != :pub_id
+        WHERE publications.id != :pub_id AND publications.public = 1
         GROUP BY publications.id
         HAVING agg REGEXP :regex
         ORDER BY ABS(:year - CAST(publications.year AS SIGNED)) ASC
