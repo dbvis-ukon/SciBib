@@ -131,10 +131,21 @@ $(document).ready(function () {
                                                                             role: 'button', href: urls[0]['filename']}));
                             }
                         } else {
-                            $(new_pub).find('#pdf-item').append($('<button>', {class: 'btn btn-xsm btn-dark cursor-default', html: 'PDF',
-                                                                               role: 'button', disabled: true}));
-                            $(new_pub).find('#url-item').append($('<button>', {class: 'btn btn-xsm btn-dark cursor-default', html: 'URL',
-                                                                               role: 'button', disabled: true}));
+                            $(new_pub).find('#pdf-item').append($('<button>', {
+                                class: 'btn btn-xsm btn-dark cursor-default', html: 'PDF',
+                                role: 'button', disabled: true
+                            }));
+                            let urls = pub['documents'].filter((doc) => doc['filename'] && doc['filename'].trim() && doc['filename'] !== pub['mainfile'] && isValidURL(doc['filename']));
+                            if (urls.length === 0)
+                                $(new_pub).find('#url-item').append($('<button>', {
+                                    class: 'btn btn-xsm btn-dark cursor-default', html: 'URL',
+                                    role: 'button', disabled: true
+                                }));
+                            else
+                                $(new_pub).find('#url-item').append($('<a>', {
+                                    class: 'btn btn-xsm btn-dark', html: 'URL',
+                                    role: 'button', href: urls[0]['filename']
+                                }));
                         }
 
                         // add thumbnail
