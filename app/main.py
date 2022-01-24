@@ -21,6 +21,7 @@ import time, datetime
 
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_security.forms import LoginForm
+from flask_security import uia_username_mapper, uia_email_mapper
 from wtforms import StringField
 from wtforms.validators import InputRequired
 from flask import Flask, request, g, render_template
@@ -91,7 +92,11 @@ This is not recommended but might give you a performance improvement on the cost
 db.init_app(app)
 
 ## Login via username not email
-app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = ('username', 'email')
+app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = [
+    {'username': {'mapper': uia_username_mapper, 'case_insensitive': True}},
+    {'email': {'mapper': uia_email_mapper, 'case_insensitive': True}},
+]
+
 
 # E-Mail subjects
 app.config['SECURITY_EMAIL_SUBJECT_PASSWORD_RESET'] = '[SciBib] Password reset instructions'

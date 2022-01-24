@@ -32,9 +32,14 @@ ENV BEHIND_PROXY $BEHIND_PROXY
 USER root
 
 RUN apt-get update && apt-get install -y python3-pip \
+                                         python3-dev \
                                          python3-mysqldb \
                                          default-mysql-client \
                                          python3-distutils \
+                                         build-essential \
+                                         libssl1.1 \
+                                         default-libmysqlclient-dev \
+                                         libssl-dev \
                                          curl \
                                          gnupg
 
@@ -57,7 +62,7 @@ WORKDIR /srv/scibib
 # add nodejs binaries to path variable
 ENV PATH="${HOME}/.local/bin:/usr/local/python3/bin:${PATH}"
 
-RUN pip3 install -r requirements.txt
+RUN python3 -m pip install --upgrade pip && pip3 install -r requirements.txt
 
 # Install frontend dependencies
 RUN npm --prefix frontend/static install --only=prod

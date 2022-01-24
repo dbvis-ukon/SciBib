@@ -31,6 +31,7 @@ class SQLAlchemy(_BaseSQLAlchemy):
     def apply_pool_defaults(self, app, options):
         super(SQLAlchemy, self).apply_pool_defaults(app, options)
         options["pool_pre_ping"] = True
+        return options
 
 
 db = SQLAlchemy()
@@ -163,4 +164,4 @@ class users(db.Model, UserMixin):
     modified = db.Column(DATETIME)
     roles = db.relationship('role', secondary="roles_users",
                             backref=db.backref('roles', lazy='dynamic'))
-
+    fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
