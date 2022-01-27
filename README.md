@@ -45,12 +45,16 @@ The system was developed with the aid of the following OpenSource libraries and 
 * [Flask](https://github.com/pallets/flask)
 * [Flask-SQLAlchemy](https://github.com/pallets/flask-sqlalchemy)
 * [Flask-Security-Too](https://github.com/Flask-Middleware/flask-security)
+* [Flask-Mail](https://pythonhosted.org/Flask-Mail/)
+* [SQLAlchemy](https://www.sqlalchemy.org/)
 * [SQLAlchemy-serializer](https://github.com/n0nSmoker/SQLAlchemy-serializer)
 * [mysqlclient](https://github.com/PyMySQL/mysqlclient-python)
 * [bibtexparser](https://github.com/sciunto-org/python-bibtexparser)
 * [Pillow](https://github.com/python-pillow/Pillow)
+* [bleach](https://pypi.org/project/bleach/)
+* [bcrypt](https://pypi.org/project/bcrypt/)
 * [gunicorn](https://github.com/benoitc/gunicorn)
-
+ 
 # License
 
 This project is licensed under GNU GPLv3. See the [LICENSE](LICENSE) file for details.
