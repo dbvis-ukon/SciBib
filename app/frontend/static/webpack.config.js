@@ -27,7 +27,7 @@ const config = {
     output: {
         path: resolve('./'),
         filename: 'bundle.js',
-        publicPath: resolve('./')
+        publicPath: '/static/'
     },
     resolve: {
         alias: {
@@ -39,26 +39,22 @@ const config = {
         rules: [
             {
                 test: /\.s?css$/,
-                //loader: 'style-loader! css-loader?modules'
-                loader: ['style-loader', 'css-loader', 'sass-loader']
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'},
+                    {loader: 'sass-loader'}]
             },
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                query: {
+                options: {
                     presets: ['@babel/preset-env']
                 }
             },
             {
                 test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        outputPath: 'fonts/',    // where the fonts will go
-                        publicPath: '/static/fonts/'       // override the default path
-                    }
-                }]
+                type: 'assset/resource',
+                dependency: { not: ['url'] },
             }
         ]
     }
