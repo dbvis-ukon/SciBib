@@ -39,6 +39,9 @@ def addUser(session, **columns):
         raise ValueError('Cannot create a user without password')
     if len(columns.get('password', '')) < 6:
         raise ValueError('Password must be at least 6 characters long')
+    if len(columns.get('fs_uniquifier', '')) == '':
+        raise ValueError('fs_uniquifier must not be null')
+
 
     newUser = users(
         first_name=columns.get('firstname', ''),
@@ -47,7 +50,8 @@ def addUser(session, **columns):
         email=columns.get('email', ''),
         password=hash_password(columns['password']),
         active=columns.get('active', 0),
-        created=columns.get('created', datetime.now())
+        created=columns.get('created', datetime.now()),
+        fs_uniquifier=columns['fs_uniquifier']
     )
     session.add(newUser)
     return newUser
