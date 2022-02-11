@@ -22,6 +22,7 @@ from flask_security.recoverable import send_reset_password_instructions
 from backend.db_controller.db import SQLAlchemy
 # from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from uuid import uuid4
 
 from backend.db_controller.db import users, role as Role, Users_publication
 from backend.db_controller.query.users import addUser
@@ -89,7 +90,8 @@ def add_user():
                 email=email,
                 password=password,
                 active=active,
-                created=datetime.now())
+                created=datetime.now(),
+                fs_uniquifier=uuid4().hex),
         session.flush()
         id = newUser.id
 
