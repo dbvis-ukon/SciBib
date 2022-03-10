@@ -59,4 +59,4 @@ The system was developed with the aid of the following OpenSource libraries and 
 
 This project is licensed under GNU GPLv3. See the [LICENSE](LICENSE) file for details.
 
-Copyright 2020 [University of Konstanz - Data Analysis and Visualization Group](https://vis.uni-konstanz.de).
+Copyright 2022 [University of Konstanz - Data Analysis and Visualization Group](https://vis.uni-konstanz.de).
