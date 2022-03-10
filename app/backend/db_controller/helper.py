@@ -14,6 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SciBib.  If not, see <http://www.gnu.org/licenses/>.
 
+import uuid
 
 from backend.db_controller.db import SQLAlchemy
 # from flask_sqlalchemy import SQLAlchemy
@@ -36,7 +37,7 @@ def _is_authorized(pub_id, curr_user):
     # check if the current user is the editor of the publication
     is_editor = db.session.query(
         db.session().query(Users_publication)\
-        .filter(Users_publication.user_id == curr_user.get_id() and Users_publication.publication_id == pub_id).exists()
+        .filter(Users_publication.user_fs_uniquifier == curr_user.get_id() and Users_publication.publication_id == pub_id).exists()
     ).scalar()
 
     db.session.close()
@@ -74,6 +75,13 @@ def isInt(s):
     """
     try:
         int(s)
+        return True
+    except ValueError:
+        return False
+
+def isValidUUID(value):
+    try:
+        uuid.UUID(value)
         return True
     except ValueError:
         return False

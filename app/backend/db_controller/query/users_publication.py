@@ -18,7 +18,7 @@ from backend.db_controller.db import SQLAlchemy
 # from flask_sqlalchemy import SQLAlchemy
 
 from backend.db_controller.db import Users_publication
-from backend.db_controller.helper import isInt
+from backend.db_controller.helper import isInt, isValidUUID
 
 db = SQLAlchemy()
 
@@ -32,11 +32,11 @@ def addUsersPublication(session, **columns):
     @return: the new UsersPublications object
     @rtype: UsersPublication object
     """
-    if not isInt(columns.get('user_id') or not isInt(columns.get('publication_id'))):
+    if not isValidUUID(columns.get('user_fs_uniquifier') or not isInt(columns.get('publication_id'))):
         raise ValueError('User_id and publication_id must be numbers')
 
     newUsersPublications = Users_publication(
-        user_id=columns['user_id'],
+        user_fs_uniquifier=columns['user_fs_uniquifier'],
         publication_id=columns['publication_id'],
     )
     session.add(newUsersPublications)
