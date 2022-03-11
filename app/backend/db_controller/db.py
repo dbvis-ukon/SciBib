@@ -132,8 +132,10 @@ roles_users = db.Table('roles_users',
                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
 class Users_publication(db.Model, SerializerMixin):
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'), primary_key=True)
+    # keep for historical usage, replaced with column fs_uniquifier
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
     publication_id = db.Column(db.Integer(), db.ForeignKey('publications.id'), primary_key=True)
+    user_fs_uniquifier = db.Column(db.String(255), db.ForeignKey('users.fs_uniquifier'), primary_key=True)
 
 class role(db.Model, RoleMixin):
     __tablename__ = "role"

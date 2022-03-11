@@ -360,7 +360,7 @@ def add_publication():
     # create session for adding the publication
     session = db.session()
 
-    user_id = current_user.get_id()
+    user_fs_uniquifier = current_user.get_id()
     thumb_name = ''
     thumb_dir = ''
     pdf_dir = ''
@@ -498,11 +498,11 @@ def add_publication():
         id = newPublication.id
 
         addUsersPublication(session,
-                            user_id=user_id,
+                            user_fs_uniquifier=user_fs_uniquifier,
                             publication_id=id)
         app.logger.info(
             "{} {}: Succesfully added Users ({}) to Publication ({}) mapping to database".format(
-                __file__, __name__, user_id, id))
+                __file__, __name__, user_fs_uniquifier, id))
 
         # Add Author<->Publication mappings
         for i, author in enumerate(authors):
